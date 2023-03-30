@@ -11,7 +11,6 @@ import {
 	Avatar,
 	Button,
 	Popover,
-	Checkbox,
 	TableRow,
 	MenuItem,
 	TableBody,
@@ -110,24 +109,6 @@ export default function TeacherPage() {
 		setSelected([]);
 	};
 
-	const handleClick = (event, name) => {
-		const selectedIndex = selected.indexOf(name);
-		let newSelected = [];
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-		setSelected(newSelected);
-	};
-
 	const handleFilterByName = (event) => {
 		setFilterName(event.target.value);
 	};
@@ -206,18 +187,6 @@ export default function TeacherPage() {
 												role="checkbox"
 												selected={selectedUser}
 											>
-												<TableCell padding="checkbox">
-													<Checkbox
-														checked={selectedUser}
-														onChange={(event) =>
-															handleClick(
-																event,
-																name
-															)
-														}
-													/>
-												</TableCell>
-
 												<TableCell
 													component="th"
 													scope="row"

@@ -9,7 +9,6 @@ import {
 	Paper,
 	Button,
 	Popover,
-	Checkbox,
 	TableRow,
 	MenuItem,
 	TableBody,
@@ -106,24 +105,6 @@ export default function UserPage() {
 		setSelected([]);
 	};
 
-	const handleClick = (event, name) => {
-		const selectedIndex = selected.indexOf(name);
-		let newSelected = [];
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-		setSelected(newSelected);
-	};
-
 	const handleFilterByName = (event) => {
 		setFilterName(event.target.value);
 	};
@@ -193,18 +174,6 @@ export default function UserPage() {
 												role="checkbox"
 												selected={selectedMajor}
 											>
-												<TableCell padding="checkbox">
-													<Checkbox
-														checked={selectedMajor}
-														onChange={(event) =>
-															handleClick(
-																event,
-																majorName
-															)
-														}
-													/>
-												</TableCell>
-
 												<TableCell
 													component="th"
 													scope="row"

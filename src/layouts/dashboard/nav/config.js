@@ -27,11 +27,6 @@ const navConfig = [
 		icon: icon("ic_user"),
 	},
 	{
-		title: "Quản lý admin",
-		path: "/admin",
-		icon: icon("ic_lock"),
-	},
-	{
 		title: "login",
 		path: "/login",
 		icon: icon("ic_lock"),

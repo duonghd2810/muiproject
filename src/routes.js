@@ -5,10 +5,9 @@ import SimpleLayout from "./layouts/simple";
 //
 import MajorPage from "./pages/MajorPage";
 import StudentPage from "./pages/StudentPage";
-import LoginPage from "./pages/Login/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import Page404 from "./pages/Page404";
 import TeacherPage from "./pages/TeacherPage";
-import AdminPage from "./pages/AdminPage";
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +21,6 @@ export default function Router() {
 				{ path: "major", element: <MajorPage /> },
 				{ path: "student", element: <StudentPage /> },
 				{ path: "teacher", element: <TeacherPage /> },
-				{ path: "admin", element: <AdminPage /> },
 			],
 		},
 		{

@@ -6,7 +6,7 @@ import { Button, Container, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // components
-import Logo from "../../components/logo";
+import Logo from "../components/logo";
 
 // ----------------------------------------------------------------------
 
