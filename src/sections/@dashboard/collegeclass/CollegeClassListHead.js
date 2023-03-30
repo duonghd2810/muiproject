@@ -21,14 +21,14 @@ const visuallyHidden = {
 	clip: "rect(0 0 0 0)",
 };
 
-MajorListHead.propTypes = {
+CollegeClassListHead.propTypes = {
 	order: PropTypes.oneOf(["asc", "desc"]),
 	orderBy: PropTypes.string,
 	headLabel: PropTypes.array,
 	onRequestSort: PropTypes.func,
 };
 
-function MajorListHead({ order, orderBy, headLabel, onRequestSort }) {
+function CollegeClassListHead({ order, orderBy, headLabel, onRequestSort }) {
 	const createSortHandler = (property) => (event) => {
 		onRequestSort(event, property);
 	};
@@ -63,4 +63,4 @@ function MajorListHead({ order, orderBy, headLabel, onRequestSort }) {
 	);
 }
 
-export default MajorListHead;
+export default CollegeClassListHead;

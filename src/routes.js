@@ -8,6 +8,7 @@ import StudentPage from "./pages/StudentPage";
 import LoginPage from "./pages/LoginPage";
 import Page404 from "./pages/Page404";
 import TeacherPage from "./pages/TeacherPage";
+import CollegeClass from "./pages/CollegeClass";
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ export default function Router() {
 				{ path: "major", element: <MajorPage /> },
 				{ path: "student", element: <StudentPage /> },
 				{ path: "teacher", element: <TeacherPage /> },
+				{ path: "collegeclass", element: <CollegeClass /> },
 			],
 		},
 		{

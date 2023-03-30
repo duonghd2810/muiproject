@@ -32,19 +32,18 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-MajorListToolbar.propTypes = {
-	numSelected: PropTypes.number,
+CollegeClassListToolbar.propTypes = {
 	filterName: PropTypes.string,
 	onFilterName: PropTypes.func,
 };
 
-export default function MajorListToolbar({ filterName, onFilterName }) {
+export default function CollegeClassListToolbar({ filterName, onFilterName }) {
 	return (
 		<StyledRoot>
 			<StyledSearch
 				value={filterName}
 				onChange={onFilterName}
-				placeholder="Tìm kiếm ngành học"
+				placeholder="Tìm kiếm lớp chính quy"
 				startAdornment={
 					<InputAdornment position="start">
 						<Iconify

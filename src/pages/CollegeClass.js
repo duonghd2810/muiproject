@@ -21,18 +21,17 @@ import {
 // components
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
-// section
-import MajorListToolbar from "src/sections/@dashboard/major/MajorListToolbar";
-import MajorListHead from "src/sections/@dashboard/major/MajorListHead";
-
 // mock
-import MAJORLIST from "../_mock/major";
+import COLLEGECLASS from "../_mock/collegeclass";
+import CollegeClassListToolbar from "src/sections/@dashboard/collegeclass/CollegeClassListToolbar";
+import CollegeClassListHead from "src/sections/@dashboard/collegeclass/CollegeClassListHead";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-	{ id: "majorName", label: "Tên ngành", alignRight: false },
-	{ id: "deanName", label: "Trưởng khoa", alignRight: false },
+	{ id: "className", label: "Tên lớp", alignRight: false },
+	{ id: "homeroomTeacher", label: "Giáo viên chủ nhiệm", alignRight: false },
+	{ id: "id_major", label: "Ngành", alignRight: false },
 	{ id: "" },
 ];
 
@@ -64,15 +63,15 @@ function applySortFilter(array, comparator, query) {
 	if (query) {
 		return filter(
 			array,
-			(_major) =>
-				_major.majorName.toLowerCase().indexOf(query.toLowerCase()) !==
+			(_class) =>
+				_class.className.toLowerCase().indexOf(query.toLowerCase()) !==
 				-1
 		);
 	}
 	return stabilizedThis.map((el) => el[0]);
 }
 
-export default function MajorPage() {
+export default function CollegeClassPage() {
 	const [open, setOpen] = useState(null);
 
 	const [order, setOrder] = useState("asc");
@@ -99,18 +98,18 @@ export default function MajorPage() {
 		setFilterName(event.target.value);
 	};
 
-	const filteredMajors = applySortFilter(
-		MAJORLIST,
+	const filteredCollegeClasses = applySortFilter(
+		COLLEGECLASS,
 		getComparator(order, orderBy),
 		filterName
 	);
 
-	const isNotFound = !filteredMajors.length && !!filterName;
+	const isNotFound = !filteredCollegeClasses.length && !!filterName;
 
 	return (
 		<>
 			<Helmet>
-				<title>Major page</title>
+				<title>Collegeclass page</title>
 			</Helmet>
 
 			<Container>
@@ -121,18 +120,18 @@ export default function MajorPage() {
 					mb={5}
 				>
 					<Typography variant="h4" gutterBottom>
-						Ngành học
+						Lớp chính quy
 					</Typography>
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
 					>
-						Thêm ngành học mới
+						Thêm lớp chính quy mới
 					</Button>
 				</Stack>
 
 				<Card>
-					<MajorListToolbar
+					<CollegeClassListToolbar
 						filterName={filterName}
 						onFilterName={handleFilterByName}
 					/>
@@ -140,15 +139,20 @@ export default function MajorPage() {
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
 							<Table>
-								<MajorListHead
+								<CollegeClassListHead
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredMajors.map((row) => {
-										const { id, majorName, deanName } = row;
+									{filteredCollegeClasses.map((row) => {
+										const {
+											id,
+											className,
+											homeroomTeacher,
+											id_major,
+										} = row;
 										return (
 											<TableRow
 												hover
@@ -158,6 +162,7 @@ export default function MajorPage() {
 												<TableCell
 													component="th"
 													scope="row"
+													align="center"
 												>
 													<Stack
 														direction="row"
@@ -168,13 +173,16 @@ export default function MajorPage() {
 															variant="subtitle2"
 															noWrap
 														>
-															{majorName}
+															{className}
 														</Typography>
 													</Stack>
 												</TableCell>
 
 												<TableCell align="left">
-													{deanName}
+													{homeroomTeacher}
+												</TableCell>
+												<TableCell align="left">
+													{id_major}
 												</TableCell>
 												<TableCell align="right">
 													<IconButton

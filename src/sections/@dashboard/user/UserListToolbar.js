@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { styled, alpha } from "@mui/material/styles";
 import {
 	Toolbar,
-	Tooltip,
-	IconButton,
 	Typography,
 	OutlinedInput,
 	InputAdornment,
@@ -82,20 +80,6 @@ export default function UserListToolbar({
 						</InputAdornment>
 					}
 				/>
-			)}
-
-			{numSelected > 0 ? (
-				<Tooltip title="Delete">
-					<IconButton>
-						<Iconify icon="eva:trash-2-fill" />
-					</IconButton>
-				</Tooltip>
-			) : (
-				<Tooltip title="Filter list">
-					<IconButton>
-						<Iconify icon="ic:round-filter-list" />
-					</IconButton>
-				</Tooltip>
 			)}
 		</StyledRoot>
 	);
