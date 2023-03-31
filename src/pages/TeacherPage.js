@@ -80,8 +80,6 @@ export default function TeacherPage() {
 
 	const [order, setOrder] = useState("asc");
 
-	const [selected, setSelected] = useState([]);
-
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
@@ -100,15 +98,6 @@ export default function TeacherPage() {
 		setOrderBy(property);
 	};
 
-	const handleSelectAllClick = (event) => {
-		if (event.target.checked) {
-			const newSelecteds = USERLIST.map((n) => n.name);
-			setSelected(newSelecteds);
-			return;
-		}
-		setSelected([]);
-	};
-
 	const handleFilterByName = (event) => {
 		setFilterName(event.target.value);
 	};
@@ -124,7 +113,7 @@ export default function TeacherPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Student page</title>
+				<title>Teacher page</title>
 			</Helmet>
 
 			<Container>
@@ -148,7 +137,6 @@ export default function TeacherPage() {
 				<Card>
 					<UserListToolbar
 						placeholder="Tìm kiếm giáo viên"
-						numSelected={selected.length}
 						filterName={filterName}
 						onFilterName={handleFilterByName}
 					/>
@@ -160,10 +148,7 @@ export default function TeacherPage() {
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
-									rowCount={USERLIST.length}
-									numSelected={selected.length}
 									onRequestSort={handleRequestSort}
-									onSelectAllClick={handleSelectAllClick}
 								/>
 								<TableBody>
 									{filteredUsers.map((row) => {
@@ -176,16 +161,11 @@ export default function TeacherPage() {
 											avatarUrl,
 											isVerified,
 										} = row;
-										const selectedUser =
-											selected.indexOf(name) !== -1;
-
 										return (
 											<TableRow
 												hover
 												key={id}
 												tabIndex={-1}
-												role="checkbox"
-												selected={selectedUser}
 											>
 												<TableCell
 													component="th"
@@ -274,16 +254,12 @@ export default function TeacherPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														No results found for
+														Không có kết quả tìm kiếm cho
 														&nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;
 														</strong>
-														.
-														<br /> Try checking for
-														typos or using complete
-														words.
 													</Typography>
 												</Paper>
 											</TableCell>

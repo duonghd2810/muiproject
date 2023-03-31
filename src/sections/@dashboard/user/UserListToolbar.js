@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { styled, alpha } from "@mui/material/styles";
 import {
 	Toolbar,
-	Typography,
 	OutlinedInput,
 	InputAdornment,
 } from "@mui/material";
@@ -38,49 +37,35 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserListToolbar.propTypes = {
-	numSelected: PropTypes.number,
+	placeholder: PropTypes.string,
 	filterName: PropTypes.string,
 	onFilterName: PropTypes.func,
 };
 
 export default function UserListToolbar({
 	placeholder,
-	numSelected,
 	filterName,
 	onFilterName,
 }) {
 	return (
-		<StyledRoot
-			sx={{
-				...(numSelected > 0 && {
-					color: "primary.main",
-					bgcolor: "primary.lighter",
-				}),
-			}}
-		>
-			{numSelected > 0 ? (
-				<Typography component="div" variant="subtitle1">
-					{numSelected} selected
-				</Typography>
-			) : (
-				<StyledSearch
-					value={filterName}
-					onChange={onFilterName}
-					placeholder={placeholder}
-					startAdornment={
-						<InputAdornment position="start">
-							<Iconify
-								icon="eva:search-fill"
-								sx={{
-									color: "text.disabled",
-									width: 20,
-									height: 20,
-								}}
-							/>
-						</InputAdornment>
-					}
-				/>
-			)}
+		<StyledRoot>
+			<StyledSearch
+				value={filterName}
+				onChange={onFilterName}
+				placeholder={placeholder}
+				startAdornment={
+					<InputAdornment position="start">
+						<Iconify
+							icon="eva:search-fill"
+							sx={{
+								color: "text.disabled",
+								width: 20,
+								height: 20,
+							}}
+						/>
+					</InputAdornment>
+				}
+			/>
 		</StyledRoot>
 	);
 }

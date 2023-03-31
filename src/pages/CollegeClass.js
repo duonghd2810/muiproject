@@ -162,7 +162,6 @@ export default function CollegeClassPage() {
 												<TableCell
 													component="th"
 													scope="row"
-													align="center"
 												>
 													<Stack
 														direction="row"
@@ -223,16 +222,12 @@ export default function CollegeClassPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														No results found for
+														Không có kết quả tìm kiếm cho
 														&nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;
 														</strong>
-														.
-														<br /> Try checking for
-														typos or using complete
-														words.
 													</Typography>
 												</Paper>
 											</TableCell>

@@ -215,16 +215,12 @@ export default function MajorPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														No results found for
+														Không có kết quả tìm kiếm cho
 														&nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;
 														</strong>
-														.
-														<br /> Try checking for
-														typos or using complete
-														words.
 													</Typography>
 												</Paper>
 											</TableCell>
