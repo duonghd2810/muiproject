@@ -1,12 +1,20 @@
 import { Helmet } from "react-helmet-async";
 // @mui
 import { styled } from "@mui/material/styles";
-import { Button, Container, TextField } from "@mui/material";
+import {
+	Button,
+	Container,
+	IconButton,
+	InputAdornment,
+	TextField,
+} from "@mui/material";
 // hooks
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // components
 import Logo from "../components/logo";
+import { useState } from "react";
+import Iconify from "../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +57,7 @@ const FormLogin = styled("form")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
+	const [showPassword, setShowPassword] = useState(false);
 	const formik = useFormik({
 		initialValues: {
 			username: "",
@@ -94,19 +103,47 @@ export default function LoginPage() {
 									value={formik.values.username}
 									onChange={formik.handleChange}
 									required
-									style={{ marginBottom: "24px" }}
+									style={{
+										marginBottom: "24px",
+										width: "60%",
+									}}
 								/>
 								<TextField
 									label="Mật khẩu"
 									id="outlined-basic"
 									variant="outlined"
-									type="password"
 									name="password"
+									type={showPassword ? "text" : "password"}
 									size="small"
 									value={formik.values.password}
 									onChange={formik.handleChange}
 									required
-									style={{ marginBottom: "24px" }}
+									style={{
+										marginBottom: "24px",
+										width: "60%",
+									}}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton
+													onClick={() =>
+														setShowPassword(
+															!showPassword
+														)
+													}
+													edge="end"
+												>
+													<Iconify
+														icon={
+															showPassword
+																? "eva:eye-fill"
+																: "eva:eye-off-fill"
+														}
+													/>
+												</IconButton>
+											</InputAdornment>
+										),
+									}}
 								/>
 								<a href="/forgot-pass">Quên mật khẩu</a>
 								<Button

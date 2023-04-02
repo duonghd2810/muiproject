@@ -27,6 +27,8 @@ import MajorListHead from "src/sections/@dashboard/major/MajorListHead";
 
 // mock
 import MAJORLIST from "../_mock/major";
+import MajorFormAdd from "src/sections/@dashboard/major/MajorFormAdd";
+import Popup from "src/sections/@dashboard/popup/Popup";
 
 // ----------------------------------------------------------------------
 
@@ -81,6 +83,8 @@ export default function MajorPage() {
 
 	const [filterName, setFilterName] = useState("");
 
+	const [openPopup, setOpenPopup] = useState(false);
+
 	const handleOpenMenu = (event) => {
 		setOpen(event.currentTarget);
 	};
@@ -126,6 +130,7 @@ export default function MajorPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						onClick={() => setOpenPopup(true)}
 					>
 						Thêm ngành học mới
 					</Button>
@@ -215,8 +220,8 @@ export default function MajorPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														Không có kết quả tìm kiếm cho
-														&nbsp;
+														Không có kết quả tìm
+														kiếm cho &nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;
@@ -261,6 +266,13 @@ export default function MajorPage() {
 					Delete
 				</MenuItem>
 			</Popover>
+			<Popup
+				openPopup={openPopup}
+				setOpenPopup={setOpenPopup}
+				title="Thêm ngành học"
+			>
+				<MajorFormAdd />
+			</Popup>
 		</>
 	);
 }
