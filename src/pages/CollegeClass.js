@@ -34,10 +34,27 @@ import CollegeClassFormUpd from "src/sections/@dashboard/collegeclass/CollegeCla
 const TABLE_HEAD = [
 	{ id: "className", label: "Tên lớp", alignRight: false },
 	{ id: "homeroomTeacher", label: "Giáo viên chủ nhiệm", alignRight: false },
-	{ id: "id_major", label: "Ngành", alignRight: false },
+	{ id: "majorName", label: "Ngành", alignRight: false },
 	{ id: "" },
 ];
-
+const dataSelect = [
+	{
+		id: 1,
+		majorName: "Công nghệ thông tin",
+	},
+	{
+		id: 2,
+		majorName: "Kế toán",
+	},
+	{
+		id: 3,
+		majorName: "Du lịch",
+	},
+	{
+		id: 4,
+		majorName: "Điện điện tử",
+	},
+];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -84,11 +101,11 @@ export default function CollegeClassPage() {
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 
-	const [recordForEdit,setRecordForEdit] = useState(null);
+	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const [filterName, setFilterName] = useState("");
 
-	const handleOpenMenu = (event,row) => {
+	const handleOpenMenu = (event, row) => {
 		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
@@ -134,7 +151,7 @@ export default function CollegeClassPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
-						onClick={()=>setOpenPopupAdd(true)}
+						onClick={() => setOpenPopupAdd(true)}
 					>
 						Thêm lớp chính quy mới
 					</Button>
@@ -162,6 +179,7 @@ export default function CollegeClassPage() {
 											className,
 											homeroomTeacher,
 											id_major,
+											majorName,
 										} = row;
 										return (
 											<TableRow
@@ -191,13 +209,18 @@ export default function CollegeClassPage() {
 													{homeroomTeacher}
 												</TableCell>
 												<TableCell align="left">
-													{id_major}
+													{majorName}
 												</TableCell>
 												<TableCell align="right">
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={(e)=>handleOpenMenu(e,row)}
+														onClick={(e) =>
+															handleOpenMenu(
+																e,
+																row
+															)
+														}
 													>
 														<Iconify
 															icon={
@@ -232,8 +255,8 @@ export default function CollegeClassPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														Không có kết quả tìm kiếm cho
-														&nbsp;
+														Không có kết quả tìm
+														kiếm cho &nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;
@@ -268,7 +291,7 @@ export default function CollegeClassPage() {
 					},
 				}}
 			>
-				<MenuItem onClick={()=>setOpenPopupUpd(true)}>
+				<MenuItem onClick={() => setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
@@ -283,14 +306,17 @@ export default function CollegeClassPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm lớp chính quy"
 			>
-				<CollegeClassFormAdd />
+				<CollegeClassFormAdd dataSelect={dataSelect} />
 			</Popup>
 			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật lớp chính quy"
 			>
-				<CollegeClassFormUpd data={recordForEdit} />
+				<CollegeClassFormUpd
+					data={recordForEdit}
+					dataSelect={dataSelect}
+				/>
 			</Popup>
 		</>
 	);

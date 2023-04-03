@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { sentenceCase } from "change-case";
 import { useState } from "react";
 // @mui
 import {
@@ -8,7 +7,6 @@ import {
 	Table,
 	Stack,
 	Paper,
-	Avatar,
 	Button,
 	Popover,
 	TableRow,
@@ -21,22 +19,22 @@ import {
 	TableContainer,
 } from "@mui/material";
 // components
-import Label from "../components/label";
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
-import USERLIST from "../_mock/user";
+import STUDENTLIST from "../_mock/student";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-	{ id: "name", label: "Name", alignRight: false },
-	{ id: "company", label: "Company", alignRight: false },
-	{ id: "role", label: "Role", alignRight: false },
-	{ id: "isVerified", label: "Verified", alignRight: false },
-	{ id: "status", label: "Status", alignRight: false },
+	{ id: "fullName", label: "Tên", alignRight: false },
+	{ id: "dateOfBirth", label: "Ngày sinh", alignRight: false },
+	{ id: "phone", label: "Số điện thoại", alignRight: false },
+	{ id: "email", label: "Email", alignRight: false },
+	{ id: "gender", label: "Giới tính", alignRight: false },
+	{ id: "className", label: "Lớp học phần", alignRight: false },
 	{ id: "" },
 ];
 
@@ -69,7 +67,7 @@ function applySortFilter(array, comparator, query) {
 		return filter(
 			array,
 			(_user) =>
-				_user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+				_user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
 		);
 	}
 	return stabilizedThis.map((el) => el[0]);
@@ -103,7 +101,7 @@ export default function StudentPage() {
 	};
 
 	const filteredUsers = applySortFilter(
-		USERLIST,
+		STUDENTLIST,
 		getComparator(order, orderBy),
 		filterName
 	);
@@ -154,12 +152,12 @@ export default function StudentPage() {
 									{filteredUsers.map((row) => {
 										const {
 											id,
-											name,
-											role,
-											status,
-											company,
-											avatarUrl,
-											isVerified,
+											fullName,
+											dateOfBirth,
+											phone,
+											email,
+											gender,
+											className,
 										} = row;
 										return (
 											<TableRow
@@ -170,49 +168,39 @@ export default function StudentPage() {
 												<TableCell
 													component="th"
 													scope="row"
-													padding="none"
 												>
 													<Stack
 														direction="row"
 														alignItems="center"
 														spacing={2}
 													>
-														<Avatar
-															alt={name}
-															src={avatarUrl}
-														/>
 														<Typography
 															variant="subtitle2"
 															noWrap
 														>
-															{name}
+															{fullName}
 														</Typography>
 													</Stack>
 												</TableCell>
 
 												<TableCell align="left">
-													{company}
+													{dateOfBirth}
 												</TableCell>
 
 												<TableCell align="left">
-													{role}
+													{phone}
 												</TableCell>
 
 												<TableCell align="left">
-													{isVerified ? "Yes" : "No"}
+													{email}
 												</TableCell>
 
 												<TableCell align="left">
-													<Label
-														color={
-															(status ===
-																"banned" &&
-																"error") ||
-															"success"
-														}
-													>
-														{sentenceCase(status)}
-													</Label>
+													{gender}
+												</TableCell>
+
+												<TableCell align="left">
+													{className}
 												</TableCell>
 
 												<TableCell align="right">
@@ -254,8 +242,8 @@ export default function StudentPage() {
 													</Typography>
 
 													<Typography variant="body2">
-														Không có kết quả tìm kiếm cho
-														&nbsp;
+														Không có kết quả tìm
+														kiếm cho &nbsp;
 														<strong>
 															&quot;{filterName}
 															&quot;

@@ -17,16 +17,16 @@ const GlobalForm = styled("form")(({ theme }) => ({
 function MajorFormAdd() {
 	const formik = useFormik({
 		initialValues: {
-			tennganh: "",
-			truongkhoa: "",
+			majorName: "",
+			deanName: "",
 		},
 		validationSchema: Yup.object({
-			tennganh: Yup.string().required("Tên ngành phải được nhập"),
-			truongkhoa: Yup.string().required("Trưởng khoa phải được nhập"),
+			majorName: Yup.string().required("Vui lòng nhập tên ngành"),
+			deanName: Yup.string().required("Vui lòng nhập tên trưởng khoa"),
 		}),
 		onSubmit: (values) => {
-			formik.handleReset();
 			console.log(values);
+			formik.handleReset();
 		},
 	});
 	return (
@@ -38,13 +38,13 @@ function MajorFormAdd() {
 					</InputLabel>
 					<Input
 						id="component-simple"
-						name="tennganh"
-						value={formik.values.tennganh}
+						name="majorName"
+						value={formik.values.majorName}
 						onChange={formik.handleChange}
 					/>
-					{formik.errors.tennganh && formik.touched.tennganh && (
+					{formik.errors.majorName && formik.touched.majorName && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.tennganh}
+							{formik.errors.majorName}
 						</p>
 					)}
 				</FormControl>
@@ -54,13 +54,13 @@ function MajorFormAdd() {
 					</InputLabel>
 					<Input
 						id="component-simple"
-						name="truongkhoa"
-						value={formik.values.truongkhoa}
+						name="deanName"
+						value={formik.values.deanName}
 						onChange={formik.handleChange}
 					/>
-					{formik.errors.truongkhoa && formik.touched.truongkhoa && (
+					{formik.errors.deanName && formik.touched.deanName && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.truongkhoa}
+							{formik.errors.deanName}
 						</p>
 					)}
 				</FormControl>
