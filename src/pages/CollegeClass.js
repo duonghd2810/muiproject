@@ -25,6 +25,9 @@ import Scrollbar from "../components/scrollbar";
 import COLLEGECLASS from "../_mock/collegeclass";
 import CollegeClassListToolbar from "src/sections/@dashboard/collegeclass/CollegeClassListToolbar";
 import CollegeClassListHead from "src/sections/@dashboard/collegeclass/CollegeClassListHead";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import CollegeClassFormAdd from "src/sections/@dashboard/collegeclass/CollegeClassFormAdd";
+import CollegeClassFormUpd from "src/sections/@dashboard/collegeclass/CollegeClassFormUpd";
 
 // ----------------------------------------------------------------------
 
@@ -78,9 +81,15 @@ export default function CollegeClassPage() {
 
 	const [orderBy, setOrderBy] = useState("name");
 
+	const [openPopupAdd, setOpenPopupAdd] = useState(false);
+	const [openPopupUpd, setOpenPopupUpd] = useState(false);
+
+	const [recordForEdit,setRecordForEdit] = useState(null);
+
 	const [filterName, setFilterName] = useState("");
 
-	const handleOpenMenu = (event) => {
+	const handleOpenMenu = (event,row) => {
+		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
 
@@ -125,6 +134,7 @@ export default function CollegeClassPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						onClick={()=>setOpenPopupAdd(true)}
 					>
 						Thêm lớp chính quy mới
 					</Button>
@@ -187,7 +197,7 @@ export default function CollegeClassPage() {
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={handleOpenMenu}
+														onClick={(e)=>handleOpenMenu(e,row)}
 													>
 														<Iconify
 															icon={
@@ -258,7 +268,7 @@ export default function CollegeClassPage() {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem onClick={()=>setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
@@ -268,6 +278,20 @@ export default function CollegeClassPage() {
 					Delete
 				</MenuItem>
 			</Popover>
+			<Popup
+				openPopup={openPopupAdd}
+				setOpenPopup={setOpenPopupAdd}
+				title="Thêm lớp chính quy"
+			>
+				<CollegeClassFormAdd />
+			</Popup>
+			<Popup
+				openPopup={openPopupUpd}
+				setOpenPopup={setOpenPopupUpd}
+				title="Cập nhật lớp chính quy"
+			>
+				<CollegeClassFormUpd data={recordForEdit} />
+			</Popup>
 		</>
 	);
 }

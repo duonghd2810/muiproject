@@ -29,6 +29,7 @@ import MajorListHead from "src/sections/@dashboard/major/MajorListHead";
 import MAJORLIST from "../_mock/major";
 import MajorFormAdd from "src/sections/@dashboard/major/MajorFormAdd";
 import Popup from "src/sections/@dashboard/popup/Popup";
+import MajorFormUpd from "src/sections/@dashboard/major/MajorFormUpd";
 
 // ----------------------------------------------------------------------
 
@@ -83,9 +84,13 @@ export default function MajorPage() {
 
 	const [filterName, setFilterName] = useState("");
 
-	const [openPopup, setOpenPopup] = useState(false);
+	const [openPopupAdd, setOpenPopupAdd] = useState(false);
+	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 
-	const handleOpenMenu = (event) => {
+	const [recordForEdit,setRecordForEdit] = useState(null);
+
+	const handleOpenMenu = (event,row) => {
+		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
 
@@ -130,7 +135,7 @@ export default function MajorPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
-						onClick={() => setOpenPopup(true)}
+						onClick={() => setOpenPopupAdd(true)}
 					>
 						Thêm ngành học mới
 					</Button>
@@ -185,7 +190,7 @@ export default function MajorPage() {
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={handleOpenMenu}
+														onClick={(e)=>handleOpenMenu(e,row)}
 													>
 														<Iconify
 															icon={
@@ -256,7 +261,7 @@ export default function MajorPage() {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem onClick={()=>setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
@@ -267,11 +272,18 @@ export default function MajorPage() {
 				</MenuItem>
 			</Popover>
 			<Popup
-				openPopup={openPopup}
-				setOpenPopup={setOpenPopup}
+				openPopup={openPopupAdd}
+				setOpenPopup={setOpenPopupAdd}
 				title="Thêm ngành học"
 			>
 				<MajorFormAdd />
+			</Popup>
+			<Popup
+				openPopup={openPopupUpd}
+				setOpenPopup={setOpenPopupUpd}
+				title="Cập nhật ngành học"
+			>
+				<MajorFormUpd data={recordForEdit} />
 			</Popup>
 		</>
 	);
