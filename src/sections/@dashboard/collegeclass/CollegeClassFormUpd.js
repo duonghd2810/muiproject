@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
 import {
 	Button,
 	Container,
@@ -18,24 +17,17 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 function CollegeClassFormUpd(props) {
 	const { data, dataSelect } = props;
-	const [major, setMajor] = useState("");
-	const handleChange = (event) => {
-		setMajor(event.target.value);
-	};
-	const getDefaultOption = () => {
-		let option = dataSelect.find(
-			(dataOption) => dataOption.id === data.id_major
-		);
-		return option.id;
-	};
+
+	// console.log(data);
+	// console.log(dataSelect);
 	const formik = useFormik({
 		initialValues: {
-			majorName: getDefaultOption,
+			majorName: data.id_major,
 			className: data.className,
 			homeroomTeacher: data.homeroomTeacher,
 		},
 		validationSchema: Yup.object({
-			majorName: Yup.string().required("Vui lòng chọn ngành học"),
+			majorName: Yup.number().required("Vui lòng chọn ngành học"),
 			className: Yup.string().required("Vui lòng nhập lớp chính quy"),
 			homeroomTeacher: Yup.string().required(
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
@@ -55,8 +47,8 @@ function CollegeClassFormUpd(props) {
 						label="Ngành"
 						labelId="demo-simple-select-label"
 						name="majorName"
-						value={major}
-						onChange={handleChange}
+						onChange={formik.handleChange}
+						defaultValue={data.id_major}
 					>
 						{dataSelect.map((item) => (
 							<MenuItem key={item.id} value={item.id}>
@@ -64,13 +56,6 @@ function CollegeClassFormUpd(props) {
 							</MenuItem>
 						))}
 					</Select>
-					{major == "" &&
-						formik.errors.majorName &&
-						formik.touched.majorName && (
-							<p style={{ color: "red", margin: "4px 0" }}>
-								{formik.errors.majorName}
-							</p>
-						)}
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">

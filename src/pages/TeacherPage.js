@@ -25,6 +25,9 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import TEACHERLIST from "../_mock/teacher";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import UserFormAdd from "src/sections/@dashboard/user/UserFormAdd";
+import UserFormUpd from "src/sections/@dashboard/user/UserFormUpd";
 
 // ----------------------------------------------------------------------
 
@@ -81,7 +84,12 @@ export default function TeacherPage() {
 
 	const [filterName, setFilterName] = useState("");
 
-	const handleOpenMenu = (event) => {
+	const [openPopupAdd, setOpenPopupAdd] = useState(false);
+	const [openPopupUpd, setOpenPopupUpd] = useState(false);
+
+	const [recordForEdit, setRecordForEdit] = useState(null);
+	const handleOpenMenu = (event, row) => {
+		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
 
@@ -126,6 +134,7 @@ export default function TeacherPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						onClick={() => setOpenPopupAdd(true)}
 					>
 						Thêm giáo viên mới
 					</Button>
@@ -201,7 +210,12 @@ export default function TeacherPage() {
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={handleOpenMenu}
+														onClick={(e) =>
+															handleOpenMenu(
+																e,
+																row
+															)
+														}
 													>
 														<Iconify
 															icon={
@@ -272,7 +286,7 @@ export default function TeacherPage() {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem onClick={() => setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
@@ -282,6 +296,20 @@ export default function TeacherPage() {
 					Delete
 				</MenuItem>
 			</Popover>
+			<Popup
+				openPopup={openPopupAdd}
+				setOpenPopup={setOpenPopupAdd}
+				title="Thêm giáo viên"
+			>
+				<UserFormAdd />
+			</Popup>
+			<Popup
+				openPopup={openPopupUpd}
+				setOpenPopup={setOpenPopupUpd}
+				title="Cập nhật giáo viên"
+			>
+				<UserFormUpd data={recordForEdit} />
+			</Popup>
 		</>
 	);
 }

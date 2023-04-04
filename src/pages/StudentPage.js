@@ -25,6 +25,9 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import STUDENTLIST from "../_mock/student";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import UserFormAdd from "src/sections/@dashboard/user/UserFormAdd";
+import UserFormUpd from "src/sections/@dashboard/user/UserFormUpd";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +37,7 @@ const TABLE_HEAD = [
 	{ id: "phone", label: "Số điện thoại", alignRight: false },
 	{ id: "email", label: "Email", alignRight: false },
 	{ id: "gender", label: "Giới tính", alignRight: false },
-	{ id: "className", label: "Lớp học phần", alignRight: false },
+	{ id: "className", label: "Lớp chính quy", alignRight: false },
 	{ id: "" },
 ];
 
@@ -81,8 +84,12 @@ export default function StudentPage() {
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
+	const [openPopupAdd, setOpenPopupAdd] = useState(false);
+	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 
-	const handleOpenMenu = (event) => {
+	const [recordForEdit, setRecordForEdit] = useState(null);
+	const handleOpenMenu = (event, row) => {
+		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
 
@@ -127,6 +134,7 @@ export default function StudentPage() {
 					<Button
 						variant="contained"
 						startIcon={<Iconify icon="eva:plus-fill" />}
+						onClick={() => setOpenPopupAdd(true)}
 					>
 						Thêm sinh viên mới
 					</Button>
@@ -207,7 +215,12 @@ export default function StudentPage() {
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={handleOpenMenu}
+														onClick={(e) =>
+															handleOpenMenu(
+																e,
+																row
+															)
+														}
 													>
 														<Iconify
 															icon={
@@ -280,7 +293,7 @@ export default function StudentPage() {
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem onClick={() => setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>
@@ -290,6 +303,20 @@ export default function StudentPage() {
 					Delete
 				</MenuItem>
 			</Popover>
+			<Popup
+				openPopup={openPopupAdd}
+				setOpenPopup={setOpenPopupAdd}
+				title="Thêm sinh viên"
+			>
+				<UserFormAdd />
+			</Popup>
+			<Popup
+				openPopup={openPopupUpd}
+				setOpenPopup={setOpenPopupUpd}
+				title="Cập nhật sinh viên"
+			>
+				<UserFormUpd data={recordForEdit} />
+			</Popup>
 		</>
 	);
 }

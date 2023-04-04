@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
-import { useState } from "react";
 import * as Yup from "yup";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -18,18 +17,14 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 function CollegeClassFormAdd(props) {
 	const { dataSelect } = props;
-	const [major, setMajor] = useState("");
-	const handleChange = (event) => {
-		setMajor(event.target.value);
-	};
 	const formik = useFormik({
 		initialValues: {
-			majorName: "",
+			majorName: undefined,
 			className: "",
 			homeroomTeacher: "",
 		},
 		validationSchema: Yup.object({
-			majorName: Yup.string().required("Vui lòng chọn ngành học"),
+			majorName: Yup.number().required("Vui lòng chọn ngành học"),
 			className: Yup.string().required("Vui lòng nhập lớp chính quy"),
 			homeroomTeacher: Yup.string().required(
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
@@ -49,8 +44,7 @@ function CollegeClassFormAdd(props) {
 						label="Ngành"
 						labelId="demo-simple-select-label"
 						name="majorName"
-						value={major}
-						onChange={handleChange}
+						onChange={formik.handleChange}
 					>
 						{dataSelect.map((item) => (
 							<MenuItem key={item.id} value={item.id}>
@@ -58,13 +52,11 @@ function CollegeClassFormAdd(props) {
 							</MenuItem>
 						))}
 					</Select>
-					{major == "" &&
-						formik.errors.majorName &&
-						formik.touched.majorName && (
-							<p style={{ color: "red", margin: "4px 0" }}>
-								{formik.errors.majorName}
-							</p>
-						)}
+					{formik.errors.majorName && formik.touched.majorName && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.majorName}
+						</p>
+					)}
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">
