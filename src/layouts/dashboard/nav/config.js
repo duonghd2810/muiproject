@@ -19,7 +19,12 @@ const navConfig = [
 	{
 		title: "Quản lý lớp chính quy",
 		path: "/collegeclass",
-		icon: icon("ic_analytics"),
+		icon: icon("ic_class"),
+	},
+	{
+		title: "Quản lý môn học",
+		path: "/subject",
+		icon: icon("ic_subject"),
 	},
 	{
 		title: "Quản lý sinh viên",

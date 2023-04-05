@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import Page404 from "./pages/Page404";
 import TeacherPage from "./pages/TeacherPage";
 import CollegeClass from "./pages/CollegeClass";
+import SubjectPage from "./pages/SubjectPage";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,7 @@ export default function Router() {
 				{ path: "student", element: <StudentPage /> },
 				{ path: "teacher", element: <TeacherPage /> },
 				{ path: "collegeclass", element: <CollegeClass /> },
+				{ path: "subject", element: <SubjectPage /> },
 			],
 		},
 		{

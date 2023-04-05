@@ -17,6 +17,7 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 
 function UserFormAdd() {
+	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 	const formik = useFormik({
 		initialValues: {
 			fullName: "",
@@ -28,7 +29,7 @@ function UserFormAdd() {
 		validationSchema: Yup.object({
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
 			dateOfBirth: Yup.date().required("Vui lòng chọn ngày sinh"),
-			phone: Yup.string().required("Vui lòng nhập số điện thoại"),
+			phone: Yup.string().required("Vui lòng nhập số điện thoại").matches(regexPhone,"Số điện thoại không hợp lệ"),
 			email: Yup.string()
 				.required("Vui lòng nhập email")
 				.email("Không đúng định dạng email"),
