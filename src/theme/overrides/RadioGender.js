@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Radio from "@mui/material/Radio";
@@ -63,26 +64,31 @@ function BpRadio(props) {
 		/>
 	);
 }
-
-export default function CustomizedGender() {
+CustomizedRadioGender.propTypes = {
+	value: PropTypes.string,
+	onChange: PropTypes.func
+};
+export default function CustomizedRadioGender(props) {
+	const {name,value,onChange} = props;
 	return (
 		<FormControl>
 			<FormLabel id="demo-customized-radios">Giới tính</FormLabel>
 			<RadioGroup
-				style={{ display: "flex" }}
-				defaultValue="female"
+				row
 				aria-labelledby="demo-customized-radios"
-				name="customized-radios"
+				name={name}
+				value={value != "" ? value : "Nam"}
+				onChange={onChange}
 			>
 				<FormControlLabel
-					value="female"
-					control={<BpRadio />}
-					label="Nữ"
-				/>
-				<FormControlLabel
-					value="male"
+					value="Nam"
 					control={<BpRadio />}
 					label="Nam"
+				/>
+				<FormControlLabel
+					value="Nữ"
+					control={<BpRadio />}
+					label="Nữ"
 				/>
 			</RadioGroup>
 		</FormControl>
