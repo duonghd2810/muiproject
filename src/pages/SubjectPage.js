@@ -26,17 +26,39 @@ import Scrollbar from "../components/scrollbar";
 // mock
 import SUBJECTLIST from "../_mock/subject";
 import Popup from "src/sections/@dashboard/popup/Popup";
-import {SubjectListToolbar, SubjectListHead, SubjectFormAdd, SubjectFormUpd} from "../sections/@dashboard/subject";
+import {
+	SubjectListToolbar,
+	SubjectListHead,
+	SubjectFormAdd,
+	SubjectFormUpd,
+} from "../sections/@dashboard/subject";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
 	{ id: "subjectName", label: "Tên môn", alignRight: false },
 	{ id: "countTc", label: "Số tín chỉ", alignRight: false },
-     { id: "fullName", label: "Giáo viên dạy", alignRight: false },
+	{ id: "fullName", label: "Giáo viên dạy", alignRight: false },
 	{ id: "" },
 ];
-
+const dataSelect = [
+	{
+		id: 1,
+		fullName: "Dương",
+	},
+	{
+		id: 2,
+		fullName: "Anh",
+	},
+	{
+		id: 3,
+		fullName: "Sỹ",
+	},
+	{
+		id: 4,
+		fullName: "Hùng",
+	},
+];
 // ----------------------------------------------------------------------
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -65,13 +87,15 @@ function applySortFilter(array, comparator, query) {
 		return filter(
 			array,
 			(_subject) =>
-				_subject.subjectName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+				_subject.subjectName
+					.toLowerCase()
+					.indexOf(query.toLowerCase()) !== -1
 		);
 	}
 	return stabilizedThis.map((el) => el[0]);
 }
 function SubjectPage() {
-  const [open, setOpen] = useState(null);
+	const [open, setOpen] = useState(null);
 
 	const [order, setOrder] = useState("asc");
 
@@ -287,14 +311,14 @@ function SubjectPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm môn học"
 			>
-				<SubjectFormAdd />
+				<SubjectFormAdd dataSelect={dataSelect} />
 			</Popup>
 			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật môn học"
 			>
-				<SubjectFormUpd data={recordForEdit} />
+				<SubjectFormUpd data={recordForEdit} dataSelect={dataSelect} />
 			</Popup>
 		</>
 	);
