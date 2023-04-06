@@ -24,7 +24,7 @@ function UserFormAdd() {
 	const formik = useFormik({
 		initialValues: {
 			fullName: "",
-			dateOfBirth: null ,
+			dateOfBirth: undefined ,
 			phone: "",
 			email: "",
 			gender: "",
@@ -44,7 +44,9 @@ function UserFormAdd() {
 	});
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
-			<GlobalForm onSubmit={formik.handleSubmit}>
+			<GlobalForm onSubmit={
+					formik.handleSubmit
+				}>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input

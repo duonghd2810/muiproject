@@ -24,7 +24,7 @@ function UserFormUpd(props) {
 	const formik = useFormik({
 		initialValues: {
 			fullName: data.fullName,
-			dateOfBirth: data.dateOfBirth,
+			dateOfBirth: new Date(data.dateOfBirth),
 			phone: data.phone,
 			email:data.email,
 			gender: data.gender,
@@ -63,7 +63,7 @@ function UserFormUpd(props) {
 				<LocalizationProvider dateAdapter={AdapterDayjs}>
 						<DatePicker 
 							name="dateOfBirth"
-							value={formik.values.dateOfBirth} 
+							defaultValue={formik.values.dateOfBirth} 
 							onChange={(value) => {
 								formik.setFieldValue('dateOfBirth', Date.parse(value));
 							}}
