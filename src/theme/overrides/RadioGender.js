@@ -65,11 +65,12 @@ function BpRadio(props) {
 	);
 }
 CustomizedRadioGender.propTypes = {
+	name: PropTypes.string,
 	value: PropTypes.string,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
 };
 export default function CustomizedRadioGender(props) {
-	const {name,value,onChange} = props;
+	const { name, value, onChange } = props;
 	return (
 		<FormControl>
 			<FormLabel id="demo-customized-radios">Giới tính</FormLabel>
@@ -77,7 +78,7 @@ export default function CustomizedRadioGender(props) {
 				row
 				aria-labelledby="demo-customized-radios"
 				name={name}
-				value={value != "" ? value : "Nam"}
+				value={value}
 				onChange={onChange}
 			>
 				<FormControlLabel
@@ -85,11 +86,7 @@ export default function CustomizedRadioGender(props) {
 					control={<BpRadio />}
 					label="Nam"
 				/>
-				<FormControlLabel
-					value="Nữ"
-					control={<BpRadio />}
-					label="Nữ"
-				/>
+				<FormControlLabel value="Nữ" control={<BpRadio />} label="Nữ" />
 			</RadioGroup>
 		</FormControl>
 	);

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomizedRadioGender from "src/theme/overrides/RadioGender";
 
 const GlobalForm = styled("form")(({ theme }) => ({
@@ -24,29 +24,31 @@ function UserFormAdd() {
 	const formik = useFormik({
 		initialValues: {
 			fullName: "",
-			dateOfBirth: undefined ,
+			dateOfBirth: undefined,
 			phone: "",
 			email: "",
 			gender: "",
 		},
 		validationSchema: Yup.object({
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
-			dateOfBirth: Yup.date().required("Vui lòng chọn ngày sinh"),
-			phone: Yup.string().required("Vui lòng nhập số điện thoại").matches(regexPhone,"Số điện thoại không hợp lệ"),
+			dateOfBirth: Yup.date()
+				.required("Vui lòng chọn ngày sinh")
+				.nullable(),
+			phone: Yup.string()
+				.required("Vui lòng nhập số điện thoại")
+				.matches(regexPhone, "Số điện thoại không hợp lệ"),
 			email: Yup.string()
 				.required("Vui lòng nhập email")
 				.email("Không đúng định dạng email"),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
+			console.log(JSON.parse(JSON.stringify(values)));
 			formik.handleReset();
 		},
 	});
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
-			<GlobalForm onSubmit={
-					formik.handleSubmit
-				}>
+			<GlobalForm onSubmit={formik.handleSubmit}>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input
@@ -63,14 +65,15 @@ function UserFormAdd() {
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
-							<DatePicker 
-								name="dateOfBirth"
-								value={formik.values.dateOfBirth} 
-								onChange={(value) => {
-									formik.setFieldValue('dateOfBirth', value);
-								}}
-								renderInput={(params) => <TextField {...params} />}
-								label="Ngày sinh" />
+						<DatePicker
+							name="dateOfBirth"
+							value={formik.values.dateOfBirth}
+							onChange={(value) => {
+								formik.setFieldValue("dateOfBirth", value);
+							}}
+							renderInput={(params) => <TextField {...params} />}
+							label="Ngày sinh"
+						/>
 					</LocalizationProvider>
 					{formik.errors.dateOfBirth &&
 						formik.touched.dateOfBirth && (
@@ -110,7 +113,11 @@ function UserFormAdd() {
 					)}
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
-					<CustomizedRadioGender name="gender" value={formik.values.gender} onChange={formik.handleChange} />
+					<CustomizedRadioGender
+						name="gender"
+						value={formik.values.gender}
+						onChange={formik.handleChange}
+					/>
 				</FormControl>
 				<Button type="submit" size="small" variant="contained">
 					Thêm
