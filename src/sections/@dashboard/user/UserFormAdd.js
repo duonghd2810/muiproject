@@ -24,7 +24,7 @@ function UserFormAdd() {
 	const formik = useFormik({
 		initialValues: {
 			fullName: "",
-			dateOfBirth: undefined,
+			dateOfBirth: null,
 			phone: "",
 			email: "",
 			gender: "",
@@ -73,6 +73,7 @@ function UserFormAdd() {
 							}}
 							renderInput={(params) => <TextField {...params} />}
 							label="Ngày sinh"
+							format="DD / MM / YYYY"
 						/>
 					</LocalizationProvider>
 					{formik.errors.dateOfBirth &&

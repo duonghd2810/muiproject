@@ -12,6 +12,7 @@ import { styled } from "@mui/material/styles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomizedRadioGender from "src/theme/overrides/RadioGender";
+import dayjs from "dayjs";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -24,7 +25,7 @@ function UserFormUpd(props) {
 	const formik = useFormik({
 		initialValues: {
 			fullName: data.fullName,
-			dateOfBirth: data.dateOfBirth,
+			dateOfBirth: dayjs(data.dateOfBirth, "DD/MM/YYYY"),
 			phone: data.phone,
 			email: data.email,
 			gender: data.gender,
@@ -76,6 +77,7 @@ function UserFormUpd(props) {
 							}}
 							renderInput={(params) => <TextField {...params} />}
 							label="Ngày sinh"
+							format="DD / MM / YYYY"
 						/>
 					</LocalizationProvider>
 					{formik.errors.dateOfBirth &&
