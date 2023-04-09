@@ -32,9 +32,7 @@ function UserFormUpd(props) {
 		},
 		validationSchema: Yup.object({
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
-			dateOfBirth: Yup.date()
-				.required("Vui lòng chọn ngày sinh")
-				.nullable(),
+      dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
 				.matches(regexPhone, "Số điện thoại không hợp lệ"),
@@ -68,7 +66,7 @@ function UserFormUpd(props) {
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
 						<DatePicker
 							name="dateOfBirth"
-							defaultValue={formik.values.dateOfBirth}
+							defaultValue={formik.values.dateOfBirth || null}
 							onChange={(value) => {
 								formik.setFieldValue(
 									"dateOfBirth",
