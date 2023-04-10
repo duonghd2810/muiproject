@@ -4,13 +4,13 @@ import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
+    label: 'Cập nhật thông tin',
   },
 ];
 
@@ -79,7 +79,7 @@ export default function AccountPopover() {
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
             <MenuItem key={option.label} onClick={handleClose}>
-              {option.label}
+              <Link to="/info" style={{color:"inherit", textDecoration:"none"}}>{option.label}</Link>
             </MenuItem>
           ))}
         </Stack>

@@ -10,6 +10,7 @@ import Page404 from "./pages/Page404";
 import TeacherPage from "./pages/TeacherPage";
 import CollegeClass from "./pages/CollegeClass";
 import SubjectPage from "./pages/SubjectPage";
+import UpdatePage from "./pages/UpdatePage";
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ export default function Router() {
 				{ path: "teacher", element: <TeacherPage /> },
 				{ path: "collegeclass", element: <CollegeClass /> },
 				{ path: "subject", element: <SubjectPage /> },
+				{ path: "info", element: <UpdatePage /> },
 			],
 		},
 		{
