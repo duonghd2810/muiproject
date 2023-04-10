@@ -75,7 +75,7 @@ export default function LoginPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Login</title>
+				<title>Đăng nhập</title>
 			</Helmet>
 
 			<StyledRoot>

@@ -135,7 +135,7 @@ export default function CollegeClassPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Collegeclass page</title>
+				<title>Quản lý lớp chính quy</title>
 			</Helmet>
 
 			<Container>

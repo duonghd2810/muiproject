@@ -87,9 +87,9 @@ export default function MajorPage() {
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 
-	const [recordForEdit,setRecordForEdit] = useState(null);
+	const [recordForEdit, setRecordForEdit] = useState(null);
 
-	const handleOpenMenu = (event,row) => {
+	const handleOpenMenu = (event, row) => {
 		setRecordForEdit(row);
 		setOpen(event.currentTarget);
 	};
@@ -119,7 +119,7 @@ export default function MajorPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Major page</title>
+				<title>Quản lý ngành học</title>
 			</Helmet>
 
 			<Container>
@@ -190,7 +190,12 @@ export default function MajorPage() {
 													<IconButton
 														size="large"
 														color="inherit"
-														onClick={(e)=>handleOpenMenu(e,row)}
+														onClick={(e) =>
+															handleOpenMenu(
+																e,
+																row
+															)
+														}
 													>
 														<Iconify
 															icon={
@@ -261,7 +266,7 @@ export default function MajorPage() {
 					},
 				}}
 			>
-				<MenuItem onClick={()=>setOpenPopupUpd(true)}>
+				<MenuItem onClick={() => setOpenPopupUpd(true)}>
 					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
 					Edit
 				</MenuItem>

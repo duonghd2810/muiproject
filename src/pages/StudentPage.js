@@ -118,7 +118,7 @@ export default function StudentPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Student page</title>
+				<title>Quản lý sinh viên</title>
 			</Helmet>
 
 			<Container>

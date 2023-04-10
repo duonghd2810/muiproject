@@ -136,7 +136,7 @@ function SubjectPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Subject page</title>
+				<title>Quản lý môn học</title>
 			</Helmet>
 
 			<Container>

@@ -11,6 +11,10 @@ import TeacherPage from "./pages/TeacherPage";
 import CollegeClass from "./pages/CollegeClass";
 import SubjectPage from "./pages/SubjectPage";
 import UpdatePage from "./pages/UpdatePage";
+import StudyResultPage from "./pages/StudyResultPage";
+import RegistLessonPage from "./pages/RegistLessonPage";
+import EnterPointPage from "./pages/EnterPointPage";
+import CalendarclPage from "./pages/CalendarclPage";
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +30,11 @@ export default function Router() {
 				{ path: "teacher", element: <TeacherPage /> },
 				{ path: "collegeclass", element: <CollegeClass /> },
 				{ path: "subject", element: <SubjectPage /> },
-				{ path: "info", element: <UpdatePage /> },
+				{ path: "profile", element: <UpdatePage /> },
+				{ path: "studyresult", element: <StudyResultPage /> },
+				{ path: "registlesson", element: <RegistLessonPage /> },
+				{ path: "enterpoint", element: <EnterPointPage /> },
+				{ path: "calendarcl", element: <CalendarclPage /> },
 			],
 		},
 		{

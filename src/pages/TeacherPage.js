@@ -118,7 +118,7 @@ export default function TeacherPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Teacher page</title>
+				<title>Quản lý giáo viên</title>
 			</Helmet>
 
 			<Container>
