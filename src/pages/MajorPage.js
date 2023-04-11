@@ -26,10 +26,12 @@ import MajorListToolbar from "src/sections/@dashboard/major/MajorListToolbar";
 import MajorListHead from "src/sections/@dashboard/major/MajorListHead";
 
 // mock
-import MAJORLIST from "../_mock/major";
 import MajorFormAdd from "src/sections/@dashboard/major/MajorFormAdd";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import MajorFormUpd from "src/sections/@dashboard/major/MajorFormUpd";
+import { useEffect } from "react";
+import { fetchMajor } from "src/reducers/majorSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +78,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function MajorPage() {
+	const dispatch = useDispatch();
 	const [open, setOpen] = useState(null);
 
 	const [order, setOrder] = useState("asc");
@@ -86,8 +89,14 @@ export default function MajorPage() {
 
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
+	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
+
+	useEffect(() => {
+		dispatch(fetchMajor());
+	}, []);
+	const MAJORLIST = useSelector((state) => state.majorReducer).data;
 
 	const handleOpenMenu = (event, row) => {
 		setRecordForEdit(row);
@@ -271,7 +280,10 @@ export default function MajorPage() {
 					Edit
 				</MenuItem>
 
-				<MenuItem sx={{ color: "error.main" }}>
+				<MenuItem
+					onClick={() => setOpenPopupDel(true)}
+					sx={{ color: "error.main" }}
+				>
 					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
 					Delete
 				</MenuItem>

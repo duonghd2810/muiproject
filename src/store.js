@@ -4,23 +4,23 @@ import storage from "redux-persist/lib/storage";
 import reducers from "./reducers";
 
 const persistConfig = {
-  key: "root",
-  whitelist: ["userReducer"],
-  storage,
-  version: 1,
+	key: "root",
+	whitelist: ["userReducer", "majorReducer"],
+	storage,
+	version: 1,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  // devTools: process.env.NODE_ENV !== "production",
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: {
-  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-  //     },
-  //   }),
+	reducer: persistedReducer,
+	// devTools: process.env.NODE_ENV !== "production",
+	// middleware: (getDefaultMiddleware) =>
+	//   getDefaultMiddleware({
+	//     serializableCheck: {
+	//       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+	//     },
+	//   }),
 });
 
 export const persistor = persistStore(store);

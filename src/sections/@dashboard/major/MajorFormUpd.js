@@ -10,6 +10,9 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import request from "src/utils/request";
+import { useDispatch } from "react-redux";
+import { fetchMajor } from "src/reducers/majorSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -20,7 +23,9 @@ MajorFormUpd.propTypes = {
 	props: PropTypes.object,
 };
 function MajorFormUpd(props) {
+	const dispatch = useDispatch();
 	const { data } = props;
+	console.log(data);
 	const formik = useFormik({
 		initialValues: {
 			majorName: data.majorName,
@@ -30,8 +35,17 @@ function MajorFormUpd(props) {
 			majorName: Yup.string().required("Vui lòng nhập tên ngành"),
 			deanName: Yup.string().required("Vui lòng nhập tên trưởng khoa"),
 		}),
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			await request.patch(
+				`major/update/${data.id}`,
+				JSON.stringify(values),
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			dispatch(fetchMajor());
 			formik.handleReset();
 		},
 	});

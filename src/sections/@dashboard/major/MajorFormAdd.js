@@ -8,6 +8,9 @@ import {
 	InputLabel,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import request from "src/utils/request";
+import { useDispatch } from "react-redux";
+import { fetchMajor } from "src/reducers/majorSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -15,6 +18,7 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function MajorFormAdd() {
+	const dispatch = useDispatch();
 	const formik = useFormik({
 		initialValues: {
 			majorName: "",
@@ -24,8 +28,13 @@ function MajorFormAdd() {
 			majorName: Yup.string().required("Vui lòng nhập tên ngành"),
 			deanName: Yup.string().required("Vui lòng nhập tên trưởng khoa"),
 		}),
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			await request.post("major/create", JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			dispatch(fetchMajor());
 			formik.handleReset();
 		},
 	});
