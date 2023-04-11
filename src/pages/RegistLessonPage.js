@@ -42,25 +42,25 @@ function RegistLessonPage() {
 									Sáng
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 							</TableRow>
 							<TableRow>
@@ -68,25 +68,25 @@ function RegistLessonPage() {
 									Chiều
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 							</TableRow>
 							<TableRow>
@@ -94,25 +94,25 @@ function RegistLessonPage() {
 									Tối
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 								<TableCell align="right">
-									<Link to="lesson">Chọn</Link>
+									<Link >Chọn</Link>
 								</TableCell>
 							</TableRow>
 						</TableBody>

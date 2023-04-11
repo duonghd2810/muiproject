@@ -28,13 +28,13 @@ function UpdatePage() {
 		initialValues: {
 			avatar: "",
 			dateOfBirth: "",
+               address:"",
 			phone: "",
 			email: "",
-			gender: "Nam",
 		},
 		validationSchema: Yup.object({
-			avatar: Yup.string(),
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
+               address: Yup.string().required("Vui lòng nhập địa chỉ"),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
 				.matches(regexPhone, "Số điện thoại không hợp lệ"),
@@ -50,7 +50,7 @@ function UpdatePage() {
 	return (
 		<>
 			<Helmet>
-				<title>Quản lý giáo viên</title>
+				<title>Cập nhật thông tin</title>
 			</Helmet>
 
 			<Container maxWidth="sm">
