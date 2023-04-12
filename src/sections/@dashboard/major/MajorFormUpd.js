@@ -24,8 +24,7 @@ MajorFormUpd.propTypes = {
 };
 function MajorFormUpd(props) {
 	const dispatch = useDispatch();
-	const { data } = props;
-	console.log(data);
+	const { data, setOpen } = props;
 	const formik = useFormik({
 		initialValues: {
 			majorName: data.majorName,
@@ -36,15 +35,11 @@ function MajorFormUpd(props) {
 			deanName: Yup.string().required("Vui lòng nhập tên trưởng khoa"),
 		}),
 		onSubmit: async (values) => {
-			await request.patch(
-				`major/update/${data.id}`,
-				JSON.stringify(values),
-				{
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			await request.patch(`major/${data.id}`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			dispatch(fetchMajor());
 			formik.handleReset();
 		},
@@ -84,7 +79,12 @@ function MajorFormUpd(props) {
 						</p>
 					)}
 				</FormControl>
-				<Button type="submit" size="small" variant="contained">
+				<Button
+					type="submit"
+					size="small"
+					variant="contained"
+					onClick={() => setOpen(false)}
+				>
 					Cập nhật
 				</Button>
 			</GlobalForm>

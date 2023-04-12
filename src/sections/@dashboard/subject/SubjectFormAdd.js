@@ -4,11 +4,10 @@ import {
 	FormControl,
 	Input,
 	InputLabel,
-	MenuItem,
-	Select,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
+import request from "src/utils/request";
 import * as Yup from "yup";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -16,19 +15,23 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function SubjectFormAdd(props) {
-	const { dataSelect } = props;
 	const formik = useFormik({
 		initialValues: {
 			subjectName: "",
-			countTc: "",
-			id_teacher: undefined,
+			tc: 0,
 		},
 		validationSchema: Yup.object({
 			subjectName: Yup.string().required("Vui lòng nhập tên môn học"),
-			countTc: Yup.string().required("Vui lòng nhập số tín chỉ"),
-			id_teacher: Yup.number().required("Vui lòng chọn giáo viên dạy"),
+			tc: Yup.number("Nhập không đúng định dạng").required(
+				"Vui lòng nhập số tín chỉ"
+			),
 		}),
 		onSubmit: (values) => {
+			request.post("subject", JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			console.log(values);
 			formik.handleReset();
 		},
@@ -59,35 +62,13 @@ function SubjectFormAdd(props) {
 					</InputLabel>
 					<Input
 						id="component-simple"
-						name="countTc"
-						value={formik.values.countTc}
+						name="tc"
+						value={formik.values.tc}
 						onChange={formik.handleChange}
 					/>
-					{formik.errors.countTc && formik.touched.countTc && (
+					{formik.errors.tc && formik.touched.tc && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.countTc}
-						</p>
-					)}
-				</FormControl>
-				<FormControl style={{ margin: "12px 0" }}>
-					<InputLabel id="demo-simple-select-label">
-						Giáo viên dạy
-					</InputLabel>
-					<Select
-						label="Giáo viên dạy"
-						labelId="demo-simple-select-label"
-						name="id_teacher"
-						onChange={formik.handleChange}
-					>
-						{dataSelect.map((item) => (
-							<MenuItem key={item.id} value={item.id}>
-								{item.fullName}
-							</MenuItem>
-						))}
-					</Select>
-					{formik.errors.id_teacher && formik.touched.id_teacher && (
-						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.id_teacher}
+							{formik.errors.tc}
 						</p>
 					)}
 				</FormControl>

@@ -29,7 +29,7 @@ function MajorFormAdd() {
 			deanName: Yup.string().required("Vui lòng nhập tên trưởng khoa"),
 		}),
 		onSubmit: async (values) => {
-			await request.post("major/create", JSON.stringify(values), {
+			await request.post("major", JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
 				},

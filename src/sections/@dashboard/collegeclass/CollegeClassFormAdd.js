@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
+import request from "src/utils/request";
 import * as Yup from "yup";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -19,19 +20,23 @@ function CollegeClassFormAdd(props) {
 	const { dataSelect } = props;
 	const formik = useFormik({
 		initialValues: {
-			majorName: undefined,
+			id_major: 0,
 			className: "",
 			homeroomTeacher: "",
 		},
 		validationSchema: Yup.object({
-			majorName: Yup.number().required("Vui lòng chọn ngành học"),
+			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			className: Yup.string().required("Vui lòng nhập lớp chính quy"),
 			homeroomTeacher: Yup.string().required(
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
 			),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
+			request.post("class", JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			formik.handleReset();
 		},
 	});
@@ -43,7 +48,7 @@ function CollegeClassFormAdd(props) {
 					<Select
 						label="Ngành"
 						labelId="demo-simple-select-label"
-						name="majorName"
+						name="id_major"
 						onChange={formik.handleChange}
 					>
 						{dataSelect.map((item) => (
@@ -52,9 +57,9 @@ function CollegeClassFormAdd(props) {
 							</MenuItem>
 						))}
 					</Select>
-					{formik.errors.majorName && formik.touched.majorName && (
+					{formik.errors.id_major && formik.touched.id_major && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.majorName}
+							{formik.errors.id_major}
 						</p>
 					)}
 				</FormControl>

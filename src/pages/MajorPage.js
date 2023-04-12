@@ -6,16 +6,13 @@ import {
 	Card,
 	Table,
 	Stack,
-	Paper,
 	Button,
-	Popover,
 	TableRow,
 	MenuItem,
 	TableBody,
 	TableCell,
 	Container,
 	Typography,
-	IconButton,
 	TableContainer,
 } from "@mui/material";
 // components
@@ -32,6 +29,7 @@ import MajorFormUpd from "src/sections/@dashboard/major/MajorFormUpd";
 import { useEffect } from "react";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { useDispatch, useSelector } from "react-redux";
+import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +58,9 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+	if (Object.keys(array).length === 0) {
+		return [];
+	}
 	const stabilizedThis = array.map((el, index) => [el, index]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);
@@ -79,7 +80,6 @@ function applySortFilter(array, comparator, query) {
 
 export default function MajorPage() {
 	const dispatch = useDispatch();
-	const [open, setOpen] = useState(null);
 
 	const [order, setOrder] = useState("asc");
 
@@ -98,13 +98,13 @@ export default function MajorPage() {
 	}, []);
 	const MAJORLIST = useSelector((state) => state.majorReducer).data;
 
-	const handleOpenMenu = (event, row) => {
+	const handleOpenUpd = (row) => {
 		setRecordForEdit(row);
-		setOpen(event.currentTarget);
+		setOpenPopupUpd(true);
 	};
-
-	const handleCloseMenu = () => {
-		setOpen(null);
+	const handleOpenDel = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupDel(true);
 	};
 
 	const handleRequestSort = (event, property) => {
@@ -122,8 +122,6 @@ export default function MajorPage() {
 		getComparator(order, orderBy),
 		filterName
 	);
-
-	const isNotFound = !filteredMajors.length && !!filterName;
 
 	return (
 		<>
@@ -166,128 +164,91 @@ export default function MajorPage() {
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredMajors.map((row) => {
-										const { id, majorName, deanName } = row;
-										return (
-											<TableRow
-												hover
-												key={id}
-												tabIndex={-1}
-											>
-												<TableCell
-													component="th"
-													scope="row"
+									{filteredMajors.length != 0 &&
+										filteredMajors.map((row) => {
+											const { id, majorName, deanName } =
+												row;
+											return (
+												<TableRow
+													hover
+													key={id}
+													tabIndex={-1}
 												>
-													<Stack
-														direction="row"
-														alignItems="center"
-														spacing={2}
+													<TableCell
+														component="th"
+														scope="row"
 													>
-														<Typography
-															variant="subtitle2"
-															noWrap
+														<Stack
+															direction="row"
+															alignItems="center"
+															spacing={2}
 														>
-															{majorName}
-														</Typography>
-													</Stack>
-												</TableCell>
+															<Typography
+																variant="subtitle2"
+																noWrap
+															>
+																{majorName}
+															</Typography>
+														</Stack>
+													</TableCell>
 
-												<TableCell align="left">
-													{deanName}
-												</TableCell>
-												<TableCell align="right">
-													<IconButton
-														size="large"
-														color="inherit"
-														onClick={(e) =>
-															handleOpenMenu(
-																e,
-																row
-															)
-														}
+													<TableCell align="left">
+														{deanName}
+													</TableCell>
+													<TableCell
+														align="right"
+														width="15%"
 													>
-														<Iconify
-															icon={
-																"eva:more-vertical-fill"
-															}
-														/>
-													</IconButton>
-												</TableCell>
-											</TableRow>
-										);
-									})}
+														<div
+															style={{
+																display: "flex",
+																justifyContent:
+																	"flex-end",
+															}}
+														>
+															<MenuItem
+																onClick={() =>
+																	handleOpenUpd(
+																		row
+																	)
+																}
+															>
+																<Iconify
+																	icon={
+																		"eva:edit-fill"
+																	}
+																/>
+																Edit
+															</MenuItem>
+
+															<MenuItem
+																onClick={() =>
+																	handleOpenDel(
+																		row
+																	)
+																}
+																sx={{
+																	color: "error.main",
+																}}
+															>
+																<Iconify
+																	icon={
+																		"eva:trash-2-outline"
+																	}
+																/>
+																Delete
+															</MenuItem>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})}
 								</TableBody>
-
-								{isNotFound && (
-									<TableBody>
-										<TableRow>
-											<TableCell
-												align="center"
-												colSpan={6}
-												sx={{ py: 3 }}
-											>
-												<Paper
-													sx={{
-														textAlign: "center",
-													}}
-												>
-													<Typography
-														variant="h6"
-														paragraph
-													>
-														Not found
-													</Typography>
-
-													<Typography variant="body2">
-														Không có kết quả tìm
-														kiếm cho &nbsp;
-														<strong>
-															&quot;{filterName}
-															&quot;
-														</strong>
-													</Typography>
-												</Paper>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								)}
 							</Table>
 						</TableContainer>
 					</Scrollbar>
 				</Card>
 			</Container>
-
-			<Popover
-				open={Boolean(open)}
-				anchorEl={open}
-				onClose={handleCloseMenu}
-				anchorOrigin={{ vertical: "top", horizontal: "left" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				PaperProps={{
-					sx: {
-						p: 1,
-						width: 140,
-						"& .MuiMenuItem-root": {
-							px: 1,
-							typography: "body2",
-							borderRadius: 0.75,
-						},
-					},
-				}}
-			>
-				<MenuItem onClick={() => setOpenPopupUpd(true)}>
-					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
-					Edit
-				</MenuItem>
-
-				<MenuItem
-					onClick={() => setOpenPopupDel(true)}
-					sx={{ color: "error.main" }}
-				>
-					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-					Delete
-				</MenuItem>
-			</Popover>
 			<Popup
 				openPopup={openPopupAdd}
 				setOpenPopup={setOpenPopupAdd}
@@ -295,12 +256,20 @@ export default function MajorPage() {
 			>
 				<MajorFormAdd />
 			</Popup>
+			<PopupDel
+				openPopup={openPopupDel}
+				setOpenPopup={setOpenPopupDel}
+				title="Bạn muốn xóa ngành học này không?"
+				type="major"
+				data={recordForEdit}
+			></PopupDel>
+
 			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật ngành học"
 			>
-				<MajorFormUpd data={recordForEdit} />
+				<MajorFormUpd data={recordForEdit} setOpen={setOpenPopupUpd} />
 			</Popup>
 		</>
 	);

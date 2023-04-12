@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui
 import {
 	Card,
@@ -22,12 +22,15 @@ import {
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
 // mock
-import COLLEGECLASS from "../_mock/collegeclass";
 import CollegeClassListToolbar from "src/sections/@dashboard/collegeclass/CollegeClassListToolbar";
 import CollegeClassListHead from "src/sections/@dashboard/collegeclass/CollegeClassListHead";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import CollegeClassFormAdd from "src/sections/@dashboard/collegeclass/CollegeClassFormAdd";
 import CollegeClassFormUpd from "src/sections/@dashboard/collegeclass/CollegeClassFormUpd";
+import PopupDel from "src/sections/@dashboard/popup/PopupDel";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMajor } from "src/reducers/majorSlice";
+import request from "src/utils/request";
 
 // ----------------------------------------------------------------------
 
@@ -36,24 +39,6 @@ const TABLE_HEAD = [
 	{ id: "homeroomTeacher", label: "Giáo viên chủ nhiệm", alignRight: false },
 	{ id: "majorName", label: "Ngành", alignRight: false },
 	{ id: "" },
-];
-const dataSelect = [
-	{
-		id: 1,
-		majorName: "Công nghệ thông tin",
-	},
-	{
-		id: 2,
-		majorName: "Kế toán",
-	},
-	{
-		id: 3,
-		majorName: "Du lịch",
-	},
-	{
-		id: 4,
-		majorName: "Điện điện tử",
-	},
 ];
 // ----------------------------------------------------------------------
 
@@ -74,6 +59,9 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+	if (array.length == 0) {
+		return [];
+	}
 	const stabilizedThis = array.map((el, index) => [el, index]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);
@@ -92,28 +80,27 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function CollegeClassPage() {
-	const [open, setOpen] = useState(null);
-
+	const dispatch = useDispatch();
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
+	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const [filterName, setFilterName] = useState("");
+	const [collegeClass, setCollegeClass] = useState([]);
 
-	const handleOpenMenu = (event, row) => {
-		setRecordForEdit(row);
-		setOpen(event.currentTarget);
-	};
-
-	const handleCloseMenu = () => {
-		setOpen(null);
-	};
-
+	useEffect(() => {
+		dispatch(fetchMajor());
+	}, []);
+	const dataSelect = useSelector((state) => state.majorReducer).data;
+	useEffect(() => {
+		request.get("class").then((res) => setCollegeClass(res.data));
+	}, []);
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -125,12 +112,18 @@ export default function CollegeClassPage() {
 	};
 
 	const filteredCollegeClasses = applySortFilter(
-		COLLEGECLASS,
+		collegeClass,
 		getComparator(order, orderBy),
 		filterName
 	);
-
-	const isNotFound = !filteredCollegeClasses.length && !!filterName;
+	const handleOpenUpd = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupUpd(true);
+	};
+	const handleOpenDel = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupDel(true);
+	};
 
 	return (
 		<>
@@ -173,134 +166,99 @@ export default function CollegeClassPage() {
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredCollegeClasses.map((row) => {
-										const {
-											id,
-											className,
-											homeroomTeacher,
-											id_major,
-											majorName,
-										} = row;
-										return (
-											<TableRow
-												hover
-												key={id}
-												tabIndex={-1}
-											>
-												<TableCell
-													component="th"
-													scope="row"
+									{filteredCollegeClasses.length != 0 &&
+										filteredCollegeClasses.map((row) => {
+											const {
+												id,
+												className,
+												homeroomTeacher,
+												id_major,
+												majorName,
+											} = row;
+											return (
+												<TableRow
+													hover
+													key={id}
+													tabIndex={-1}
 												>
-													<Stack
-														direction="row"
-														alignItems="center"
-														spacing={2}
+													<TableCell
+														component="th"
+														scope="row"
 													>
-														<Typography
-															variant="subtitle2"
-															noWrap
+														<Stack
+															direction="row"
+															alignItems="center"
+															spacing={2}
 														>
-															{className}
-														</Typography>
-													</Stack>
-												</TableCell>
+															<Typography
+																variant="subtitle2"
+																noWrap
+															>
+																{className}
+															</Typography>
+														</Stack>
+													</TableCell>
 
-												<TableCell align="left">
-													{homeroomTeacher}
-												</TableCell>
-												<TableCell align="left">
-													{majorName}
-												</TableCell>
-												<TableCell align="right">
-													<IconButton
-														size="large"
-														color="inherit"
-														onClick={(e) =>
-															handleOpenMenu(
-																e,
-																row
-															)
-														}
+													<TableCell align="left">
+														{homeroomTeacher}
+													</TableCell>
+													<TableCell align="left">
+														{majorName}
+													</TableCell>
+													<TableCell
+														align="right"
+														width="15%"
 													>
-														<Iconify
-															icon={
-																"eva:more-vertical-fill"
-															}
-														/>
-													</IconButton>
-												</TableCell>
-											</TableRow>
-										);
-									})}
+														<div
+															style={{
+																display: "flex",
+																justifyContent:
+																	"flex-end",
+															}}
+														>
+															<MenuItem
+																onClick={() =>
+																	handleOpenUpd(
+																		row
+																	)
+																}
+															>
+																<Iconify
+																	icon={
+																		"eva:edit-fill"
+																	}
+																/>
+																Edit
+															</MenuItem>
+
+															<MenuItem
+																onClick={() =>
+																	handleOpenDel(
+																		row
+																	)
+																}
+																sx={{
+																	color: "error.main",
+																}}
+															>
+																<Iconify
+																	icon={
+																		"eva:trash-2-outline"
+																	}
+																/>
+																Delete
+															</MenuItem>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})}
 								</TableBody>
-
-								{isNotFound && (
-									<TableBody>
-										<TableRow>
-											<TableCell
-												align="center"
-												colSpan={6}
-												sx={{ py: 3 }}
-											>
-												<Paper
-													sx={{
-														textAlign: "center",
-													}}
-												>
-													<Typography
-														variant="h6"
-														paragraph
-													>
-														Not found
-													</Typography>
-
-													<Typography variant="body2">
-														Không có kết quả tìm
-														kiếm cho &nbsp;
-														<strong>
-															&quot;{filterName}
-															&quot;
-														</strong>
-													</Typography>
-												</Paper>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								)}
 							</Table>
 						</TableContainer>
 					</Scrollbar>
 				</Card>
 			</Container>
-
-			<Popover
-				open={Boolean(open)}
-				anchorEl={open}
-				onClose={handleCloseMenu}
-				anchorOrigin={{ vertical: "top", horizontal: "left" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				PaperProps={{
-					sx: {
-						p: 1,
-						width: 140,
-						"& .MuiMenuItem-root": {
-							px: 1,
-							typography: "body2",
-							borderRadius: 0.75,
-						},
-					},
-				}}
-			>
-				<MenuItem onClick={() => setOpenPopupUpd(true)}>
-					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
-					Edit
-				</MenuItem>
-
-				<MenuItem sx={{ color: "error.main" }}>
-					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-					Delete
-				</MenuItem>
-			</Popover>
 			<Popup
 				openPopup={openPopupAdd}
 				setOpenPopup={setOpenPopupAdd}
@@ -308,6 +266,13 @@ export default function CollegeClassPage() {
 			>
 				<CollegeClassFormAdd dataSelect={dataSelect} />
 			</Popup>
+			<PopupDel
+				openPopup={openPopupDel}
+				setOpenPopup={setOpenPopupDel}
+				title="Bạn muốn xóa lớp này không?"
+				type="class"
+				data={recordForEdit}
+			></PopupDel>
 			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
@@ -316,6 +281,7 @@ export default function CollegeClassPage() {
 				<CollegeClassFormUpd
 					data={recordForEdit}
 					dataSelect={dataSelect}
+					setOpen={setOpenPopupUpd}
 				/>
 			</Popup>
 		</>

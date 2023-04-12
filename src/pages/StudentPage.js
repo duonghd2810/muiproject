@@ -113,8 +113,6 @@ export default function StudentPage() {
 		filterName
 	);
 
-	const isNotFound = !filteredUsers.length && !!filterName;
-
 	return (
 		<>
 			<Helmet>
@@ -233,42 +231,6 @@ export default function StudentPage() {
 										);
 									})}
 								</TableBody>
-
-								{isNotFound && (
-									<TableBody>
-										<TableRow>
-											<TableCell
-												align="center"
-												colSpan={6}
-												sx={{ py: 3 }}
-											>
-												<Paper
-													sx={{
-														textAlign: "center",
-													}}
-												>
-													<Typography
-														variant="h6"
-														paragraph
-													>
-														Not found
-													</Typography>
-
-													<Typography variant="body2">
-														Không có kết quả tìm
-														kiếm cho &nbsp;
-														<strong>
-															&quot;{filterName}
-															&quot;
-														</strong>
-														.
-														<br />
-													</Typography>
-												</Paper>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								)}
 							</Table>
 						</TableContainer>
 					</Scrollbar>

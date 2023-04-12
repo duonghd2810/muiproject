@@ -10,31 +10,35 @@ import {
 	Select,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import request from "src/utils/request";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
 	flexDirection: "column",
 }));
 function CollegeClassFormUpd(props) {
-	const { data, dataSelect } = props;
-
-	// console.log(data);
-	// console.log(dataSelect);
+	const { data, dataSelect, setOpen } = props;
+	console.log(data);
 	const formik = useFormik({
 		initialValues: {
-			majorName: data.id_major,
+			id_major: data.id_major,
 			className: data.className,
 			homeroomTeacher: data.homeroomTeacher,
 		},
 		validationSchema: Yup.object({
-			majorName: Yup.number().required("Vui lòng chọn ngành học"),
+			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			className: Yup.string().required("Vui lòng nhập lớp chính quy"),
 			homeroomTeacher: Yup.string().required(
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
 			),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
+			request.patch(`class/${data.id}`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			setOpen(false);
 			formik.handleReset();
 		},
 	});
@@ -46,7 +50,7 @@ function CollegeClassFormUpd(props) {
 					<Select
 						label="Ngành"
 						labelId="demo-simple-select-label"
-						name="majorName"
+						name="id_major"
 						onChange={formik.handleChange}
 						defaultValue={data.id_major}
 					>
