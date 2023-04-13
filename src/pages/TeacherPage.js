@@ -28,6 +28,7 @@ import TEACHERLIST from "../_mock/teacher";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import UserFormAdd from "src/sections/@dashboard/user/UserFormAdd";
 import UserFormUpd from "src/sections/@dashboard/user/UserFormUpd";
+import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +87,7 @@ export default function TeacherPage() {
 
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
+	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
 	const handleOpenMenu = (event, row) => {
@@ -106,7 +108,14 @@ export default function TeacherPage() {
 	const handleFilterByName = (event) => {
 		setFilterName(event.target.value);
 	};
-
+	const handleOpenUpd = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupUpd(true);
+	};
+	const handleOpenDel = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupDel(true);
+	};
 	const filteredUsers = applySortFilter(
 		TEACHERLIST,
 		getComparator(order, orderBy),
@@ -204,23 +213,50 @@ export default function TeacherPage() {
 													{gender}
 												</TableCell>
 
-												<TableCell align="right">
-													<IconButton
-														size="large"
-														color="inherit"
-														onClick={(e) =>
-															handleOpenMenu(
-																e,
-																row
-															)
-														}
+												<TableCell
+													align="right"
+													width="10%"
+												>
+													<div
+														style={{
+															display: "flex",
+															justifyContent:
+																"flex-end",
+														}}
 													>
-														<Iconify
-															icon={
-																"eva:more-vertical-fill"
+														<MenuItem
+															onClick={() =>
+																handleOpenUpd(
+																	row
+																)
 															}
-														/>
-													</IconButton>
+														>
+															<Iconify
+																icon={
+																	"eva:edit-fill"
+																}
+															/>
+															Edit
+														</MenuItem>
+
+														<MenuItem
+															onClick={() =>
+																handleOpenDel(
+																	row
+																)
+															}
+															sx={{
+																color: "error.main",
+															}}
+														>
+															<Iconify
+																icon={
+																	"eva:trash-2-outline"
+																}
+															/>
+															Delete
+														</MenuItem>
+													</div>
 												</TableCell>
 											</TableRow>
 										);
@@ -231,35 +267,6 @@ export default function TeacherPage() {
 					</Scrollbar>
 				</Card>
 			</Container>
-
-			<Popover
-				open={Boolean(open)}
-				anchorEl={open}
-				onClose={handleCloseMenu}
-				anchorOrigin={{ vertical: "top", horizontal: "left" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				PaperProps={{
-					sx: {
-						p: 1,
-						width: 140,
-						"& .MuiMenuItem-root": {
-							px: 1,
-							typography: "body2",
-							borderRadius: 0.75,
-						},
-					},
-				}}
-			>
-				<MenuItem onClick={() => setOpenPopupUpd(true)}>
-					<Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
-					Edit
-				</MenuItem>
-
-				<MenuItem sx={{ color: "error.main" }}>
-					<Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-					Delete
-				</MenuItem>
-			</Popover>
 			<Popup
 				openPopup={openPopupAdd}
 				setOpenPopup={setOpenPopupAdd}
@@ -267,12 +274,19 @@ export default function TeacherPage() {
 			>
 				<UserFormAdd />
 			</Popup>
+			<PopupDel
+				openPopup={openPopupDel}
+				setOpenPopup={setOpenPopupDel}
+				title="Bạn muốn xóa giáo viên này không?"
+				type="user"
+				data={recordForEdit}
+			></PopupDel>
 			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật giáo viên"
 			>
-				<UserFormUpd data={recordForEdit} />
+				<UserFormUpd data={recordForEdit} setOpen={setOpenPopupUpd} />
 			</Popup>
 		</>
 	);

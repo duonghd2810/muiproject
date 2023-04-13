@@ -12,6 +12,9 @@ import { styled } from "@mui/material/styles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomizedRadioGender from "src/theme/overrides/RadioGender";
+import request from "src/utils/request";
+import { useDispatch } from "react-redux";
+import { fetchStudent } from "src/reducers/studentSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -20,10 +23,11 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 
 function UserFormAdd() {
+	const dispatch = useDispatch();
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 	const formik = useFormik({
 		initialValues: {
-			fullName: "",
+			fullname: "",
 			dateOfBirth: "",
 			gender: "",
 			address: "",
@@ -31,7 +35,7 @@ function UserFormAdd() {
 			email: "",
 		},
 		validationSchema: Yup.object({
-			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
+			fullname: Yup.string().required("Vui lòng nhập tên sinh viên"),
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
 			address: Yup.string().required("Vui lòng nhập địa chỉ"),
 			phone: Yup.string()
@@ -40,9 +44,16 @@ function UserFormAdd() {
 			email: Yup.string()
 				.required("Vui lòng nhập email")
 				.email("Không đúng định dạng email"),
+			gender: Yup.string().required("Vui lòng chọn giới tính"),
 		}),
 		onSubmit: (values) => {
-			console.log(JSON.parse(JSON.stringify(values)));
+			console.log(JSON.stringify(values));
+			// await request.post("auth/registerstudent", JSON.stringify(values), {
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// });
+			// dispatch(fetchStudent());
 			formik.handleReset();
 		},
 	});
@@ -53,13 +64,13 @@ function UserFormAdd() {
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input
 						id="component-simple"
-						name="fullName"
-						value={formik.values.fullName}
+						name="fullname"
+						value={formik.values.fullname}
 						onChange={formik.handleChange}
 					/>
-					{formik.errors.fullName && formik.touched.fullName && (
+					{formik.errors.fullname && formik.touched.fullname && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.fullName}
+							{formik.errors.fullname}
 						</p>
 					)}
 				</FormControl>
@@ -120,6 +131,11 @@ function UserFormAdd() {
 						onChange={formik.handleChange}
 					/>
 				</FormControl>
+				{formik.errors.gender && formik.touched.gender && (
+					<p style={{ color: "red", margin: "4px 0" }}>
+						{formik.errors.gender}
+					</p>
+				)}
 				<Button type="submit" size="small" variant="contained">
 					Thêm
 				</Button>

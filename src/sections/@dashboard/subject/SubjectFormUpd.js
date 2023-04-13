@@ -28,10 +28,6 @@ function SubjectFormUpd(props) {
 			),
 		}),
 		onSubmit: (values) => {
-			console.log(
-				"🚀 ~ file: SubjectFormUpd.js:31 ~ SubjectFormUpd ~ values:",
-				JSON.stringify(values)
-			);
 			request.patch(`subject/${data.id}`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",

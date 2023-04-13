@@ -8,16 +8,21 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchMajor } from "src/reducers/majorSlice";
+import { fetchStudent } from "src/reducers/studentSlice";
 import request from "src/utils/request";
 
 function PopupDel(props) {
 	const dispatch = useDispatch();
 	const { openPopup, setOpenPopup, title, type, data } = props;
+
 	const handleDelete = async () => {
 		await request.delete(`${type}/${data.id}`);
 		setOpenPopup(false);
 		if (type == "major") {
 			dispatch(fetchMajor());
+		}
+		if (type == "user") {
+			dispatch(fetchStudent());
 		}
 	};
 	return (
