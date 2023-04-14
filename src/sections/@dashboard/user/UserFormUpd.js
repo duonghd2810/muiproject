@@ -22,6 +22,7 @@ const GlobalForm = styled("form")(({ theme }) => ({
 const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 function UserFormUpd(props) {
 	const { data } = props;
+	
 	const formik = useFormik({
 		initialValues: {
 			fullName: data.fullName,
@@ -118,7 +119,7 @@ function UserFormUpd(props) {
 				<FormControl style={{ margin: "12px 0" }}>
 					<CustomizedRadioGender
 						name="gender"
-						value={formik.values.gender}
+						value={formik.gender}
 						onChange={formik.handleChange}
 					/>
 				</FormControl>

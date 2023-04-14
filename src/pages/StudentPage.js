@@ -13,7 +13,6 @@ import {
 	TableCell,
 	Container,
 	Typography,
-	IconButton,
 	TableContainer,
 } from "@mui/material";
 // components
@@ -37,7 +36,6 @@ const TABLE_HEAD = [
 	{ id: "phone", label: "Số điện thoại", alignRight: false },
 	{ id: "email", label: "Email", alignRight: false },
 	{ id: "gender", label: "Giới tính", alignRight: false },
-	{ id: "className", label: "Lớp chính quy", alignRight: false },
 	{ id: "" },
 ];
 
@@ -169,7 +167,6 @@ export default function StudentPage() {
 											phone,
 											email,
 											gender,
-											className,
 										} = row;
 										return (
 											<TableRow
@@ -180,6 +177,7 @@ export default function StudentPage() {
 												<TableCell
 													component="th"
 													scope="row"
+													style={{width:"20%"}}
 												>
 													<Stack
 														direction="row"
@@ -195,29 +193,25 @@ export default function StudentPage() {
 													</Stack>
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"15%"}}>
 													{dateOfBirth}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"20%"}}>
 													{phone}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"25%"}}>
 													{email}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"10%"}}>
 													{gender}
-												</TableCell>
-
-												<TableCell align="left">
-													{className}
 												</TableCell>
 
 												<TableCell
 													align="right"
-													width="10%"
+													style={{width:"10%"}}
 												>
 													<div
 														style={{

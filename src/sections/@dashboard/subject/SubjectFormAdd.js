@@ -32,7 +32,6 @@ function SubjectFormAdd(props) {
 					"Content-Type": "application/json",
 				},
 			});
-			console.log(values);
 			formik.handleReset();
 		},
 	});

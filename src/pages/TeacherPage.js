@@ -6,16 +6,13 @@ import {
 	Card,
 	Table,
 	Stack,
-	Paper,
 	Button,
-	Popover,
 	TableRow,
 	MenuItem,
 	TableBody,
 	TableCell,
 	Container,
 	Typography,
-	IconButton,
 	TableContainer,
 } from "@mui/material";
 // components
@@ -77,7 +74,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function TeacherPage() {
-	const [open, setOpen] = useState(null);
 
 	const [order, setOrder] = useState("asc");
 
@@ -90,14 +86,6 @@ export default function TeacherPage() {
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
-	const handleOpenMenu = (event, row) => {
-		setRecordForEdit(row);
-		setOpen(event.currentTarget);
-	};
-
-	const handleCloseMenu = () => {
-		setOpen(null);
-	};
 
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
@@ -197,25 +185,25 @@ export default function TeacherPage() {
 													</Stack>
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"15%"}}>
 													{dateOfBirth}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"20%"}}>
 													{phone}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"25%"}}>
 													{email}
 												</TableCell>
 
-												<TableCell align="left">
+												<TableCell align="left" style={{width:"10%"}}>
 													{gender}
 												</TableCell>
 
 												<TableCell
 													align="right"
-													width="10%"
+													style={{width:"10%"}}
 												>
 													<div
 														style={{
