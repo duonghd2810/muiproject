@@ -5,8 +5,6 @@ import { styled } from "@mui/material/styles";
 //
 import Header from "./header";
 import Nav from "./nav";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "src/reducers/userSlice";
 
 // ----------------------------------------------------------------------
 
@@ -35,10 +33,6 @@ const Main = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
-	const dispatch = useDispatch();
-	const user = useSelector((state) => state.userReducer);
-	console.log("DashboardLayout -> user", user);
-
 	const [open, setOpen] = useState(false);
 
 	return (
@@ -48,16 +42,6 @@ export default function DashboardLayout() {
 			<Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
 			<Main>
-				<button
-					onClick={async () => {
-						const res = await dispatch(
-							fetchUser({ username: "test", password: "123456" })
-						).unwrap();
-						console.log("DashboardLayout -> res", res);
-					}}
-				>
-					Test Redux Toolkit
-				</button>
 				<Outlet />
 			</Main>
 		</StyledRoot>

@@ -15,6 +15,7 @@ import CustomizedRadioGender from "src/theme/overrides/RadioGender";
 import request from "src/utils/request";
 import { useDispatch } from "react-redux";
 import { fetchStudent } from "src/reducers/studentSlice";
+import { fetchTeacher } from "src/reducers/teacherSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -22,12 +23,12 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 
-function UserFormAdd() {
+function UserFormAdd({ type }) {
 	const dispatch = useDispatch();
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 	const formik = useFormik({
 		initialValues: {
-			fullname: "",
+			fullName: "",
 			dateOfBirth: "",
 			gender: "",
 			address: "",
@@ -35,9 +36,9 @@ function UserFormAdd() {
 			email: "",
 		},
 		validationSchema: Yup.object({
-			fullname: Yup.string().required("Vui lòng nhập tên sinh viên"),
+			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
-			address: Yup.string().required("Vui lòng nhập địa chỉ"),
+			address: Yup.string(),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
 				.matches(regexPhone, "Số điện thoại không hợp lệ"),
@@ -46,14 +47,31 @@ function UserFormAdd() {
 				.email("Không đúng định dạng email"),
 			gender: Yup.string().required("Vui lòng chọn giới tính"),
 		}),
-		onSubmit: (values) => {
-			console.log(JSON.stringify(values));
-			// await request.post("auth/registerstudent", JSON.stringify(values), {
-			// 	headers: {
-			// 		"Content-Type": "application/json",
-			// 	},
-			// });
-			// dispatch(fetchStudent());
+		onSubmit: async (values) => {
+			if (type == "student") {
+				await request.post(
+					"auth/registerstudent",
+					JSON.stringify(values),
+					{
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				dispatch(fetchStudent());
+			}
+			if (type == "teacher") {
+				await request.post(
+					"auth/registerteacher",
+					JSON.stringify(values),
+					{
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				dispatch(fetchTeacher());
+			}
 			formik.handleReset();
 		},
 	});
@@ -64,13 +82,13 @@ function UserFormAdd() {
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input
 						id="component-simple"
-						name="fullname"
-						value={formik.values.fullname}
+						name="fullName"
+						value={formik.values.fullName}
 						onChange={formik.handleChange}
 					/>
-					{formik.errors.fullname && formik.touched.fullname && (
+					{formik.errors.fullName && formik.touched.fullName && (
 						<p style={{ color: "red", margin: "4px 0" }}>
-							{formik.errors.fullname}
+							{formik.errors.fullName}
 						</p>
 					)}
 				</FormControl>
@@ -93,6 +111,20 @@ function UserFormAdd() {
 								{formik.errors.dateOfBirth}
 							</p>
 						)}
+				</FormControl>
+				<FormControl style={{ margin: "12px 0" }}>
+					<InputLabel htmlFor="component-simple">Địa chỉ</InputLabel>
+					<Input
+						id="component-simple"
+						name="address"
+						value={formik.values.address}
+						onChange={formik.handleChange}
+					/>
+					{formik.errors.address && formik.touched.address && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.address}
+						</p>
+					)}
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">

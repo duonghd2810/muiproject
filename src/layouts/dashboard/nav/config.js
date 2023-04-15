@@ -32,6 +32,11 @@ const navConfig = [
 		icon: icon("ic_user"),
 	},
 	{
+		title: "Quản lý giáo viên",
+		path: "/teacher",
+		icon: icon("ic_user"),
+	},
+	{
 		title: "Thời khóa biểu",
 		path: "/calendarcl",
 		icon: icon("ic_calendar"),
@@ -50,11 +55,6 @@ const navConfig = [
 		title: "Nhập điểm",
 		path: "/enterpoint",
 		icon: icon("ic_point"),
-	},
-	{
-		title: "Quản lý giáo viên",
-		path: "/teacher",
-		icon: icon("ic_user"),
 	},
 	{
 		title: "login",

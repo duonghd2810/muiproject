@@ -7,6 +7,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { fetchSubject } from "src/reducers/subjectSlice";
 import request from "src/utils/request";
 import * as Yup from "yup";
 const GlobalForm = styled("form")(({ theme }) => ({
@@ -15,10 +17,11 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function SubjectFormAdd(props) {
+	const dispatch = useDispatch();
 	const formik = useFormik({
 		initialValues: {
 			subjectName: "",
-			tc: 0,
+			tc: null,
 		},
 		validationSchema: Yup.object({
 			subjectName: Yup.string().required("Vui lòng nhập tên môn học"),
@@ -26,12 +29,13 @@ function SubjectFormAdd(props) {
 				"Vui lòng nhập số tín chỉ"
 			),
 		}),
-		onSubmit: (values) => {
-			request.post("subject", JSON.stringify(values), {
+		onSubmit: async (values) => {
+			await request.post("subject", JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
 				},
 			});
+			dispatch(fetchSubject());
 			formik.handleReset();
 		},
 	});

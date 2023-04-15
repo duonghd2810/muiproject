@@ -5,7 +5,7 @@ import reducers from "./reducers";
 
 const persistConfig = {
 	key: "root",
-	whitelist: ["userReducer", "majorReducer", "studentReducer"],
+	whitelist: ["userReducer"],
 	storage,
 	version: 1,
 };

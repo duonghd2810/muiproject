@@ -11,14 +11,16 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import request from "src/utils/request";
+import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
+import { useDispatch } from "react-redux";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
 	flexDirection: "column",
 }));
 function CollegeClassFormUpd(props) {
+	const dispatch = useDispatch();
 	const { data, dataSelect, setOpen } = props;
-	console.log(data);
 	const formik = useFormik({
 		initialValues: {
 			id_major: data.id_major,
@@ -32,12 +34,13 @@ function CollegeClassFormUpd(props) {
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
 			),
 		}),
-		onSubmit: (values) => {
-			request.patch(`class/${data.id}`, JSON.stringify(values), {
+		onSubmit: async (values) => {
+			await request.patch(`class/${data.id}`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
 				},
 			});
+			dispatch(fetchCollegeClass());
 			setOpen(false);
 			formik.handleReset();
 		},

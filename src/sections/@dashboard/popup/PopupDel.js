@@ -7,8 +7,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { fetchStudent } from "src/reducers/studentSlice";
+import { fetchSubject } from "src/reducers/subjectSlice";
 import request from "src/utils/request";
 
 function PopupDel(props) {
@@ -23,6 +25,12 @@ function PopupDel(props) {
 		}
 		if (type == "user") {
 			dispatch(fetchStudent());
+		}
+		if (type == "class") {
+			dispatch(fetchCollegeClass());
+		}
+		if (type == "subject") {
+			dispatch(fetchSubject());
 		}
 	};
 	return (

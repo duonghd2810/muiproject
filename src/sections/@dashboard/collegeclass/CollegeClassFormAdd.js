@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
 import request from "src/utils/request";
 import * as Yup from "yup";
 const GlobalForm = styled("form")(({ theme }) => ({
@@ -17,10 +19,11 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function CollegeClassFormAdd(props) {
+	const dispatch = useDispatch();
 	const { dataSelect } = props;
 	const formik = useFormik({
 		initialValues: {
-			id_major: 0,
+			id_major: null,
 			className: "",
 			homeroomTeacher: "",
 		},
@@ -31,12 +34,13 @@ function CollegeClassFormAdd(props) {
 				"Vui lòng nhập tên giáo viên chủ nhiệm"
 			),
 		}),
-		onSubmit: (values) => {
-			request.post("class", JSON.stringify(values), {
+		onSubmit: async (values) => {
+			await request.post("class", JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
 				},
 			});
+			dispatch(fetchCollegeClass());
 			formik.handleReset();
 		},
 	});
@@ -50,6 +54,7 @@ function CollegeClassFormAdd(props) {
 						labelId="demo-simple-select-label"
 						name="id_major"
 						onChange={formik.handleChange}
+						value={formik.values.id_major || null}
 					>
 						{dataSelect.map((item) => (
 							<MenuItem key={item.id} value={item.id}>

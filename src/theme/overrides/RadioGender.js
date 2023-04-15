@@ -71,8 +71,11 @@ CustomizedRadioGender.propTypes = {
 };
 export default function CustomizedRadioGender(props) {
 	const { name, value, onChange } = props;
-	console.log("🚀 ~ file: RadioGender.js:74 ~ CustomizedRadioGender ~ value:", value)
-	
+	console.log(
+		"🚀 ~ file: RadioGender.js:74 ~ CustomizedRadioGender ~ value:",
+		value
+	);
+
 	return (
 		<FormControl>
 			<FormLabel id="demo-customized-radios">Giới tính</FormLabel>

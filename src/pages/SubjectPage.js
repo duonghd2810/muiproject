@@ -29,7 +29,8 @@ import {
 	SubjectFormUpd,
 } from "../sections/@dashboard/subject";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
-import request from "src/utils/request";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSubject } from "src/reducers/subjectSlice";
 
 // ----------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-	if (array.length == 0) {
+	if (Object.keys(array).length === 0) {
 		return [];
 	}
 	const stabilizedThis = array.map((el, index) => [el, index]);
@@ -78,6 +79,7 @@ function applySortFilter(array, comparator, query) {
 	return stabilizedThis.map((el) => el[0]);
 }
 function SubjectPage() {
+	const dispatch = useDispatch();
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
@@ -88,11 +90,11 @@ function SubjectPage() {
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
-	const [subjects, setSubject] = useState([]);
 
 	useEffect(() => {
-		request.get("subject").then((res) => setSubject(res.data.result));
+		dispatch(fetchSubject());
 	}, []);
+	const SUBJECTLIST = useSelector((state) => state.subjectReducer).data;
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -104,7 +106,7 @@ function SubjectPage() {
 	};
 
 	const filteredSubjects = applySortFilter(
-		subjects,
+		SUBJECTLIST,
 		getComparator(order, orderBy),
 		filterName
 	);

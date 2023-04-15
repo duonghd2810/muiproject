@@ -13,27 +13,34 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomizedRadioGender from "src/theme/overrides/RadioGender";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import request from "src/utils/request";
+import { fetchStudent } from "src/reducers/studentSlice";
+import { fetchTeacher } from "src/reducers/teacherSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
 	flexDirection: "column",
 }));
-const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 function UserFormUpd(props) {
-	const { data } = props;
-	
+	const dispatch = useDispatch();
+	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
+	const { data, setOpen, type } = props;
+
 	const formik = useFormik({
 		initialValues: {
 			fullName: data.fullName,
-			dateOfBirth: dayjs(data.dateOfBirth, "DD/MM/YYYY"),
+			dateOfBirth: dayjs(data.dateOfBirth),
 			phone: data.phone,
+			address: data.address,
 			email: data.email,
 			gender: data.gender,
 		},
 		validationSchema: Yup.object({
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
-      dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
+			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
+			address: Yup.string(),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
 				.matches(regexPhone, "Số điện thoại không hợp lệ"),
@@ -41,11 +48,22 @@ function UserFormUpd(props) {
 				.required("Vui lòng nhập email")
 				.email("Không đúng định dạng email"),
 		}),
-		onSubmit: (values) => {
-			console.log(JSON.parse(JSON.stringify(values)));
+		onSubmit: async (values) => {
+			await request.patch(`user/${data.id}`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (type == "student") {
+				dispatch(fetchStudent());
+			}
+			if (type == "teacher") {
+				dispatch(fetchTeacher());
+			}
 			formik.handleReset();
 		},
 	});
+	console.log("birth", formik.dateOfBirth);
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
@@ -87,6 +105,20 @@ function UserFormUpd(props) {
 						)}
 				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
+					<InputLabel htmlFor="component-simple">Địa chỉ</InputLabel>
+					<Input
+						id="component-simple"
+						name="address"
+						value={formik.values.address}
+						onChange={formik.handleChange}
+					/>
+					{formik.errors.address && formik.touched.address && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.address}
+						</p>
+					)}
+				</FormControl>
+				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">
 						Số điện thoại
 					</InputLabel>
@@ -123,7 +155,12 @@ function UserFormUpd(props) {
 						onChange={formik.handleChange}
 					/>
 				</FormControl>
-				<Button type="submit" size="small" variant="contained">
+				<Button
+					type="submit"
+					size="small"
+					variant="contained"
+					onClick={() => setOpen(false)}
+				>
 					Cập nhật
 				</Button>
 			</GlobalForm>

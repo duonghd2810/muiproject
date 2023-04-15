@@ -28,13 +28,13 @@ function UpdatePage() {
 		initialValues: {
 			avatar: "",
 			dateOfBirth: "",
-               address:"",
+			address: "",
 			phone: "",
 			email: "",
 		},
 		validationSchema: Yup.object({
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
-               address: Yup.string().required("Vui lòng nhập địa chỉ"),
+			address: Yup.string().required("Vui lòng nhập địa chỉ"),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
 				.matches(regexPhone, "Số điện thoại không hợp lệ"),
@@ -43,7 +43,6 @@ function UpdatePage() {
 				.email("Không đúng định dạng email"),
 		}),
 		onSubmit: (values) => {
-			console.log(JSON.parse(JSON.stringify(values)));
 			formik.handleReset();
 		},
 	});

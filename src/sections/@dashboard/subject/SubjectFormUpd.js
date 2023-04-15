@@ -9,12 +9,15 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import request from "src/utils/request";
+import { useDispatch } from "react-redux";
+import { fetchSubject } from "src/reducers/subjectSlice";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
 	flexDirection: "column",
 }));
 function SubjectFormUpd(props) {
+	const dispatch = useDispatch();
 	const { data, setOpen } = props;
 	const formik = useFormik({
 		initialValues: {
@@ -27,13 +30,13 @@ function SubjectFormUpd(props) {
 				"Vui lòng nhập số tín chỉ"
 			),
 		}),
-		onSubmit: (values) => {
-			request.patch(`subject/${data.id}`, JSON.stringify(values), {
+		onSubmit: async (values) => {
+			await request.patch(`subject/${data.id}`, JSON.stringify(values), {
 				headers: {
 					"Content-Type": "application/json",
 				},
 			});
-
+			dispatch(fetchSubject());
 			setOpen(false);
 			formik.handleReset();
 		},

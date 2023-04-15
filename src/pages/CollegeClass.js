@@ -6,16 +6,13 @@ import {
 	Card,
 	Table,
 	Stack,
-	Paper,
 	Button,
-	Popover,
 	TableRow,
 	MenuItem,
 	TableBody,
 	TableCell,
 	Container,
 	Typography,
-	IconButton,
 	TableContainer,
 } from "@mui/material";
 // components
@@ -30,7 +27,7 @@ import CollegeClassFormUpd from "src/sections/@dashboard/collegeclass/CollegeCla
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMajor } from "src/reducers/majorSlice";
-import request from "src/utils/request";
+import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +56,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-	if (array.length == 0) {
+	if (Object.keys(array).length === 0) {
 		return [];
 	}
 	const stabilizedThis = array.map((el, index) => [el, index]);
@@ -92,15 +89,16 @@ export default function CollegeClassPage() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const [filterName, setFilterName] = useState("");
-	const [collegeClass, setCollegeClass] = useState([]);
 
 	useEffect(() => {
 		dispatch(fetchMajor());
 	}, []);
 	const dataSelect = useSelector((state) => state.majorReducer).data;
 	useEffect(() => {
-		request.get("class").then((res) => setCollegeClass(res.data));
+		dispatch(fetchCollegeClass());
 	}, []);
+	const COLLEGECLASS = useSelector((state) => state.collegeClassReducer).data;
+
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -112,7 +110,7 @@ export default function CollegeClassPage() {
 	};
 
 	const filteredCollegeClasses = applySortFilter(
-		collegeClass,
+		COLLEGECLASS,
 		getComparator(order, orderBy),
 		filterName
 	);

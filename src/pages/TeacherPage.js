@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui
 import {
 	Card,
@@ -21,11 +21,13 @@ import Scrollbar from "../components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
-import TEACHERLIST from "../_mock/teacher";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import UserFormAdd from "src/sections/@dashboard/user/UserFormAdd";
 import UserFormUpd from "src/sections/@dashboard/user/UserFormUpd";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacher } from "src/reducers/teacherSlice";
+import dayjs from "dayjs";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +59,9 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+	if (Object.keys(array).length === 0) {
+		return [];
+	}
 	const stabilizedThis = array.map((el, index) => [el, index]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);
@@ -74,7 +79,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function TeacherPage() {
-
+	const dispatch = useDispatch();
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
@@ -86,6 +91,10 @@ export default function TeacherPage() {
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
+	useEffect(() => {
+		dispatch(fetchTeacher());
+	}, []);
+	const TEACHERLIST = useSelector((state) => state.teacherReducer).data;
 
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
@@ -157,6 +166,7 @@ export default function TeacherPage() {
 											id,
 											fullName,
 											dateOfBirth,
+											address,
 											phone,
 											email,
 											gender,
@@ -170,6 +180,7 @@ export default function TeacherPage() {
 												<TableCell
 													component="th"
 													scope="row"
+													style={{ width: "20%" }}
 												>
 													<Stack
 														direction="row"
@@ -185,25 +196,39 @@ export default function TeacherPage() {
 													</Stack>
 												</TableCell>
 
-												<TableCell align="left" style={{width:"15%"}}>
-													{dateOfBirth}
+												<TableCell
+													align="left"
+													style={{ width: "15%" }}
+												>
+													{dayjs(dateOfBirth).format(
+														"DD/MM/YYYY"
+													)}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"20%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "20%" }}
+												>
 													{phone}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"25%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "25%" }}
+												>
 													{email}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"10%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "10%" }}
+												>
 													{gender}
 												</TableCell>
 
 												<TableCell
 													align="right"
-													style={{width:"10%"}}
+													style={{ width: "10%" }}
 												>
 													<div
 														style={{
@@ -260,7 +285,7 @@ export default function TeacherPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm giáo viên"
 			>
-				<UserFormAdd />
+				<UserFormAdd type="teacher" />
 			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
@@ -274,7 +299,11 @@ export default function TeacherPage() {
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật giáo viên"
 			>
-				<UserFormUpd data={recordForEdit} setOpen={setOpenPopupUpd} />
+				<UserFormUpd
+					data={recordForEdit}
+					setOpen={setOpenPopupUpd}
+					type="teacher"
+				/>
 			</Popup>
 		</>
 	);

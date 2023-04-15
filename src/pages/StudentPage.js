@@ -27,6 +27,7 @@ import UserFormUpd from "src/sections/@dashboard/user/UserFormUpd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "src/reducers/studentSlice";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
+import dayjs from "dayjs";
 
 // ----------------------------------------------------------------------
 
@@ -164,6 +165,7 @@ export default function StudentPage() {
 											id,
 											fullName,
 											dateOfBirth,
+											address,
 											phone,
 											email,
 											gender,
@@ -177,7 +179,7 @@ export default function StudentPage() {
 												<TableCell
 													component="th"
 													scope="row"
-													style={{width:"20%"}}
+													style={{ width: "20%" }}
 												>
 													<Stack
 														direction="row"
@@ -193,25 +195,39 @@ export default function StudentPage() {
 													</Stack>
 												</TableCell>
 
-												<TableCell align="left" style={{width:"15%"}}>
-													{dateOfBirth}
+												<TableCell
+													align="left"
+													style={{ width: "15%" }}
+												>
+													{dayjs(dateOfBirth).format(
+														"DD/MM/YYYY"
+													)}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"20%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "20%" }}
+												>
 													{phone}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"25%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "25%" }}
+												>
 													{email}
 												</TableCell>
 
-												<TableCell align="left" style={{width:"10%"}}>
+												<TableCell
+													align="left"
+													style={{ width: "10%" }}
+												>
 													{gender}
 												</TableCell>
 
 												<TableCell
 													align="right"
-													style={{width:"10%"}}
+													style={{ width: "10%" }}
 												>
 													<div
 														style={{
@@ -268,7 +284,7 @@ export default function StudentPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm sinh viên"
 			>
-				<UserFormAdd />
+				<UserFormAdd type="student" />
 			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
@@ -282,7 +298,11 @@ export default function StudentPage() {
 				setOpenPopup={setOpenPopupUpd}
 				title="Cập nhật sinh viên"
 			>
-				<UserFormUpd data={recordForEdit} setOpen={setOpenPopupUpd} />
+				<UserFormUpd
+					data={recordForEdit}
+					setOpen={setOpenPopupUpd}
+					type="student"
+				/>
 			</Popup>
 		</>
 	);
