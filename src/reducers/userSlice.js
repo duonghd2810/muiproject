@@ -1,16 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import request from "src/utils/request";
 
 export const fetchUser = createAsyncThunk(
 	"user/fetchUser",
 	async (param, { dispatch, getState }) => {
-		console.log("param", param);
-		console.log("getState", getState());
-		const response = await Promise.resolve({
-			token:
-				Date.now().toString(36) +
-				Math.random().toString(36).substring(2),
-		});
-		return response;
+		console.log("🚀 ~ file: userSlice.js:7 ~ getState:", getState());
+		try {
+			const response = await request.post(
+				"auth/login",
+				JSON.stringify(param),
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			request.defaults.headers.common[
+				"Authorization"
+			] = `Bearer ${response.data.result.token}`;
+			return response.data.result;
+		} catch {
+			alert("Tên đăng nhập hoặc mật khẩu không đúng");
+		}
 	}
 );
 

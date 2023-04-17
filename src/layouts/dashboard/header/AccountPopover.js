@@ -1,10 +1,11 @@
 import { useState } from "react";
 // @mui
-import { alpha } from "@mui/material/styles";
 import { Divider, Stack, MenuItem, IconButton, Popover } from "@mui/material";
 // mocks_
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { userActions } from "src/reducers/userSlice";
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -24,6 +25,7 @@ const AvatarHead = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+	const dispatch = useDispatch();
 	const [open, setOpen] = useState(null);
 
 	const handleOpen = (event) => {
@@ -33,7 +35,10 @@ export default function AccountPopover() {
 	const handleClose = () => {
 		setOpen(null);
 	};
-
+	const handleLogout = () => {
+		dispatch(userActions.update({}));
+		setOpen(null);
+	};
 	return (
 		<>
 			<IconButton
@@ -96,7 +101,7 @@ export default function AccountPopover() {
 
 				<Divider sx={{ borderStyle: "dashed" }} />
 
-				<MenuItem onClick={handleClose} sx={{ m: 1 }}>
+				<MenuItem onClick={handleLogout} sx={{ m: 1 }}>
 					Logout
 				</MenuItem>
 			</Popover>

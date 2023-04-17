@@ -8,33 +8,19 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
-import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
-import { fetchMajor } from "src/reducers/majorSlice";
-import { fetchStudent } from "src/reducers/studentSlice";
-import { fetchSubject } from "src/reducers/subjectSlice";
 import request from "src/utils/request";
 
-function PopupDel(props) {
+function PopupUpd(props) {
 	const dispatch = useDispatch();
-	const { openPopup, setOpenPopup, title, type, data } = props;
+	const { openPopup, setOpenPopup, title, type, data, teacher } = props;
 
-	const handleDelete = async () => {
-		await request.delete(`${type}/${data.id}`);
-		if (type == "major") {
-			dispatch(fetchMajor());
-		}
-		if (type == "user") {
-			dispatch(fetchStudent());
-		}
-		if (type == "class") {
-			dispatch(fetchCollegeClass());
-		}
-		if (type == "subject") {
-			dispatch(fetchSubject());
-		}
-		if (type == "classsection") {
-			dispatch(fetchClassSection());
-		}
+	const handleUpdate = async () => {
+		await request.patch(`${type}/${data.id}/teacher/${teacher}`, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		dispatch(fetchClassSection());
 		setOpenPopup(false);
 	};
 	return (
@@ -65,8 +51,8 @@ function PopupDel(props) {
 						justifyContent: "center",
 					}}
 				>
-					<Button color="success" onClick={handleDelete}>
-						Xóa
+					<Button color="success" onClick={handleUpdate}>
+						Cập nhật
 					</Button>
 					<Button color="error" onClick={() => setOpenPopup(false)}>
 						Hủy
@@ -77,4 +63,4 @@ function PopupDel(props) {
 	);
 }
 
-export default PopupDel;
+export default PopupUpd;

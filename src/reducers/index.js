@@ -4,6 +4,7 @@ import studentReducer from "./studentSlice";
 import teacherReducer from "./teacherSlice";
 import collegeClassReducer from "./collegeClassSlice";
 import subjectReducer from "./subjectSlice";
+import classSectionReducer from "./classSectionSlice";
 import { combineReducers } from "@reduxjs/toolkit";
 
 export default combineReducers({
@@ -13,4 +14,5 @@ export default combineReducers({
 	teacherReducer,
 	collegeClassReducer,
 	subjectReducer,
+	classSectionReducer,
 });

@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 //
 import Header from "./header";
 import Nav from "./nav";
+import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,6 @@ const Main = styled("div")(({ theme }) => ({
 
 export default function DashboardLayout() {
 	const [open, setOpen] = useState(false);
-
 	return (
 		<StyledRoot>
 			<Header onOpenNav={() => setOpen(true)} />

@@ -15,6 +15,7 @@ import StudyResultPage from "./pages/StudyResultPage";
 import RegistLessonPage from "./pages/RegistLessonPage";
 import EnterPointPage from "./pages/EnterPointPage";
 import CalendarclPage from "./pages/CalendarclPage";
+import SectionClassPage from "./pages/SectionClassPage";
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function Router() {
 				{ path: "teacher", element: <TeacherPage /> },
 				{ path: "collegeclass", element: <CollegeClass /> },
 				{ path: "subject", element: <SubjectPage /> },
+				{ path: "sectionclass", element: <SectionClassPage /> },
 				{ path: "profile", element: <UpdatePage /> },
 				{ path: "studyresult", element: <StudyResultPage /> },
 				{ path: "registlesson", element: <RegistLessonPage /> },

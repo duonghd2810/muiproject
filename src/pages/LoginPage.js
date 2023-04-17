@@ -15,6 +15,10 @@ import * as Yup from "yup";
 import Logo from "../components/logo";
 import { useState } from "react";
 import Iconify from "../components/iconify";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "src/reducers/userSlice";
+import { isEmpty } from "lodash";
+import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +61,7 @@ const FormLogin = styled("form")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
+	const dispatch = useDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const formik = useFormik({
 		initialValues: {
@@ -67,12 +72,14 @@ export default function LoginPage() {
 			username: Yup.string().required("Username is required"),
 			password: Yup.string().required("Password is required"),
 		}),
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			dispatch(fetchUser(values));
 		},
 	});
-
-	return (
+	const user = useSelector((state) => state.userReducer).data;
+	return !isEmpty(user) && user != null ? (
+		<DashboardLayout />
+	) : (
 		<>
 			<Helmet>
 				<title>Đăng nhập</title>

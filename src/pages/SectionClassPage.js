@@ -6,7 +6,6 @@ import {
 	Card,
 	Table,
 	Stack,
-	Button,
 	TableRow,
 	MenuItem,
 	TableBody,
@@ -14,33 +13,23 @@ import {
 	Container,
 	Typography,
 	TableContainer,
-	Alert,
-	IconButton,
+	Select,
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
 import Scrollbar from "../components/scrollbar";
-// sections
-
-// mock
-import Popup from "src/sections/@dashboard/popup/Popup";
-import {
-	SubjectListToolbar,
-	SubjectListHead,
-	SubjectFormAdd,
-	SubjectFormUpd,
-} from "../sections/@dashboard/subject";
-import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSubject } from "src/reducers/subjectSlice";
-import request from "src/utils/request";
-
-// ----------------------------------------------------------------------
+import { fetchClassSection } from "src/reducers/classSectionSlice";
+import PopupDel from "src/sections/@dashboard/popup/PopupDel";
+import { fetchTeacher } from "src/reducers/teacherSlice";
+import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
+import PopupUpd from "src/sections/@dashboard/popup/PopupUpd";
 
 const TABLE_HEAD = [
-	{ id: "subjectName", label: "Tên môn", alignRight: false },
-	{ id: "tc", label: "Số tín chỉ", alignRight: false },
-	{ id: "price", label: "Giá tiền/tín chỉ", alignRight: false },
+	{ id: "subjectCode", label: "Mã HP", alignRight: false },
+	{ id: "tenHp", label: "Tên HP", alignRight: false },
+	{ id: "soTc", label: "Số tín chỉ", alignRight: false },
+	{ id: "teacherName", label: "Giáo viên dạy", alignRight: false },
 	{ id: "" },
 ];
 // ----------------------------------------------------------------------
@@ -81,35 +70,38 @@ function applySortFilter(array, comparator, query) {
 	}
 	return stabilizedThis.map((el) => el[0]);
 }
-function SubjectPage() {
+function SectionClassPage() {
 	const dispatch = useDispatch();
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
-	const [openPopupAdd, setOpenPopupAdd] = useState(false);
+	const [teacher, setTeacher] = useState(null);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	useEffect(() => {
-		dispatch(fetchSubject());
+		dispatch(fetchTeacher());
 	}, []);
-	const SUBJECTLIST = useSelector((state) => state.subjectReducer).data;
+	const dataSelect = useSelector((state) => state.teacherReducer).data;
+
+	useEffect(() => {
+		dispatch(fetchClassSection());
+	}, []);
+	const CLASSSECTIONTLIST = useSelector(
+		(state) => state.classSectionReducer
+	).data;
+
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
 		setOrderBy(property);
 	};
-
-	const handleFilterByName = (event) => {
-		setFilterName(event.target.value);
-	};
-
 	const filteredSubjects = applySortFilter(
-		SUBJECTLIST,
+		CLASSSECTIONTLIST,
 		getComparator(order, orderBy),
 		filterName
 	);
@@ -121,14 +113,10 @@ function SubjectPage() {
 		setRecordForEdit(row);
 		setOpenPopupDel(true);
 	};
-	const handleAddClassSection = async (row) => {
-		await request.post(`classsection/${row.id}`);
-		alert("Đã thêm lớp học phần mới");
-	};
 	return (
 		<>
 			<Helmet>
-				<title>Quản lý môn học</title>
+				<title>Quản lý lớp học phần</title>
 			</Helmet>
 
 			<Container>
@@ -139,27 +127,15 @@ function SubjectPage() {
 					mb={5}
 				>
 					<Typography variant="h4" gutterBottom>
-						Môn học
+						Lớp học phần
 					</Typography>
-					<Button
-						variant="contained"
-						startIcon={<Iconify icon="eva:plus-fill" />}
-						onClick={() => setOpenPopupAdd(true)}
-					>
-						Thêm môn học mới
-					</Button>
 				</Stack>
 
 				<Card>
-					<SubjectListToolbar
-						filterName={filterName}
-						onFilterName={handleFilterByName}
-					/>
-
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
 							<Table>
-								<SubjectListHead
+								<ClassSectionListHead
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
@@ -170,9 +146,11 @@ function SubjectPage() {
 										filteredSubjects.map((row) => {
 											const {
 												id,
-												subjectName,
-												tc,
-												price,
+												subjectCode,
+												soTc,
+												tenHp,
+												id_teacher,
+												teacherName,
 											} = row;
 											return (
 												<TableRow
@@ -193,21 +171,54 @@ function SubjectPage() {
 																variant="subtitle2"
 																noWrap
 															>
-																{subjectName}
+																{`${subjectCode}.${id}`}
 															</Typography>
 														</Stack>
 													</TableCell>
 
 													<TableCell align="left">
-														{tc}
+														{tenHp}
 													</TableCell>
 													<TableCell align="left">
-														{price}
+														{soTc}
 													</TableCell>
-
+													<TableCell align="left">
+														<Select
+															labelId="demo-simple-select-label"
+															name="id_teacher"
+															size="small"
+															onChange={(e) =>
+																setTeacher(
+																	e.target
+																		.value
+																)
+															}
+															defaultValue={
+																id_teacher ||
+																null
+															}
+														>
+															{dataSelect.map(
+																(item) => (
+																	<MenuItem
+																		key={
+																			item.id
+																		}
+																		value={
+																			item.id
+																		}
+																	>
+																		{
+																			item.fullName
+																		}
+																	</MenuItem>
+																)
+															)}
+														</Select>
+													</TableCell>
 													<TableCell
 														align="right"
-														style={{ width: "20%" }}
+														width="15%"
 													>
 														<div
 															style={{
@@ -216,23 +227,6 @@ function SubjectPage() {
 																	"flex-end",
 															}}
 														>
-															<MenuItem
-																onClick={() =>
-																	handleAddClassSection(
-																		row
-																	)
-																}
-																sx={{
-																	color: "success.main",
-																}}
-															>
-																<Iconify
-																	icon={
-																		"eva:plus-fill"
-																	}
-																/>
-																Thêm lớp HP
-															</MenuItem>
 															<MenuItem
 																onClick={() =>
 																	handleOpenUpd(
@@ -276,32 +270,23 @@ function SubjectPage() {
 					</Scrollbar>
 				</Card>
 			</Container>
-			<Popup
-				openPopup={openPopupAdd}
-				setOpenPopup={setOpenPopupAdd}
-				title="Thêm môn học"
-			>
-				<SubjectFormAdd />
-			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
 				setOpenPopup={setOpenPopupDel}
-				title="Bạn muốn xóa môn học này không?"
-				type="subject"
+				title="Bạn muốn xóa lớp học phần này không?"
+				type="classsection"
 				data={recordForEdit}
 			></PopupDel>
-			<Popup
+			<PopupUpd
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
-				title="Cập nhật môn học"
-			>
-				<SubjectFormUpd
-					data={recordForEdit}
-					setOpen={setOpenPopupUpd}
-				/>
-			</Popup>
+				title="Bạn muốn cập nhật lớp học phần này?"
+				type="classsection"
+				teacher={teacher}
+				data={recordForEdit}
+			/>
 		</>
 	);
 }
 
-export default SubjectPage;
+export default SectionClassPage;
