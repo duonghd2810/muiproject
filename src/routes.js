@@ -16,14 +16,21 @@ import RegistLessonPage from "./pages/RegistLessonPage";
 import EnterPointPage from "./pages/EnterPointPage";
 import CalendarclPage from "./pages/CalendarclPage";
 import SectionClassPage from "./pages/SectionClassPage";
+import { isEmpty } from "lodash";
+import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+	const { data } = useSelector((state) => state.userReducer);
 	const routes = useRoutes([
 		{
 			path: "/",
-			element: <DashboardLayout />,
+      element: isEmpty(data) ? (
+        <Navigate replace to="/login" />
+      ) : (
+        <DashboardLayout />
+      ),
 			children: [
 				{ element: "", index: true },
 				{ path: "major", element: <MajorPage /> },
@@ -41,7 +48,7 @@ export default function Router() {
 		},
 		{
 			path: "login",
-			element: <LoginPage />,
+      element: isEmpty(data) ? <LoginPage /> : <Navigate replace to="/" />,
 		},
 		{
 			element: <SimpleLayout />,

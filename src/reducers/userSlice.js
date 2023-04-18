@@ -15,9 +15,7 @@ export const fetchUser = createAsyncThunk(
 					},
 				}
 			);
-			request.defaults.headers.common[
-				"Authorization"
-			] = `Bearer ${response.data.result.token}`;
+			localStorage.setItem("token", `Bearer ${response.data.result.token}`)
 			return response.data.result;
 		} catch {
 			alert("Tên đăng nhập hoặc mật khẩu không đúng");

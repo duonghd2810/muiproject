@@ -36,6 +36,7 @@ export default function AccountPopover() {
 		setOpen(null);
 	};
 	const handleLogout = () => {
+		localStorage.removeItem("token")
 		dispatch(userActions.update({}));
 		setOpen(null);
 	};
