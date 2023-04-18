@@ -28,6 +28,7 @@ import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
+import { Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -122,7 +123,6 @@ export default function CollegeClassPage() {
 		setRecordForEdit(row);
 		setOpenPopupDel(true);
 	};
-
 	return (
 		<>
 			<Helmet>
@@ -205,7 +205,7 @@ export default function CollegeClassPage() {
 													</TableCell>
 													<TableCell
 														align="right"
-														width="15%"
+														style={{ width: "20%" }}
 													>
 														<div
 															style={{
@@ -214,6 +214,22 @@ export default function CollegeClassPage() {
 																	"flex-end",
 															}}
 														>
+															<MenuItem
+																sx={{
+																	color: "success.main",
+																}}
+															>
+																<Link
+																	to="/addstudenttoclass"
+																	style={{
+																		color: "inherit",
+																		textDecoration:
+																			"none",
+																	}}
+																>
+																	Danh sách SV
+																</Link>
+															</MenuItem>
 															<MenuItem
 																onClick={() =>
 																	handleOpenUpd(

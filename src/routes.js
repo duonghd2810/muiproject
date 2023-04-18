@@ -16,6 +16,7 @@ import RegistLessonPage from "./pages/RegistLessonPage";
 import EnterPointPage from "./pages/EnterPointPage";
 import CalendarclPage from "./pages/CalendarclPage";
 import SectionClassPage from "./pages/SectionClassPage";
+import DetailClassPage from "./pages/DetailClassPage";
 import { isEmpty } from "lodash";
 import { useSelector } from "react-redux";
 
@@ -44,6 +45,10 @@ export default function Router() {
 				{ path: "registlesson", element: <RegistLessonPage /> },
 				{ path: "enterpoint", element: <EnterPointPage /> },
 				{ path: "calendarcl", element: <CalendarclPage /> },
+				{
+					path: "addstudenttoclass",
+					element: <DetailClassPage />,
+				},
 			],
 		},
 		{

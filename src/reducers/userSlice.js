@@ -4,7 +4,6 @@ import request from "src/utils/request";
 export const fetchUser = createAsyncThunk(
 	"user/fetchUser",
 	async (param, { dispatch, getState }) => {
-		console.log("🚀 ~ file: userSlice.js:7 ~ getState:", getState());
 		try {
 			const response = await request.post(
 				"auth/login",

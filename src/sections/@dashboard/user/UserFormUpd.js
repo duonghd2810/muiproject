@@ -63,7 +63,6 @@ function UserFormUpd(props) {
 			formik.handleReset();
 		},
 	});
-	console.log("birth", formik.dateOfBirth);
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>

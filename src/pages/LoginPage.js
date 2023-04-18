@@ -18,7 +18,7 @@ import Iconify from "../components/iconify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "src/reducers/userSlice";
 import { isEmpty } from "lodash";
-import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +62,7 @@ const FormLogin = styled("form")(({ theme }) => ({
 
 export default function LoginPage() {
 	const dispatch = useDispatch();
+	const history = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const formik = useFormik({
 		initialValues: {
@@ -77,9 +78,7 @@ export default function LoginPage() {
 		},
 	});
 	const user = useSelector((state) => state.userReducer).data;
-	return !isEmpty(user) && user != null ? (
-		<DashboardLayout />
-	) : (
+	return isEmpty(user) ? (
 		<>
 			<Helmet>
 				<title>Đăng nhập</title>
@@ -167,5 +166,7 @@ export default function LoginPage() {
 				</Container>
 			</StyledRoot>
 		</>
+	) : (
+		history("/", { replace: true })
 	);
 }
