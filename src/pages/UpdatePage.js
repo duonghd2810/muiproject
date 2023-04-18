@@ -1,21 +1,16 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-	Button,
-	Card,
-	CardActionArea,
-	CardMedia,
-	Container,
-	FormControl,
-	Input,
-	InputLabel,
-	Stack,
-	TextField,
-} from "@mui/material";
+import { Button, Container, FormControl, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import request from "src/utils/request";
+import dayjs from "dayjs";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import ChangePassword from "src/sections/@dashboard/user/ChangePassword";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
@@ -23,17 +18,33 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 
 function UpdatePage() {
+	const refresh = () => window.location.reload(true);
+	const user = useSelector((state) => state.userReducer).data;
+	const [userUpd, setUserUpd] = useState({});
+	const [openForm, setOpenForm] = useState(false);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await request.get(`user/${user.userId}`);
+			return response.data.result;
+		};
+		fetchData().then((res) => {
+			setUserUpd(res);
+		});
+	}, []);
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 	const formik = useFormik({
+		enableReinitialize: true,
 		initialValues: {
-			avatar: "",
-			dateOfBirth: "",
-			address: "",
-			phone: "",
-			email: "",
+			fullName: userUpd.fullName,
+			username: userUpd.username,
+			dateOfBirth: dayjs(userUpd.dateOfBirth),
+			gender: userUpd.gender,
+			address: userUpd.address,
+			phone: userUpd.phone,
+			email: userUpd.email,
 		},
 		validationSchema: Yup.object({
-			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
 			address: Yup.string().required("Vui lòng nhập địa chỉ"),
 			phone: Yup.string()
 				.required("Vui lòng nhập số điện thoại")
@@ -42,8 +53,13 @@ function UpdatePage() {
 				.required("Vui lòng nhập email")
 				.email("Không đúng định dạng email"),
 		}),
-		onSubmit: (values) => {
-			formik.handleReset();
+		onSubmit: async (values) => {
+			await request.patch(`user/${user.userId}`, JSON.stringify(values), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			refresh();
 		},
 	});
 	return (
@@ -55,88 +71,90 @@ function UpdatePage() {
 			<Container maxWidth="sm">
 				<GlobalForm onSubmit={formik.handleSubmit}>
 					<FormControl style={{ margin: "12px 0" }}>
-						<InputLabel htmlFor="component-simple">Tên</InputLabel>
-						<Input
-							id="component-simple"
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Tên"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
 							name="fullName"
-							value=""
+							value={formik.values.fullName}
 							size="small"
 							readOnly
+							disabled
 						/>
+					</FormControl>
+					<FormControl style={{ margin: "12px 0" }}>
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Tên đăng nhập"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
+							name="username"
+							value={formik.values.username}
+							size="small"
+							readOnly
+							disabled
+						/>
+					</FormControl>
+					<FormControl style={{ margin: "12px 0" }}>
+						<label
+							style={{
+								color: "#919EAB",
+								fontSize: "1rem",
+								lineHeight: "1.4375em",
+							}}
+						>
+							Mật khẩu
+						</label>
+						<Button
+							size="small"
+							style={{ width: "120px", fontWeight: "400" }}
+							onClick={() => setOpenForm(true)}
+						>
+							Đổi mật khẩu
+						</Button>
 					</FormControl>
 					<FormControl style={{ margin: "12px 0" }}>
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<DatePicker
 								name="dateOfBirth"
-								value={formik.values.dateOfBirth || null}
-								onChange={(value) => {
-									formik.setFieldValue("dateOfBirth", value);
-								}}
+								value={formik.values.dateOfBirth}
 								size="small"
 								renderInput={(params) => (
 									<TextField {...params} />
 								)}
+								InputLabelProps={{ shrink: true }}
 								label="Ngày sinh"
 								format="DD / MM / YYYY"
 								readOnly
+								disabled
 							/>
 						</LocalizationProvider>
 					</FormControl>
 					<FormControl style={{ margin: "12px 0" }}>
-						<InputLabel htmlFor="component-simple">
-							Giới tính
-						</InputLabel>
-						<Input
-							id="component-simple"
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Giới tính"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
 							name="gender"
-							value=""
+							value={formik.values.gender}
 							size="small"
 							readOnly
+							disabled
 						/>
 					</FormControl>
-					{/* <FormControl style={{ margin: "12px 0" }}>
-					<Stack direction="row" alignItems="center" spacing={2}>
-						<TextField
-							id="outlined-full-width"
-							label="Ảnh"
-							style={{ margin: 8 }}
-							name="upload-photo"
-							type="file"
-							size="small"
-							fullWidth
-							margin="normal"
-							InputLabelProps={{
-								shrink: true,
-							}}
-							variant="outlined"
-							onChange={(e) => {
-								formik.setFieldValue(
-									"avatar",
-									URL.createObjectURL(e.target.files[0])
-								);
-							}}
-						/>
-					</Stack>
-					{!formik.errors.avatar && (
-						<Card style={{ maxWidth: "350px" }}>
-							<CardActionArea>
-								<CardMedia
-									component="img"
-									alt="Ảnh"
-									height="140"
-									image={formik.avatar}
-								/>
-							</CardActionArea>
-						</Card>
-					)}
-				</FormControl> */}
 					<FormControl style={{ margin: "12px 0" }}>
-						<InputLabel htmlFor="component-simple">
-							Địa chỉ
-						</InputLabel>
-						<Input
-							id="component-simple"
-							name="phone"
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Địa chỉ"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
+							name="address"
 							value={formik.values.address}
 							onChange={formik.handleChange}
 							size="small"
@@ -148,11 +166,12 @@ function UpdatePage() {
 						)}
 					</FormControl>
 					<FormControl style={{ margin: "12px 0" }}>
-						<InputLabel htmlFor="component-simple">
-							Số điện thoại
-						</InputLabel>
-						<Input
-							id="component-simple"
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Số điện thoại"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
 							name="phone"
 							value={formik.values.phone}
 							onChange={formik.handleChange}
@@ -165,11 +184,12 @@ function UpdatePage() {
 						)}
 					</FormControl>
 					<FormControl style={{ margin: "12px 0" }}>
-						<InputLabel htmlFor="component-simple">
-							Email
-						</InputLabel>
-						<Input
-							id="component-simple"
+						<TextField
+							InputLabelProps={{ shrink: true }}
+							label="Email"
+							id="outlined-basic"
+							variant="outlined"
+							type="text"
 							name="email"
 							value={formik.values.email}
 							onChange={formik.handleChange}
@@ -191,6 +211,13 @@ function UpdatePage() {
 					</Button>
 				</GlobalForm>
 			</Container>
+			<Popup
+				openPopup={openForm}
+				setOpenPopup={setOpenForm}
+				title="Thay đổi mật khẩu"
+			>
+				<ChangePassword />
+			</Popup>
 		</>
 	);
 }
