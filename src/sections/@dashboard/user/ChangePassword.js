@@ -51,7 +51,6 @@ function ChangePassword() {
 				}
 			);
 			refresh();
-			console.log(values);
 		},
 	});
 	return (

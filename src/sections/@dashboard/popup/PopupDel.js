@@ -8,7 +8,6 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
-import { fetchCollegeClass } from "src/reducers/collegeClassSlice";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { fetchStudent } from "src/reducers/studentSlice";
 import { fetchSubject } from "src/reducers/subjectSlice";
@@ -20,19 +19,16 @@ function PopupDel(props) {
 
 	const handleDelete = async () => {
 		await request.delete(`${type}/${data.id}`);
-		if (type == "major") {
+		if (type === "major") {
 			dispatch(fetchMajor());
 		}
-		if (type == "user") {
+		if (type === "user") {
 			dispatch(fetchStudent());
 		}
-		if (type == "class") {
-			dispatch(fetchCollegeClass());
-		}
-		if (type == "subject") {
+		if (type === "subject") {
 			dispatch(fetchSubject());
 		}
-		if (type == "classsection") {
+		if (type === "classsection") {
 			dispatch(fetchClassSection());
 		}
 		setOpenPopup(false);

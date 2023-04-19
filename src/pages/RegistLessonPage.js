@@ -1,123 +1,200 @@
 import {
+	Card,
 	Container,
-	Paper,
+	MenuItem,
+	Stack,
 	Table,
 	TableBody,
 	TableCell,
 	TableContainer,
-	TableHead,
 	TableRow,
 	Typography,
 } from "@mui/material";
-import React from "react";
+import { filter } from "lodash";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Iconify from "src/components/iconify/Iconify";
+import Scrollbar from "src/components/scrollbar/Scrollbar";
+import { fetchClassSectionByStudent } from "src/reducers/classSectionByIdStudentSlice";
+import { fetchClassSection } from "src/reducers/classSectionSlice";
+import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
+
+const TABLE_HEAD = [
+	{ id: "subjectCode", label: "Mã HP", alignRight: false },
+	{ id: "tenHp", label: "Tên HP", alignRight: false },
+	{ id: "soTc", label: "Số tín chỉ", alignRight: false },
+	{ id: "teacherName", label: "Giáo viên dạy", alignRight: false },
+	{ id: "" },
+];
+// ----------------------------------------------------------------------
+function descendingComparator(a, b, orderBy) {
+	if (b[orderBy] < a[orderBy]) {
+		return -1;
+	}
+	if (b[orderBy] > a[orderBy]) {
+		return 1;
+	}
+	return 0;
+}
+
+function getComparator(order, orderBy) {
+	return order === "desc"
+		? (a, b) => descendingComparator(a, b, orderBy)
+		: (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+	if (Object.keys(array).length === 0) {
+		return [];
+	}
+	const stabilizedThis = array.map((el, index) => [el, index]);
+	stabilizedThis.sort((a, b) => {
+		const order = comparator(a[0], b[0]);
+		if (order !== 0) return order;
+		return a[1] - b[1];
+	});
+	if (query) {
+		return filter(
+			array,
+			(_subject) =>
+				_subject.subjectName
+					.toLowerCase()
+					.indexOf(query.toLowerCase()) !== -1
+		);
+	}
+	return stabilizedThis.map((el) => el[0]);
+}
 function RegistLessonPage() {
+	const dispatch = useDispatch();
+	const [order, setOrder] = useState("asc");
+
+	const [orderBy, setOrderBy] = useState("name");
+
+	const [filterName, setFilterName] = useState("");
+
+	const [recordForEdit, setRecordForEdit] = useState(null);
+	const user = useSelector((state) => state.userReducer).data;
+	useEffect(() => {
+		dispatch(fetchClassSectionByStudent(user.majorId));
+	}, []);
+	const CLASSSECTIONTLIST = useSelector(
+		(state) => state.classSectionByStudentReducer
+	).data;
+
+	const handleRequestSort = (event, property) => {
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
+		setOrderBy(property);
+	};
+	const filteredSubjects = applySortFilter(
+		CLASSSECTIONTLIST,
+		getComparator(order, orderBy),
+		filterName
+	);
+	const handleOpenAdd = (row) => {
+		setRecordForEdit(row);
+	};
 	return (
 		<>
 			<Helmet>
 				<title>Đăng ký học phần</title>
 			</Helmet>
 			<Container>
-				<Typography variant="h4" gutterBottom>
-					Đăng ký học phần
-				</Typography>
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650 }} aria-label="simple table">
-						<TableHead>
-							<TableRow>
-								<TableCell>Thời khóa biểu</TableCell>
-								<TableCell align="right">Thứ 2</TableCell>
-								<TableCell align="right">Thứ 3</TableCell>
-								<TableCell align="right">Thứ 4</TableCell>
-								<TableCell align="right">Thứ 5</TableCell>
-								<TableCell align="right">Thứ 6</TableCell>
-								<TableCell align="right">Thứ 7</TableCell>
-								<TableCell align="right">Chủ nhật</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							<TableRow>
-								<TableCell component="th" scope="row">
-									Sáng
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell component="th" scope="row">
-									Chiều
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell component="th" scope="row">
-									Tối
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-								<TableCell align="right">
-									<Link >Chọn</Link>
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-				</TableContainer>
+				<Stack
+					direction="row"
+					alignItems="center"
+					justifyContent="space-between"
+					mb={5}
+				>
+					<Typography variant="h4" gutterBottom>
+						Đăng ký học phần
+					</Typography>
+				</Stack>
+
+				<Card>
+					<Scrollbar>
+						<TableContainer sx={{ minWidth: 800 }}>
+							<Table>
+								<ClassSectionListHead
+									order={order}
+									orderBy={orderBy}
+									headLabel={TABLE_HEAD}
+									onRequestSort={handleRequestSort}
+								/>
+								<TableBody>
+									{filteredSubjects.length != 0 &&
+										filteredSubjects.map((row) => {
+											const {
+												id,
+												subjectCode,
+												soTc,
+												tenHp,
+												teacherName,
+											} = row;
+											return (
+												<TableRow
+													hover
+													key={id}
+													tabIndex={-1}
+												>
+													<TableCell
+														component="th"
+														scope="row"
+													>
+														<Stack
+															direction="row"
+															alignItems="center"
+															spacing={2}
+														>
+															<Typography
+																variant="subtitle2"
+																noWrap
+															>
+																{`${subjectCode}.${id}`}
+															</Typography>
+														</Stack>
+													</TableCell>
+
+													<TableCell align="left">
+														{tenHp}
+													</TableCell>
+													<TableCell align="left">
+														{soTc}
+													</TableCell>
+													<TableCell align="left">
+														{teacherName}
+													</TableCell>
+													<TableCell
+														align="right"
+														width="15%"
+													>
+														<MenuItem
+															onClick={() =>
+																handleOpenAdd(
+																	row
+																)
+															}
+															sx={{
+																color: "success.main",
+															}}
+														>
+															<Iconify
+																icon={
+																	"eva:plus-fill"
+																}
+															/>
+															Đăng ký
+														</MenuItem>
+													</TableCell>
+												</TableRow>
+											);
+										})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Scrollbar>
+				</Card>
 			</Container>
 		</>
 	);

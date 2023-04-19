@@ -14,8 +14,6 @@ import {
 	Container,
 	Typography,
 	TableContainer,
-	Alert,
-	IconButton,
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
@@ -34,6 +32,7 @@ import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSubject } from "src/reducers/subjectSlice";
 import request from "src/utils/request";
+import { fetchMajor } from "src/reducers/majorSlice";
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +40,7 @@ const TABLE_HEAD = [
 	{ id: "subjectName", label: "Tên môn", alignRight: false },
 	{ id: "tc", label: "Số tín chỉ", alignRight: false },
 	{ id: "price", label: "Giá tiền/tín chỉ", alignRight: false },
+	{ id: "majorName", label: "Ngành", alignRight: false },
 	{ id: "" },
 ];
 // ----------------------------------------------------------------------
@@ -93,6 +93,11 @@ function SubjectPage() {
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
+
+	useEffect(() => {
+		dispatch(fetchMajor());
+	}, []);
+	const dataSelect = useSelector((state) => state.majorReducer).data;
 
 	useEffect(() => {
 		dispatch(fetchSubject());
@@ -173,6 +178,7 @@ function SubjectPage() {
 												subjectName,
 												tc,
 												price,
+												majorName,
 											} = row;
 											return (
 												<TableRow
@@ -203,6 +209,9 @@ function SubjectPage() {
 													</TableCell>
 													<TableCell align="left">
 														{price}
+													</TableCell>
+													<TableCell align="left">
+														{majorName}
 													</TableCell>
 
 													<TableCell
@@ -281,7 +290,7 @@ function SubjectPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm môn học"
 			>
-				<SubjectFormAdd />
+				<SubjectFormAdd dataSelect={dataSelect} />
 			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
@@ -297,6 +306,7 @@ function SubjectPage() {
 			>
 				<SubjectFormUpd
 					data={recordForEdit}
+					dataSelect={dataSelect}
 					setOpen={setOpenPopupUpd}
 				/>
 			</Popup>

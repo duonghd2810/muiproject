@@ -4,7 +4,7 @@ export const fetchSubject = createAsyncThunk(
 	"subject/fetchSubject",
 	async (param, { dispatch, getState }) => {
 		const response = await request.get("subject");
-		return response.data.result;
+		return response.data;
 	}
 );
 export const subjectSlice = createSlice({

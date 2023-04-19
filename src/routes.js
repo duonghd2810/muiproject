@@ -8,7 +8,6 @@ import StudentPage from "./pages/StudentPage";
 import LoginPage from "./pages/LoginPage";
 import Page404 from "./pages/Page404";
 import TeacherPage from "./pages/TeacherPage";
-import CollegeClass from "./pages/CollegeClass";
 import SubjectPage from "./pages/SubjectPage";
 import UpdatePage from "./pages/UpdatePage";
 import StudyResultPage from "./pages/StudyResultPage";
@@ -27,17 +26,16 @@ export default function Router() {
 	const routes = useRoutes([
 		{
 			path: "/",
-      element: isEmpty(data) ? (
-        <Navigate replace to="/login" />
-      ) : (
-        <DashboardLayout />
-      ),
+			element: isEmpty(data) ? (
+				<Navigate replace to="/login" />
+			) : (
+				<DashboardLayout />
+			),
 			children: [
 				{ element: "", index: true },
 				{ path: "major", element: <MajorPage /> },
 				{ path: "student", element: <StudentPage /> },
 				{ path: "teacher", element: <TeacherPage /> },
-				{ path: "collegeclass", element: <CollegeClass /> },
 				{ path: "subject", element: <SubjectPage /> },
 				{ path: "sectionclass", element: <SectionClassPage /> },
 				{ path: "profile", element: <UpdatePage /> },
@@ -46,14 +44,18 @@ export default function Router() {
 				{ path: "enterpoint", element: <EnterPointPage /> },
 				{ path: "calendarcl", element: <CalendarclPage /> },
 				{
-					path: "addstudenttoclass",
+					path: "addstudenttomajor",
 					element: <DetailClassPage />,
 				},
 			],
 		},
 		{
 			path: "login",
-      element: isEmpty(data) ? <LoginPage /> : <Navigate replace to="/" />,
+			element: isEmpty(data) ? (
+				<LoginPage />
+			) : (
+				<Navigate replace to="/" />
+			),
 		},
 		{
 			element: <SimpleLayout />,

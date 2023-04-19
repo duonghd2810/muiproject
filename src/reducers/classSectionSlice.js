@@ -28,6 +28,6 @@ export const classSectionSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const majorActions = classSectionSlice.actions;
+export const classSectionActions = classSectionSlice.actions;
 
 export default classSectionSlice.reducer;

@@ -17,11 +17,6 @@ const navConfig = [
 		icon: icon("ic_analytics"),
 	},
 	{
-		title: "Quản lý lớp chính quy",
-		path: "/collegeclass",
-		icon: icon("ic_class"),
-	},
-	{
 		title: "Quản lý môn học",
 		path: "/subject",
 		icon: icon("ic_subject"),
@@ -61,16 +56,16 @@ const navConfig = [
 		path: "/enterpoint",
 		icon: icon("ic_point"),
 	},
-	{
-		title: "login",
-		path: "/login",
-		icon: icon("ic_lock"),
-	},
-	{
-		title: "Not found",
-		path: "/404",
-		icon: icon("ic_disabled"),
-	},
+	// {
+	// 	title: "login",
+	// 	path: "/login",
+	// 	icon: icon("ic_lock"),
+	// },
+	// {
+	// 	title: "Not found",
+	// 	path: "/404",
+	// 	icon: icon("ic_disabled"),
+	// },
 ];
 
 export default navConfig;

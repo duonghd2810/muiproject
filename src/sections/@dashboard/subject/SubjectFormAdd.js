@@ -4,6 +4,8 @@ import {
 	FormControl,
 	Input,
 	InputLabel,
+	MenuItem,
+	Select,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useFormik } from "formik";
@@ -17,13 +19,16 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function SubjectFormAdd(props) {
+	const { dataSelect } = props;
 	const dispatch = useDispatch();
 	const formik = useFormik({
 		initialValues: {
+			id_major: null,
 			subjectName: "",
 			tc: null,
 		},
 		validationSchema: Yup.object({
+			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			subjectName: Yup.string().required("Vui lòng nhập tên môn học"),
 			tc: Yup.number("Nhập không đúng định dạng").required(
 				"Vui lòng nhập số tín chỉ"
@@ -42,6 +47,27 @@ function SubjectFormAdd(props) {
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
+				<FormControl style={{ margin: "12px 0" }}>
+					<InputLabel id="demo-simple-select-label">Ngành</InputLabel>
+					<Select
+						label="Ngành"
+						labelId="demo-simple-select-label"
+						name="id_major"
+						onChange={formik.handleChange}
+						value={formik.values.id_major || null}
+					>
+						{dataSelect.map((item) => (
+							<MenuItem key={item.id} value={item.id}>
+								{item.majorName}
+							</MenuItem>
+						))}
+					</Select>
+					{formik.errors.id_major && formik.touched.id_major && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.id_major}
+						</p>
+					)}
+				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">
 						Tên môn học

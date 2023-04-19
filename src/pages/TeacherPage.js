@@ -207,7 +207,7 @@ export default function TeacherPage() {
 
 												<TableCell
 													align="left"
-													style={{ width: "20%" }}
+													style={{ width: "18%" }}
 												>
 													{phone}
 												</TableCell>
@@ -221,7 +221,7 @@ export default function TeacherPage() {
 
 												<TableCell
 													align="left"
-													style={{ width: "10%" }}
+													style={{ width: "12%" }}
 												>
 													{gender}
 												</TableCell>

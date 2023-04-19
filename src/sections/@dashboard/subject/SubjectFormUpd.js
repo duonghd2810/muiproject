@@ -6,6 +6,8 @@ import {
 	FormControl,
 	Input,
 	InputLabel,
+	MenuItem,
+	Select,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import request from "src/utils/request";
@@ -18,13 +20,15 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 function SubjectFormUpd(props) {
 	const dispatch = useDispatch();
-	const { data, setOpen } = props;
+	const { data, dataSelect, setOpen } = props;
 	const formik = useFormik({
 		initialValues: {
+			id_major: data.id_major,
 			subjectName: data.subjectName,
 			tc: data.tc,
 		},
 		validationSchema: Yup.object({
+			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			subjectName: Yup.string().required("Vui lòng nhập tên môn học"),
 			tc: Yup.number("Nhập không đúng định dạng").required(
 				"Vui lòng nhập số tín chỉ"
@@ -44,6 +48,22 @@ function SubjectFormUpd(props) {
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
+				<FormControl style={{ margin: "12px 0" }}>
+					<InputLabel id="demo-simple-select-label">Ngành</InputLabel>
+					<Select
+						label="Ngành"
+						labelId="demo-simple-select-label"
+						name="id_major"
+						onChange={formik.handleChange}
+						defaultValue={data.id_major}
+					>
+						{dataSelect.map((item) => (
+							<MenuItem key={item.id} value={item.id}>
+								{item.majorName}
+							</MenuItem>
+						))}
+					</Select>
+				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">
 						Tên môn học
