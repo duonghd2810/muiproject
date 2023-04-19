@@ -19,6 +19,7 @@ import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { fetchClassSectionByStudent } from "src/reducers/classSectionByIdStudentSlice";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
+import request from "src/utils/request";
 
 const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
@@ -72,11 +73,9 @@ function RegistLessonPage() {
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
-
-	const [recordForEdit, setRecordForEdit] = useState(null);
 	const user = useSelector((state) => state.userReducer).data;
 	useEffect(() => {
-		dispatch(fetchClassSectionByStudent(user.majorId));
+		dispatch(fetchClassSectionByStudent(user.userId));
 	}, []);
 	const CLASSSECTIONTLIST = useSelector(
 		(state) => state.classSectionByStudentReducer
@@ -92,8 +91,15 @@ function RegistLessonPage() {
 		getComparator(order, orderBy),
 		filterName
 	);
-	const handleOpenAdd = (row) => {
-		setRecordForEdit(row);
+	const handleOpenAdd = async (row) => {
+		try {
+			await request.post(
+				`coursegrade/${row.id}/registclasssection/${user.userId}`
+			);
+			alert("Đăng ký thành công");
+		} catch {
+			alert("Bạn đã đăng ký học phần này rồi");
+		}
 	};
 	return (
 		<>

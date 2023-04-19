@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
 	Container,
 	Paper,
@@ -9,10 +10,21 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
-import React from "react";
 import { Helmet } from "react-helmet-async";
+import request from "src/utils/request";
+import { useSelector } from "react-redux";
 
 function StudyResultPage() {
+	const [results, setResults] = useState([]);
+	const user = useSelector((state) => state.userReducer).data;
+	useEffect(() => {
+		request
+			.get(`coursegrade/studyresult/${user.userId}`)
+			.then((res) => setResults(res.data))
+			.catch(function (error) {
+				return Promise.reject(error);
+			});
+	}, []);
 	return (
 		<>
 			<Helmet>
@@ -26,29 +38,60 @@ function StudyResultPage() {
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
 						<TableHead>
 							<TableRow>
-								<TableCell rowSpan={2}>STT</TableCell>
-								<TableCell align="center" rowSpan={2}>
+								<TableCell
+									align="center"
+									rowSpan={2}
+									style={{ width: "25%" }}
+								>
 									Học phần
 								</TableCell>
-								<TableCell align="center" rowSpan={2}>
-									Số tín chỉ
+								<TableCell
+									align="center"
+									rowSpan={2}
+									style={{ width: "10%" }}
+								>
+									Số TC
 								</TableCell>
-								<TableCell align="center" rowSpan={2}>
+								<TableCell
+									align="center"
+									rowSpan={2}
+									style={{ width: "8%" }}
+								>
 									TX1
 								</TableCell>
-								<TableCell align="center" rowSpan={2}>
+								<TableCell
+									align="center"
+									rowSpan={2}
+									style={{ width: "8%" }}
+								>
 									TX2
 								</TableCell>
-								<TableCell align="center" rowSpan={2}>
+								<TableCell
+									align="center"
+									rowSpan={2}
+									style={{ width: "10%" }}
+								>
 									TB KTTX
 								</TableCell>
-								<TableCell align="center" colSpan={2}>
+								<TableCell
+									align="center"
+									colSpan={2}
+									style={{ width: "14%" }}
+								>
 									Điểm thi
 								</TableCell>
-								<TableCell align="center" colSpan={3}>
+								<TableCell
+									align="center"
+									colSpan={3}
+									style={{ width: "18%" }}
+								>
 									Trung bình môn
 								</TableCell>
-								<TableCell align="right" rowSpan={2}>
+								<TableCell
+									align="right"
+									rowSpan={2}
+									style={{ width: "7%" }}
+								>
 									Xếp loại
 								</TableCell>
 							</TableRow>
@@ -61,16 +104,49 @@ function StudyResultPage() {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							<TableRow>
-								<TableCell component="th"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-								<TableCell align="center"></TableCell>
-							</TableRow>
+							{results.length > 0 &&
+								results.map((row) => {
+									const {
+										idClass,
+										tenHp,
+										soTc,
+										hs1,
+										hs2,
+										finaltest,
+									} = row;
+									return (
+										<TableRow>
+											<TableCell align="left">
+												{tenHp}
+											</TableCell>
+											<TableCell align="center">
+												{soTc}
+											</TableCell>
+											<TableCell align="center">
+												{hs1}
+											</TableCell>
+											<TableCell align="center">
+												{hs2}
+											</TableCell>
+											<TableCell align="center">
+												{((hs1 + hs2) / 2).toFixed(2) >
+												0
+													? ((hs1 + hs2) / 2).toFixed(
+															2
+													  )
+													: null}
+											</TableCell>
+											<TableCell align="center">
+												{finaltest}
+											</TableCell>
+											<TableCell align="center"></TableCell>
+											<TableCell align="center"></TableCell>
+											<TableCell align="center"></TableCell>
+											<TableCell align="center"></TableCell>
+											<TableCell align="center"></TableCell>
+										</TableRow>
+									);
+								})}
 						</TableBody>
 					</Table>
 				</TableContainer>
