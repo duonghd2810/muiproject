@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "src/utils/request";
-export const fetchClassSectionByStudent = createAsyncThunk(
-	"classsection/fetchClassSectionByStudent",
+export const fetchClassSectionByTeacher = createAsyncThunk(
+	"classsection/fetchClassSectionByTeacher",
 	async (param, { dispatch, getState }) => {
-		const response = await request.get(`classsection/${param}`);
+		const response = await request.get(`classsection/teacher/${param}`);
 		return response.data;
 	}
 );
-export const classSectionByStudentSlice = createSlice({
-	name: "classsectionbystudent",
+export const classSectionByTeacherSlice = createSlice({
+	name: "classsectionbyteacher",
 	initialState: {
 		data: {},
 	},
@@ -19,13 +19,13 @@ export const classSectionByStudentSlice = createSlice({
 	},
 	extraReducers(builder) {
 		builder.addCase(
-			fetchClassSectionByStudent.fulfilled,
+			fetchClassSectionByTeacher.fulfilled,
 			(state, action) => {
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			fetchClassSectionByStudent.rejected,
+			fetchClassSectionByTeacher.rejected,
 			(state, action) => {
 				state.data = {};
 			}
@@ -34,6 +34,6 @@ export const classSectionByStudentSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const classSectionByStudentActions = classSectionByStudentSlice.actions;
+export const classSectionByTeacherActions = classSectionByTeacherSlice.actions;
 
-export default classSectionByStudentSlice.reducer;
+export default classSectionByTeacherSlice.reducer;

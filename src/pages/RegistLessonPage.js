@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Iconify from "src/components/iconify/Iconify";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { fetchClassSectionByStudent } from "src/reducers/classSectionByIdStudentSlice";
-import { fetchClassSection } from "src/reducers/classSectionSlice";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
 import request from "src/utils/request";
 
@@ -86,7 +85,7 @@ function RegistLessonPage() {
 		setOrder(isAsc ? "desc" : "asc");
 		setOrderBy(property);
 	};
-	const filteredSubjects = applySortFilter(
+	const filteredClassSections = applySortFilter(
 		CLASSSECTIONTLIST,
 		getComparator(order, orderBy),
 		filterName
@@ -129,8 +128,8 @@ function RegistLessonPage() {
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredSubjects.length != 0 &&
-										filteredSubjects.map((row) => {
+									{filteredClassSections.length != 0 &&
+										filteredClassSections.map((row) => {
 											const {
 												id,
 												subjectCode,

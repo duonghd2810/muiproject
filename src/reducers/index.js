@@ -5,6 +5,7 @@ import teacherReducer from "./teacherSlice";
 import subjectReducer from "./subjectSlice";
 import classSectionReducer from "./classSectionSlice";
 import classSectionByStudentReducer from "./classSectionByIdStudentSlice";
+import classSectionByTeacherReducer from "./classSectionByTeacherSlice";
 import { combineReducers } from "@reduxjs/toolkit";
 
 export default combineReducers({
@@ -15,4 +16,5 @@ export default combineReducers({
 	subjectReducer,
 	classSectionReducer,
 	classSectionByStudentReducer,
+	classSectionByTeacherReducer,
 });

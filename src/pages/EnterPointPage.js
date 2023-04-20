@@ -9,19 +9,80 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
+import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
-import { fetchMajor } from "src/reducers/majorSlice";
+import { fetchClassSectionByTeacher } from "src/reducers/classSectionByTeacherSlice";
+import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
+const TABLE_HEAD = [
+	{ id: "subjectCode", label: "Mã HP", alignRight: false },
+	{ id: "tenHp", label: "Tên HP", alignRight: false },
+	{ id: "soTc", label: "Số tín chỉ", alignRight: false },
+];
+function descendingComparator(a, b, orderBy) {
+	if (b[orderBy] < a[orderBy]) {
+		return -1;
+	}
+	if (b[orderBy] > a[orderBy]) {
+		return 1;
+	}
+	return 0;
+}
 
+function getComparator(order, orderBy) {
+	return order === "desc"
+		? (a, b) => descendingComparator(a, b, orderBy)
+		: (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+	if (Object.keys(array).length === 0) {
+		return [];
+	}
+	const stabilizedThis = array.map((el, index) => [el, index]);
+	stabilizedThis.sort((a, b) => {
+		const order = comparator(a[0], b[0]);
+		if (order !== 0) return order;
+		return a[1] - b[1];
+	});
+	if (query) {
+		return filter(
+			array,
+			(_subject) =>
+				_subject.subjectName
+					.toLowerCase()
+					.indexOf(query.toLowerCase()) !== -1
+		);
+	}
+	return stabilizedThis.map((el) => el[0]);
+}
 function EnterPointPage() {
 	const dispatch = useDispatch();
+	const [order, setOrder] = useState("asc");
 
+	const [orderBy, setOrderBy] = useState("name");
+
+	const [filterName, setFilterName] = useState("");
+	const user = useSelector((state) => state.userReducer).data;
 	useEffect(() => {
-		dispatch(fetchMajor());
+		dispatch(fetchClassSectionByTeacher(user.userId));
 	}, []);
-	const MAJORLIST = useSelector((state) => state.majorReducer).data;
+	const CLASSSECTIONTLIST = useSelector(
+		(state) => state.classSectionByTeacherReducer
+	).data;
+
+	const handleRequestSort = (event, property) => {
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
+		setOrderBy(property);
+	};
+	const filteredClassSections = applySortFilter(
+		CLASSSECTIONTLIST,
+		getComparator(order, orderBy),
+		filterName
+	);
 	return (
 		<>
 			<Helmet>
@@ -35,10 +96,21 @@ function EnterPointPage() {
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
 							<Table>
+								<ClassSectionListHead
+									order={order}
+									orderBy={orderBy}
+									headLabel={TABLE_HEAD}
+									onRequestSort={handleRequestSort}
+								/>
 								<TableBody>
-									{MAJORLIST.length != 0 &&
-										MAJORLIST.map((row) => {
-											const { id, majorName } = row;
+									{filteredClassSections.length > 0 &&
+										filteredClassSections.map((row) => {
+											const {
+												id,
+												subjectCode,
+												tenHp,
+												soTc,
+											} = row;
 											return (
 												<TableRow
 													hover
@@ -58,9 +130,15 @@ function EnterPointPage() {
 																variant="subtitle2"
 																noWrap
 															>
-																{majorName}
+																{`${subjectCode}.${id}`}
 															</Typography>
 														</Stack>
+													</TableCell>
+													<TableCell>
+														{tenHp}
+													</TableCell>
+													<TableCell>
+														{soTc}
 													</TableCell>
 												</TableRow>
 											);
