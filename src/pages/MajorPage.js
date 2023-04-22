@@ -30,7 +30,6 @@ import { useEffect } from "react";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
-import PopupAddStudent from "src/sections/@dashboard/popup/PopupAddStudent";
 
 // ----------------------------------------------------------------------
 
@@ -87,8 +86,6 @@ export default function MajorPage() {
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
-
-	const [openPopStudent, setOpenPopStudent] = useState(false);
 	const [openPopupAdd, setOpenPopupAdd] = useState(false);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
@@ -107,10 +104,6 @@ export default function MajorPage() {
 	const handleOpenDel = (row) => {
 		setRecordForEdit(row);
 		setOpenPopupDel(true);
-	};
-	const handlePopupStudent = (row) => {
-		setRecordForEdit(row);
-		setOpenPopStudent(true);
 	};
 
 	const handleRequestSort = (event, property) => {
@@ -213,18 +206,6 @@ export default function MajorPage() {
 														>
 															<MenuItem
 																onClick={() =>
-																	handlePopupStudent(
-																		row
-																	)
-																}
-																sx={{
-																	color: "success.main",
-																}}
-															>
-																Danh sách SV
-															</MenuItem>
-															<MenuItem
-																onClick={() =>
 																	handleOpenUpd(
 																		row
 																	)
@@ -288,11 +269,6 @@ export default function MajorPage() {
 			>
 				<MajorFormUpd data={recordForEdit} setOpen={setOpenPopupUpd} />
 			</Popup>
-			<PopupAddStudent
-				openPopup={openPopStudent}
-				setOpenPopup={setOpenPopStudent}
-				data={recordForEdit}
-			></PopupAddStudent>
 		</>
 	);
 }

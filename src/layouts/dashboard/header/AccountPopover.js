@@ -4,7 +4,7 @@ import { Divider, Stack, MenuItem, IconButton, Popover } from "@mui/material";
 // mocks_
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "src/reducers/userSlice";
 // ----------------------------------------------------------------------
 
@@ -26,6 +26,7 @@ const AvatarHead = styled("div")(({ theme }) => ({
 
 export default function AccountPopover() {
 	const dispatch = useDispatch();
+	const user = useSelector((state) => state.userReducer).data;
 	const [open, setOpen] = useState(null);
 
 	const handleOpen = (event) => {
@@ -36,9 +37,25 @@ export default function AccountPopover() {
 		setOpen(null);
 	};
 	const handleLogout = () => {
-		localStorage.removeItem("token")
+		localStorage.removeItem("token");
 		dispatch(userActions.update({}));
 		setOpen(null);
+	};
+	const showName = () => {
+		const arrUser = user.fullName.split(" ");
+		let name = "";
+		if (arrUser.length > 0) {
+			for (let i = 0; i < arrUser.length; i++) {
+				if (i === 0 || i === arrUser.length - 1) {
+					let firstChar = arrUser[i]
+						.toString()
+						.charAt(0)
+						.toUpperCase();
+					name = name.concat(firstChar);
+				}
+			}
+		}
+		return name;
 	};
 	return (
 		<>
@@ -59,7 +76,7 @@ export default function AccountPopover() {
 				}}
 			>
 				<AvatarHead>
-					<span style={{ color: "white" }}>HD</span>
+					<span style={{ color: "white" }}>{showName()}</span>
 				</AvatarHead>
 			</IconButton>
 

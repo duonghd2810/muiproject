@@ -13,6 +13,7 @@ import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { fetchClassSectionByTeacher } from "src/reducers/classSectionByTeacherSlice";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
@@ -60,6 +61,7 @@ function applySortFilter(array, comparator, query) {
 }
 function EnterPointPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
@@ -83,6 +85,9 @@ function EnterPointPage() {
 		getComparator(order, orderBy),
 		filterName
 	);
+	const handleDetail = (id) => {
+		navigate(`/enterpoint/${id}`);
+	};
 	return (
 		<>
 			<Helmet>
@@ -116,10 +121,19 @@ function EnterPointPage() {
 													hover
 													key={id}
 													tabIndex={-1}
+													style={{
+														cursor: "pointer",
+													}}
+													onClick={() =>
+														handleDetail(row.id)
+													}
 												>
 													<TableCell
 														component="th"
 														scope="row"
+														style={{
+															cursor: "pointer",
+														}}
 													>
 														<Stack
 															direction="row"
@@ -134,10 +148,18 @@ function EnterPointPage() {
 															</Typography>
 														</Stack>
 													</TableCell>
-													<TableCell>
+													<TableCell
+														style={{
+															cursor: "pointer",
+														}}
+													>
 														{tenHp}
 													</TableCell>
-													<TableCell>
+													<TableCell
+														style={{
+															cursor: "pointer",
+														}}
+													>
 														{soTc}
 													</TableCell>
 												</TableRow>

@@ -198,22 +198,23 @@ function SectionClassPage() {
 																null
 															}
 														>
-															{dataSelect.map(
-																(item) => (
-																	<MenuItem
-																		key={
-																			item.id
-																		}
-																		value={
-																			item.id
-																		}
-																	>
-																		{
-																			item.fullName
-																		}
-																	</MenuItem>
-																)
-															)}
+															{!!dataSelect &&
+																dataSelect.map(
+																	(item) => (
+																		<MenuItem
+																			key={
+																				item.id
+																			}
+																			value={
+																				item.id
+																			}
+																		>
+																			{
+																				item.fullName
+																			}
+																		</MenuItem>
+																	)
+																)}
 														</Select>
 													</TableCell>
 													<TableCell
