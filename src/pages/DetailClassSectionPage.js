@@ -18,11 +18,13 @@ import request from "src/utils/request";
 import ClassSectionDetailHead from "src/sections/@dashboard/classSection/ClassSectionDetailHead";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentInclassSection } from "src/reducers/allStudentInClassSection";
+import { isEmpty } from "lodash";
 
 function DetailClassSectionPage() {
 	const dispatch = useDispatch();
 	const { idClass } = useParams();
 	const [classSection, setClassSection] = useState();
+	const [selectedFile, setSelectedFile] = useState(null);
 	useEffect(() => {
 		request
 			.get(`classsection/classdetail/${idClass}`)
@@ -38,7 +40,51 @@ function DetailClassSectionPage() {
 		(state) => state.studentInclassSectionReducer
 	).data;
 	const showTBTX = (student) => {
-		let tb = 0.0;
+		const { hs1, hs2, hs3, hs4, hs5 } = student;
+		const arr = [hs1, hs2, hs3, hs4, hs5];
+		const arrCheckNull = arr.filter((item) => item !== null);
+		if (arrCheckNull.length === 0) return "";
+		const tbc =
+			arrCheckNull.reduce((total, value) => total + value, 0) /
+			arrCheckNull.length;
+		return tbc;
+	};
+	const exportFile = async () => {
+		const response = await request.get(`coursegrade/export/${idClass}`, {
+			responseType: "blob",
+		});
+		const url = window.URL.createObjectURL(
+			new Blob([response.data], {
+				type: response.data.type,
+			})
+		);
+		let a = window.document.createElement("a");
+		a.href = url;
+		a.target = "_blank";
+		a.download = "Danh sách lớp " + classSection.tenHp;
+		a.click();
+	};
+	const handleFileSelect = (event) => {
+		setSelectedFile(event.target.files[0]);
+	};
+
+	const handleFileUpload = () => {
+		const formData = new FormData();
+		formData.append("file", selectedFile);
+
+		request
+			.post(`coursegrade/import/${idClass}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			})
+			.then((response) => {
+				console.log("File uploaded successfully:", response.data);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		dispatch(fetchStudentInclassSection(idClass));
 	};
 	return (
 		<>
@@ -47,15 +93,15 @@ function DetailClassSectionPage() {
 			</Helmet>
 			<Container>
 				<Grid container margin={2}>
-					<Grid item xs={4}>
-						<Typography variant="h5" gutterBottom>
+					<Grid item xs={3}>
+						<Typography variant="h6">
 							Mã học phần:&nbsp;
 							{!!classSection &&
 								`${classSection.subjectCode}.${classSection.id}`}
 						</Typography>
 					</Grid>
-					<Grid item xs={4}>
-						<Typography variant="h5" gutterBottom>
+					<Grid item xs={5}>
+						<Typography variant="h6">
 							Tên học phần:&nbsp;
 							{!!classSection && classSection.tenHp}
 						</Typography>
@@ -65,12 +111,22 @@ function DetailClassSectionPage() {
 						xs={4}
 						style={{
 							display: "flex",
-							justifyContent: "space-around",
+							justifyContent: "space-between",
 							alignItems: "center",
 						}}
 					>
-						<Button>Export</Button>
-						<Button>Import</Button>
+						<input
+							style={{ flex: "2" }}
+							type="file"
+							onChange={handleFileSelect}
+						/>
+						<Button
+							variant="contained"
+							onClick={handleFileUpload}
+							style={{ flex: "1" }}
+						>
+							Import file
+						</Button>
 					</Grid>
 				</Grid>
 				<Card>
@@ -138,13 +194,15 @@ function DetailClassSectionPage() {
 													align="center"
 													style={{ width: "8%" }}
 												>
-													4
+													{student.sotietnghi}
 												</TableCell>
 												<TableCell
 													align="center"
 													style={{ width: "15%" }}
 												>
-													đủ
+													{showTBTX(student) < 4
+														? "Không đủ ĐK"
+														: "Đủ ĐK"}
 												</TableCell>
 											</TableRow>
 										))}
@@ -153,6 +211,13 @@ function DetailClassSectionPage() {
 						</TableContainer>
 					</Scrollbar>
 				</Card>
+				<Button
+					variant="contained"
+					style={{ position: "fixed", bottom: "10px" }}
+					onClick={exportFile}
+				>
+					Export
+				</Button>
 			</Container>
 		</>
 	);

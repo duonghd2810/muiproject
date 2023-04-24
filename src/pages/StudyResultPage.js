@@ -25,6 +25,20 @@ function StudyResultPage() {
 				return Promise.reject(error);
 			});
 	}, []);
+	const showTBTX = (student) => {
+		const { hs1, hs2, hs3, hs4, hs5 } = student;
+		console.log(
+			"🚀 ~ file: StudyResultPage.js:30 ~ showTBTX ~ student:",
+			student
+		);
+		const arr = [hs1, hs2, hs3, hs4, hs5];
+		const arrCheckNull = arr.filter((item) => item !== null);
+		if (arrCheckNull.length === 0) return "";
+		const tbc =
+			arrCheckNull.reduce((total, value) => total + value, 0) /
+			arrCheckNull.length;
+		return tbc;
+	};
 	return (
 		<>
 			<Helmet>
@@ -82,7 +96,7 @@ function StudyResultPage() {
 								</TableCell>
 								<TableCell
 									align="center"
-									colSpan={3}
+									colSpan={2}
 									style={{ width: "18%" }}
 								>
 									Trung bình môn
@@ -100,20 +114,13 @@ function StudyResultPage() {
 								<TableCell align="center">Lần 2</TableCell>
 								<TableCell align="center">Điểm 10</TableCell>
 								<TableCell align="center">Điểm 4</TableCell>
-								<TableCell align="center">Điểm chữ</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{results.length > 0 &&
 								results.map((row) => {
-									const {
-										idClass,
-										tenHp,
-										soTc,
-										hs1,
-										hs2,
-										finaltest,
-									} = row;
+									const { tenHp, soTc, hs1, hs2, finaltest } =
+										row;
 									return (
 										<TableRow>
 											<TableCell align="left">
@@ -129,12 +136,7 @@ function StudyResultPage() {
 												{hs2}
 											</TableCell>
 											<TableCell align="center">
-												{((hs1 + hs2) / 2).toFixed(2) >
-												0
-													? ((hs1 + hs2) / 2).toFixed(
-															2
-													  )
-													: null}
+												{showTBTX(row)}
 											</TableCell>
 											<TableCell align="center">
 												{finaltest}

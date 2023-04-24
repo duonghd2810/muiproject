@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "src/reducers/studentSlice";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import dayjs from "dayjs";
+import { fetchMajor } from "src/reducers/majorSlice";
 
 // ----------------------------------------------------------------------
 
@@ -90,6 +91,10 @@ export default function StudentPage() {
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
+	useEffect(() => {
+		dispatch(fetchMajor());
+	}, []);
+	const dataSelect = useSelector((state) => state.majorReducer).data;
 	const [recordForEdit, setRecordForEdit] = useState(null);
 	useEffect(() => {
 		dispatch(fetchStudent());
@@ -165,7 +170,6 @@ export default function StudentPage() {
 											id,
 											fullName,
 											dateOfBirth,
-											address,
 											phone,
 											email,
 											gender,
@@ -284,7 +288,7 @@ export default function StudentPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm sinh viên"
 			>
-				<UserFormAdd type="student" />
+				<UserFormAdd type="student" dataSelect={dataSelect} />
 			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
@@ -300,6 +304,7 @@ export default function StudentPage() {
 			>
 				<UserFormUpd
 					data={recordForEdit}
+					dataSelect={dataSelect}
 					setOpen={setOpenPopupUpd}
 					type="student"
 				/>

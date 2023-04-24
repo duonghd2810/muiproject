@@ -28,6 +28,7 @@ import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacher } from "src/reducers/teacherSlice";
 import dayjs from "dayjs";
+import { fetchMajor } from "src/reducers/majorSlice";
 
 // ----------------------------------------------------------------------
 
@@ -90,6 +91,10 @@ export default function TeacherPage() {
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
+	useEffect(() => {
+		dispatch(fetchMajor());
+	}, []);
+	const dataSelect = useSelector((state) => state.majorReducer).data;
 	const [recordForEdit, setRecordForEdit] = useState(null);
 	useEffect(() => {
 		dispatch(fetchTeacher());
@@ -166,7 +171,6 @@ export default function TeacherPage() {
 											id,
 											fullName,
 											dateOfBirth,
-											address,
 											phone,
 											email,
 											gender,
@@ -285,7 +289,7 @@ export default function TeacherPage() {
 				setOpenPopup={setOpenPopupAdd}
 				title="Thêm giáo viên"
 			>
-				<UserFormAdd type="teacher" />
+				<UserFormAdd type="teacher" dataSelect={dataSelect} />
 			</Popup>
 			<PopupDel
 				openPopup={openPopupDel}
@@ -301,6 +305,7 @@ export default function TeacherPage() {
 			>
 				<UserFormUpd
 					data={recordForEdit}
+					dataSelect={dataSelect}
 					setOpen={setOpenPopupUpd}
 					type="teacher"
 				/>

@@ -6,6 +6,8 @@ import {
 	FormControl,
 	Input,
 	InputLabel,
+	MenuItem,
+	Select,
 	TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -23,11 +25,12 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 
-function UserFormAdd({ type }) {
+function UserFormAdd({ type, dataSelect }) {
 	const dispatch = useDispatch();
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 	const formik = useFormik({
 		initialValues: {
+			id_major: null,
 			fullName: "",
 			dateOfBirth: "",
 			gender: "",
@@ -36,6 +39,7 @@ function UserFormAdd({ type }) {
 			email: "",
 		},
 		validationSchema: Yup.object({
+			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
 			address: Yup.string(),
@@ -48,7 +52,7 @@ function UserFormAdd({ type }) {
 			gender: Yup.string().required("Vui lòng chọn giới tính"),
 		}),
 		onSubmit: async (values) => {
-			if (type == "student") {
+			if (type === "student") {
 				await request.post(
 					"auth/registerstudent",
 					JSON.stringify(values),
@@ -60,7 +64,7 @@ function UserFormAdd({ type }) {
 				);
 				dispatch(fetchStudent());
 			}
-			if (type == "teacher") {
+			if (type === "teacher") {
 				await request.post(
 					"auth/registerteacher",
 					JSON.stringify(values),
@@ -78,6 +82,27 @@ function UserFormAdd({ type }) {
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
+				<FormControl style={{ margin: "12px 0" }}>
+					<InputLabel id="demo-simple-select-label">Ngành</InputLabel>
+					<Select
+						label="Ngành"
+						labelId="demo-simple-select-label"
+						name="id_major"
+						onChange={formik.handleChange}
+						value={formik.values.id_major || null}
+					>
+						{dataSelect.map((item) => (
+							<MenuItem key={item.id} value={item.id}>
+								{item.majorName}
+							</MenuItem>
+						))}
+					</Select>
+					{formik.errors.id_major && formik.touched.id_major && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.id_major}
+						</p>
+					)}
+				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input

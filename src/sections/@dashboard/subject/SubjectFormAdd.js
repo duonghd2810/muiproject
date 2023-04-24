@@ -92,7 +92,7 @@ function SubjectFormAdd(props) {
 					<Input
 						id="component-simple"
 						name="tc"
-						value={formik.values.tc}
+						value={formik.values.tc || ""}
 						onChange={formik.handleChange}
 					/>
 					{formik.errors.tc && formik.touched.tc && (
