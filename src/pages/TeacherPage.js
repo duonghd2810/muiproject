@@ -305,7 +305,6 @@ export default function TeacherPage() {
 			>
 				<UserFormUpd
 					data={recordForEdit}
-					dataSelect={dataSelect}
 					setOpen={setOpenPopupUpd}
 					type="teacher"
 				/>

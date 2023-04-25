@@ -28,11 +28,10 @@ const GlobalForm = styled("form")(({ theme }) => ({
 function UserFormUpd(props) {
 	const dispatch = useDispatch();
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
-	const { data, setOpen, type, dataSelect } = props;
+	const { data, setOpen, type } = props;
 
 	const formik = useFormik({
 		initialValues: {
-			id_major: data.id_major,
 			fullName: data.fullName,
 			dateOfBirth: dayjs(data.dateOfBirth),
 			phone: data.phone,
@@ -41,7 +40,6 @@ function UserFormUpd(props) {
 			gender: data.gender,
 		},
 		validationSchema: Yup.object({
-			id_major: Yup.number().required("Vui lòng chọn ngành học"),
 			fullName: Yup.string().required("Vui lòng nhập tên sinh viên"),
 			dateOfBirth: Yup.string().required("Vui lòng chọn ngày sinh"),
 			address: Yup.string(),
@@ -70,22 +68,6 @@ function UserFormUpd(props) {
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
-				<FormControl style={{ margin: "12px 0" }}>
-					<InputLabel id="demo-simple-select-label">Ngành</InputLabel>
-					<Select
-						label="Ngành"
-						labelId="demo-simple-select-label"
-						name="id_major"
-						onChange={formik.handleChange}
-						defaultValue={data.id_major}
-					>
-						{dataSelect.map((item) => (
-							<MenuItem key={item.id} value={item.id}>
-								{item.majorName}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<InputLabel htmlFor="component-simple">Tên</InputLabel>
 					<Input

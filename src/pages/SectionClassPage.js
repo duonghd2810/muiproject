@@ -84,17 +84,18 @@ function SectionClassPage() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	useEffect(() => {
-		dispatch(fetchTeacher());
-	}, []);
-	const dataSelect = useSelector((state) => state.teacherReducer).data;
-
-	useEffect(() => {
 		dispatch(fetchClassSection());
 	}, []);
 	const CLASSSECTIONTLIST = useSelector(
 		(state) => state.classSectionReducer
 	).data;
 
+	useEffect(() => {
+		dispatch(fetchTeacher());
+	}, []);
+	const dataSelect = useSelector((state) => state.teacherReducer).data;
+	const renderTeacherList = (idMajor) => {
+	}
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -150,8 +151,8 @@ function SectionClassPage() {
 												soTc,
 												tenHp,
 												id_teacher,
-												teacherName,
 											} = row;
+											renderTeacherList(row.idMajor);
 											return (
 												<TableRow
 													hover
