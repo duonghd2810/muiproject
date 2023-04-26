@@ -7,6 +7,7 @@ import classSectionReducer from "./classSectionSlice";
 import classSectionByStudentReducer from "./classSectionByIdStudentSlice";
 import classSectionByTeacherReducer from "./classSectionByTeacherSlice";
 import studentInclassSectionReducer from "./allStudentInClassSection";
+import classSectionRegistedByStudentReducer from "./alllClassSectionRegistedByStudent";
 import { combineReducers } from "@reduxjs/toolkit";
 
 export default combineReducers({
@@ -19,4 +20,5 @@ export default combineReducers({
 	classSectionByStudentReducer,
 	classSectionByTeacherReducer,
 	studentInclassSectionReducer,
+	classSectionRegistedByStudentReducer,
 });

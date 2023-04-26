@@ -6,7 +6,8 @@ import {
 	Typography,
 } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClassSectionRegistedByStudent } from "src/reducers/alllClassSectionRegistedByStudent";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
 import { fetchMajor } from "src/reducers/majorSlice";
 import { fetchStudent } from "src/reducers/studentSlice";
@@ -17,7 +18,16 @@ function PopupDel(props) {
 	const dispatch = useDispatch();
 	const { openPopup, setOpenPopup, title, type, data } = props;
 
+	const user = useSelector((state) => state.userReducer).data;
+
 	const handleDelete = async () => {
+		if (type === "cancel-registed") {
+			await request.delete(
+				`coursegrade/${user.userId}/${type}/${data.idClass}`
+			);
+			dispatch(fetchClassSectionRegistedByStudent(user.userId));
+			setOpenPopup(false);
+		}
 		await request.delete(`${type}/${data.id}`);
 		if (type === "major") {
 			dispatch(fetchMajor());

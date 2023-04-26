@@ -16,8 +16,10 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import Iconify from "src/components/iconify/Iconify";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
+import { fetchClassSectionRegistedByStudent } from "src/reducers/alllClassSectionRegistedByStudent";
 import { fetchClassSectionByStudent } from "src/reducers/classSectionByIdStudentSlice";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
+import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import request from "src/utils/request";
 
 const TABLE_HEAD = [
@@ -72,12 +74,22 @@ function RegistLessonPage() {
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
+	const [recordForEdit, setRecordForEdit] = useState(null);
+	const [openPopupDel, setOpenPopupDel] = useState(false);
 	const user = useSelector((state) => state.userReducer).data;
+
 	useEffect(() => {
 		dispatch(fetchClassSectionByStudent(user.userId));
 	}, []);
 	const CLASSSECTIONTLIST = useSelector(
 		(state) => state.classSectionByStudentReducer
+	).data;
+
+	useEffect(() => {
+		dispatch(fetchClassSectionRegistedByStudent(user.userId));
+	}, []);
+	const CLASSSECTIONTLISTREGISTED = useSelector(
+		(state) => state.classSectionRegistedByStudentReducer
 	).data;
 
 	const handleRequestSort = (event, property) => {
@@ -95,11 +107,18 @@ function RegistLessonPage() {
 			await request.post(
 				`coursegrade/${row.id}/registclasssection/${user.userId}`
 			);
+			dispatch(fetchClassSectionRegistedByStudent(user.userId));
 			alert("Đăng ký thành công");
 		} catch {
 			alert("Bạn đã đăng ký học phần này rồi");
 		}
 	};
+
+	const handleOpenDelete = (row) => {
+		setRecordForEdit(row);
+		setOpenPopupDel(true);
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -110,11 +129,9 @@ function RegistLessonPage() {
 					direction="row"
 					alignItems="center"
 					justifyContent="space-between"
-					mb={5}
+					mb={2}
 				>
-					<Typography variant="h4" gutterBottom>
-						Đăng ký học phần
-					</Typography>
+					<Typography variant="h4">Đăng ký học phần</Typography>
 				</Stack>
 
 				<Card>
@@ -128,7 +145,7 @@ function RegistLessonPage() {
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredClassSections.length != 0 &&
+									{filteredClassSections.length !== 0 &&
 										filteredClassSections.map((row) => {
 											const {
 												id,
@@ -200,7 +217,99 @@ function RegistLessonPage() {
 						</TableContainer>
 					</Scrollbar>
 				</Card>
+				<Stack
+					direction="row"
+					alignItems="center"
+					justifyContent="space-between"
+					mt={4}
+					mb={2}
+				>
+					<Typography variant="h5" gutterBottom>
+						Danh sách học phần đã đăng ký
+					</Typography>
+				</Stack>
+				<Card>
+					<Scrollbar>
+						<TableContainer sx={{ minWidth: 800 }}>
+							<Table>
+								<TableBody>
+									{Object.keys(CLASSSECTIONTLISTREGISTED)
+										.length !== 0 &&
+										CLASSSECTIONTLISTREGISTED.map((row) => {
+											const {
+												idClass,
+												subjectCode,
+												tenHp,
+												soTc,
+											} = row;
+											return (
+												<TableRow
+													hover
+													key={idClass}
+													tabIndex={-1}
+												>
+													<TableCell
+														component="th"
+														scope="row"
+													>
+														<Stack
+															direction="row"
+															alignItems="center"
+															spacing={2}
+														>
+															<Typography
+																variant="subtitle2"
+																noWrap
+															>
+																{`${subjectCode}.${idClass}`}
+															</Typography>
+														</Stack>
+													</TableCell>
+
+													<TableCell align="left">
+														{tenHp}
+													</TableCell>
+													<TableCell align="left">
+														{soTc}
+													</TableCell>
+													<TableCell
+														align="right"
+														width="15%"
+													>
+														<MenuItem
+															onClick={() =>
+																handleOpenDelete(
+																	row
+																)
+															}
+															sx={{
+																color: "error.main",
+															}}
+														>
+															<Iconify
+																icon={
+																	"eva:trash-2-outline"
+																}
+															/>
+															Hủy đăng ký
+														</MenuItem>
+													</TableCell>
+												</TableRow>
+											);
+										})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Scrollbar>
+				</Card>
 			</Container>
+			<PopupDel
+				openPopup={openPopupDel}
+				setOpenPopup={setOpenPopupDel}
+				title="Bạn muốn hủy học phần này không?"
+				type="cancel-registed"
+				data={recordForEdit}
+			></PopupDel>
 		</>
 	);
 }

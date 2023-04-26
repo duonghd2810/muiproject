@@ -27,10 +27,6 @@ function StudyResultPage() {
 	}, []);
 	const showTBTX = (student) => {
 		const { hs1, hs2, hs3, hs4, hs5 } = student;
-		console.log(
-			"🚀 ~ file: StudyResultPage.js:30 ~ showTBTX ~ student:",
-			student
-		);
 		const arr = [hs1, hs2, hs3, hs4, hs5];
 		const arrCheckNull = arr.filter((item) => item !== null);
 		if (arrCheckNull.length === 0) return "";

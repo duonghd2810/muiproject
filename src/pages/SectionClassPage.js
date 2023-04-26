@@ -13,7 +13,6 @@ import {
 	Container,
 	Typography,
 	TableContainer,
-	Select,
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
@@ -21,9 +20,9 @@ import Scrollbar from "../components/scrollbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
-import { fetchTeacher } from "src/reducers/teacherSlice";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
 import PopupUpd from "src/sections/@dashboard/popup/PopupUpd";
+import TeacherByMajor from "src/components/important-components/TeacherByMajor";
 
 const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
@@ -90,12 +89,6 @@ function SectionClassPage() {
 		(state) => state.classSectionReducer
 	).data;
 
-	useEffect(() => {
-		dispatch(fetchTeacher());
-	}, []);
-	const dataSelect = useSelector((state) => state.teacherReducer).data;
-	const renderTeacherList = (idMajor) => {
-	}
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
@@ -150,9 +143,9 @@ function SectionClassPage() {
 												subjectCode,
 												soTc,
 												tenHp,
+												idMajor,
 												id_teacher,
 											} = row;
-											renderTeacherList(row.idMajor);
 											return (
 												<TableRow
 													hover
@@ -184,39 +177,15 @@ function SectionClassPage() {
 														{soTc}
 													</TableCell>
 													<TableCell align="left">
-														<Select
-															labelId="demo-simple-select-label"
-															name="id_teacher"
-															size="small"
-															onChange={(e) =>
-																setTeacher(
-																	e.target
-																		.value
-																)
+														<TeacherByMajor
+															setTeacher={
+																setTeacher
 															}
-															defaultValue={
-																id_teacher ||
-																null
+															idMajor={idMajor}
+															idTeacher={
+																id_teacher
 															}
-														>
-															{!!dataSelect &&
-																dataSelect.map(
-																	(item) => (
-																		<MenuItem
-																			key={
-																				item.id
-																			}
-																			value={
-																				item.id
-																			}
-																		>
-																			{
-																				item.fullName
-																			}
-																		</MenuItem>
-																	)
-																)}
-														</Select>
+														/>
 													</TableCell>
 													<TableCell
 														align="right"
