@@ -18,6 +18,7 @@ import SectionClassPage from "./pages/SectionClassPage";
 import DetailClassSectionPage from "./pages/DetailClassSectionPage";
 import { isEmpty } from "lodash";
 import { useSelector } from "react-redux";
+import EnterPointFinalPage from "./pages/EnterPointFinalPage";
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +43,7 @@ export default function Router() {
 				{ path: "studyresult", element: <StudyResultPage /> },
 				{ path: "registlesson", element: <RegistLessonPage /> },
 				{ path: "enterpoint", element: <EnterPointPage /> },
+				{ path: "enterpointfinal", element: <EnterPointFinalPage /> },
 				{ path: "calendarcl", element: <CalendarclPage /> },
 				{
 					path: "enterpoint/:idClass",

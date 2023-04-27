@@ -18,7 +18,6 @@ import request from "src/utils/request";
 import ClassSectionDetailHead from "src/sections/@dashboard/classSection/ClassSectionDetailHead";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentInclassSection } from "src/reducers/allStudentInClassSection";
-import { isEmpty } from "lodash";
 
 function DetailClassSectionPage() {
 	const dispatch = useDispatch();

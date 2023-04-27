@@ -52,6 +52,11 @@ const navConfig = [
 		icon: icon("ic_key"),
 	},
 	{
+		title: "Nhập điểm học kì",
+		path: "/enterpointfinal",
+		icon: icon("ic_point"),
+	},
+	{
 		title: "Nhập điểm",
 		path: "/enterpoint",
 		icon: icon("ic_point"),

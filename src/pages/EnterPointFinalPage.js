@@ -1,0 +1,71 @@
+import { useState } from 'react';
+import { Button, Container } from '@mui/material';
+import { styled } from "@mui/material/styles";
+import { Icon } from '@iconify/react';
+import request from 'src/utils/request';
+
+const StyledDiv = styled("div")(({ theme }) => ({
+	width: "100%",
+	display: "flex",
+     flexDirection:"column",
+     justifyContent:"center",
+     alignItems:"center"
+}));
+const FileForm = styled("form")(({ theme }) => ({
+     width:"50%",
+     height:"250px",
+     borderRadius:"5px",
+	display: "flex",
+	flexDirection: "column",
+     justifyContent:"center",
+     alignItems:"center",
+     border:"1px dashed #1475cf",
+     cursor:"pointer"
+}));
+function EnterPointFinalPage() {
+     const [selectedFile, setSelectedFile] = useState(null);
+
+     const handleFileSelect = (event) => {
+		setSelectedFile(event.target.files[0]);
+	};
+     const handleFileUpload = () => {
+		const formData = new FormData();
+		formData.append("file", selectedFile);
+		console.log("🚀 ~ file: EnterPointFinalPage.js:33 ~ handleFileUpload ~ formData:", formData)
+
+		// request
+		// 	.post(`coursegrade/import/${idClass}`, formData, {
+		// 		headers: {
+		// 			"Content-Type": "multipart/form-data",
+		// 		},
+		// 	})
+		// 	.then((response) => {
+		// 		console.log("File uploaded successfully:", response.data);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.error(error);
+		// 	});
+	};
+     return (
+     <Container>
+          <StyledDiv>
+               <FileForm onClick={()=> document.querySelector(".input-field").click()}>
+                    <input
+                         className="input-field"
+                         style={{ flex: "2" }}
+                         type="file"
+                         onChange={handleFileSelect}
+                         hidden
+				/>
+                    <Icon icon="material-symbols:cloud-upload" width={80} style={{color:"#1475cf"}} />
+               </FileForm>
+               <div>
+                    <span>{selectedFile.name}</span>
+               </div>
+               <Button variant="contained" onClick={handleFileUpload} style={{marginTop:"10px"}}>Upload</Button>
+          </StyledDiv>
+     </Container>
+     )
+}
+
+export default EnterPointFinalPage
