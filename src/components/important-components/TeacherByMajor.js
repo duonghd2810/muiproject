@@ -1,4 +1,4 @@
-import { Alert, MenuItem, Select } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import request from "src/utils/request";
@@ -21,10 +21,10 @@ function TeacherByMajor({ setTeacher, idMajor, idTeacher }) {
 	}, []);
 	return (
 		<Select
+			label="Giáo viên dạy"
 			labelId="demo-simple-select-label"
 			name="id_teacher"
-			size="small"
-			onChange={(e) => setTeacher(e.target.value)}
+			onChange={setTeacher}
 			defaultValue={idTeacher || null}
 		>
 			{!!dataSelect &&

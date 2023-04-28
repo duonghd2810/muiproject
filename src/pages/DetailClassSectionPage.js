@@ -67,11 +67,11 @@ function DetailClassSectionPage() {
 		setSelectedFile(event.target.files[0]);
 	};
 
-	const handleFileUpload = () => {
+	const handleFileUpload = async () => {
 		const formData = new FormData();
 		formData.append("file", selectedFile);
 
-		request
+		await request
 			.post(`coursegrade/import/${idClass}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
@@ -83,6 +83,7 @@ function DetailClassSectionPage() {
 			.catch((error) => {
 				console.error(error);
 			});
+		setSelectedFile(null);
 		dispatch(fetchStudentInclassSection(idClass));
 	};
 	return (
@@ -123,6 +124,7 @@ function DetailClassSectionPage() {
 							variant="contained"
 							onClick={handleFileUpload}
 							style={{ flex: "1" }}
+							size="small"
 						>
 							Import file
 						</Button>
@@ -214,6 +216,7 @@ function DetailClassSectionPage() {
 					variant="contained"
 					style={{ position: "fixed", bottom: "10px" }}
 					onClick={exportFile}
+					size="small"
 				>
 					Export
 				</Button>

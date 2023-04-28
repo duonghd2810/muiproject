@@ -13,6 +13,7 @@ import {
 import { Helmet } from "react-helmet-async";
 import request from "src/utils/request";
 import { useSelector } from "react-redux";
+import { isEmpty } from "lodash";
 
 function StudyResultPage() {
 	const [results, setResults] = useState([]);
@@ -35,6 +36,37 @@ function StudyResultPage() {
 			arrCheckNull.length;
 		return tbc;
 	};
+
+	const showTBNumber = (student) => {
+		if (student.finaltest === null) return "";
+		const tbkt = showTBTX(student);
+		const tb = (tbkt + student.finaltest * 2) / 3;
+		return tb.toFixed(1);
+	};
+
+	const showTBText = (student) => {
+		const tb = showTBNumber(student);
+		if (tb === null) return "";
+		if (tb >= 8.5) {
+			return "A";
+		} else if (tb >= 7.7) {
+			return "B+";
+		} else if (tb >= 7) {
+			return "B";
+		} else if (tb >= 6.2) {
+			return "C+";
+		} else if (tb >= 5.5) {
+			return "C";
+		} else if (tb >= 4.7) {
+			return "D+";
+		} else if (tb >= 4) {
+			return "D";
+		} else {
+			if (tb === "") {
+				return "";
+			} else return "Kém";
+		}
+	};
 	return (
 		<>
 			<Helmet>
@@ -49,7 +81,7 @@ function StudyResultPage() {
 						<TableHead>
 							<TableRow>
 								<TableCell
-									align="center"
+									align="left"
 									rowSpan={2}
 									style={{ width: "25%" }}
 								>
@@ -79,6 +111,13 @@ function StudyResultPage() {
 								<TableCell
 									align="center"
 									rowSpan={2}
+									style={{ width: "8%" }}
+								>
+									TX3
+								</TableCell>
+								<TableCell
+									align="center"
+									rowSpan={2}
 									style={{ width: "10%" }}
 								>
 									TB KTTX
@@ -92,8 +131,8 @@ function StudyResultPage() {
 								</TableCell>
 								<TableCell
 									align="center"
-									colSpan={2}
-									style={{ width: "18%" }}
+									rowSpan={2}
+									style={{ width: "10%" }}
 								>
 									Trung bình môn
 								</TableCell>
@@ -108,15 +147,19 @@ function StudyResultPage() {
 							<TableRow>
 								<TableCell align="center">Lần 1</TableCell>
 								<TableCell align="center">Lần 2</TableCell>
-								<TableCell align="center">Điểm 10</TableCell>
-								<TableCell align="center">Điểm 4</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{results.length > 0 &&
 								results.map((row) => {
-									const { tenHp, soTc, hs1, hs2, finaltest } =
-										row;
+									const {
+										tenHp,
+										soTc,
+										hs1,
+										hs2,
+										hs3,
+										finaltest,
+									} = row;
 									return (
 										<TableRow>
 											<TableCell align="left">
@@ -132,16 +175,21 @@ function StudyResultPage() {
 												{hs2}
 											</TableCell>
 											<TableCell align="center">
+												{hs3}
+											</TableCell>
+											<TableCell align="center">
 												{showTBTX(row)}
 											</TableCell>
 											<TableCell align="center">
 												{finaltest}
 											</TableCell>
 											<TableCell align="center"></TableCell>
-											<TableCell align="center"></TableCell>
-											<TableCell align="center"></TableCell>
-											<TableCell align="center"></TableCell>
-											<TableCell align="center"></TableCell>
+											<TableCell align="center">
+												{showTBNumber(row)}
+											</TableCell>
+											<TableCell align="center">
+												{showTBText(row)}
+											</TableCell>
 										</TableRow>
 									);
 								})}

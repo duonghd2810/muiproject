@@ -21,8 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchClassSection } from "src/reducers/classSectionSlice";
 import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
-import PopupUpd from "src/sections/@dashboard/popup/PopupUpd";
-import TeacherByMajor from "src/components/important-components/TeacherByMajor";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import ClassSectionFormUpd from "src/sections/@dashboard/classSection/ClassSectionFormUpd";
 
 const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
@@ -76,7 +76,6 @@ function SectionClassPage() {
 	const [orderBy, setOrderBy] = useState("name");
 
 	const [filterName, setFilterName] = useState("");
-	const [teacher, setTeacher] = useState(null);
 	const [openPopupUpd, setOpenPopupUpd] = useState(false);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
 
@@ -145,6 +144,7 @@ function SectionClassPage() {
 												tenHp,
 												idMajor,
 												id_teacher,
+												teacherName,
 											} = row;
 											return (
 												<TableRow
@@ -158,7 +158,7 @@ function SectionClassPage() {
 													>
 														<Stack
 															direction="row"
-															alignItems="center"
+															alignItems="left"
 															spacing={2}
 														>
 															<Typography
@@ -176,16 +176,11 @@ function SectionClassPage() {
 													<TableCell align="left">
 														{soTc}
 													</TableCell>
-													<TableCell align="left">
-														<TeacherByMajor
-															setTeacher={
-																setTeacher
-															}
-															idMajor={idMajor}
-															idTeacher={
-																id_teacher
-															}
-														/>
+													<TableCell
+														align="left"
+														style={{ width: "20%" }}
+													>
+														{teacherName}
 													</TableCell>
 													<TableCell
 														align="right"
@@ -248,14 +243,16 @@ function SectionClassPage() {
 				type="classsection"
 				data={recordForEdit}
 			></PopupDel>
-			<PopupUpd
+			<Popup
 				openPopup={openPopupUpd}
 				setOpenPopup={setOpenPopupUpd}
-				title="Bạn muốn cập nhật lớp học phần này?"
-				type="classsection"
-				teacher={teacher}
-				data={recordForEdit}
-			/>
+				title="Cập nhật lớp học phần"
+			>
+				<ClassSectionFormUpd
+					data={recordForEdit}
+					setOpen={setOpenPopupUpd}
+				/>
+			</Popup>
 		</>
 	);
 }

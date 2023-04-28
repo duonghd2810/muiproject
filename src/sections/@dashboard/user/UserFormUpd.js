@@ -6,8 +6,6 @@ import {
 	FormControl,
 	Input,
 	InputLabel,
-	MenuItem,
-	Select,
 	TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";

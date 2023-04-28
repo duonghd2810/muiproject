@@ -1,71 +1,91 @@
-import { useState } from 'react';
-import { Button, Container } from '@mui/material';
+import { useState } from "react";
+import { Button, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Icon } from '@iconify/react';
-import request from 'src/utils/request';
+import { Icon } from "@iconify/react";
+import request from "src/utils/request";
+import { Helmet } from "react-helmet-async";
 
 const StyledDiv = styled("div")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
-     flexDirection:"column",
-     justifyContent:"center",
-     alignItems:"center"
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
 }));
 const FileForm = styled("form")(({ theme }) => ({
-     width:"50%",
-     height:"250px",
-     borderRadius:"5px",
+	width: "50%",
+	height: "250px",
+	borderRadius: "5px",
 	display: "flex",
 	flexDirection: "column",
-     justifyContent:"center",
-     alignItems:"center",
-     border:"1px dashed #1475cf",
-     cursor:"pointer"
+	justifyContent: "center",
+	alignItems: "center",
+	border: "1px dashed #1475cf",
+	cursor: "pointer",
 }));
 function EnterPointFinalPage() {
-     const [selectedFile, setSelectedFile] = useState(null);
+	const [selectedFile, setSelectedFile] = useState(null);
 
-     const handleFileSelect = (event) => {
+	const handleFileSelect = (event) => {
 		setSelectedFile(event.target.files[0]);
 	};
-     const handleFileUpload = () => {
+	const handleUploadFinalPoint = () => {
 		const formData = new FormData();
 		formData.append("file", selectedFile);
-		console.log("🚀 ~ file: EnterPointFinalPage.js:33 ~ handleFileUpload ~ formData:", formData)
 
-		// request
-		// 	.post(`coursegrade/import/${idClass}`, formData, {
-		// 		headers: {
-		// 			"Content-Type": "multipart/form-data",
-		// 		},
-		// 	})
-		// 	.then((response) => {
-		// 		console.log("File uploaded successfully:", response.data);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.error(error);
-		// 	});
+		request
+			.post("coursegrade/final-point", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			})
+			.then((response) => {
+				alert(response.data.Message);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		setSelectedFile(null);
 	};
-     return (
-     <Container>
-          <StyledDiv>
-               <FileForm onClick={()=> document.querySelector(".input-field").click()}>
-                    <input
-                         className="input-field"
-                         style={{ flex: "2" }}
-                         type="file"
-                         onChange={handleFileSelect}
-                         hidden
-				/>
-                    <Icon icon="material-symbols:cloud-upload" width={80} style={{color:"#1475cf"}} />
-               </FileForm>
-               <div>
-                    <span>{selectedFile.name}</span>
-               </div>
-               <Button variant="contained" onClick={handleFileUpload} style={{marginTop:"10px"}}>Upload</Button>
-          </StyledDiv>
-     </Container>
-     )
+	return (
+		<>
+			<Helmet>
+				<title>Nhập điểm cuối kỳ</title>
+			</Helmet>
+			<Container>
+				<StyledDiv>
+					<FileForm
+						onClick={() =>
+							document.querySelector(".input-field").click()
+						}
+					>
+						<input
+							className="input-field"
+							style={{ flex: "2" }}
+							type="file"
+							onChange={handleFileSelect}
+							hidden
+						/>
+						<Icon
+							icon="material-symbols:cloud-upload"
+							width={80}
+							style={{ color: "#1475cf" }}
+						/>
+					</FileForm>
+					<div>
+						<span>{selectedFile?.name}</span>
+					</div>
+					<Button
+						variant="contained"
+						onClick={handleUploadFinalPoint}
+						style={{ marginTop: "10px" }}
+					>
+						Upload
+					</Button>
+				</StyledDiv>
+			</Container>
+		</>
+	);
 }
 
-export default EnterPointFinalPage
+export default EnterPointFinalPage;
