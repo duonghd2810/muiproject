@@ -135,15 +135,13 @@ function SectionClassPage() {
 									onRequestSort={handleRequestSort}
 								/>
 								<TableBody>
-									{filteredSubjects.length != 0 &&
+									{filteredSubjects.length !== 0 &&
 										filteredSubjects.map((row) => {
 											const {
 												id,
 												subjectCode,
 												soTc,
 												tenHp,
-												idMajor,
-												id_teacher,
 												teacherName,
 											} = row;
 											return (
@@ -155,6 +153,7 @@ function SectionClassPage() {
 													<TableCell
 														component="th"
 														scope="row"
+														style={{ width: "10%" }}
 													>
 														<Stack
 															direction="row"
@@ -170,10 +169,16 @@ function SectionClassPage() {
 														</Stack>
 													</TableCell>
 
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "15%" }}
+													>
 														{tenHp}
 													</TableCell>
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
 														{soTc}
 													</TableCell>
 													<TableCell
@@ -184,7 +189,7 @@ function SectionClassPage() {
 													</TableCell>
 													<TableCell
 														align="right"
-														width="15%"
+														style={{ width: "15%" }}
 													>
 														<div
 															style={{

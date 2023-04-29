@@ -27,12 +27,11 @@ function TeacherByMajor({ setTeacher, idMajor, idTeacher }) {
 			onChange={setTeacher}
 			defaultValue={idTeacher || null}
 		>
-			{!!dataSelect &&
-				dataSelect.map((item) => (
-					<MenuItem key={item.id} value={item.id}>
-						{item.fullName}
-					</MenuItem>
-				))}
+			{dataSelect?.map((item) => (
+				<MenuItem key={item.id} value={item.id}>
+					{item.fullName}
+				</MenuItem>
+			))}
 		</Select>
 	);
 }

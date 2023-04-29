@@ -1,93 +1,121 @@
-import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import React from "react";
+import { useState, useEffect } from "react";
+import {
+	Container,
+	Stack,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableRow,
+	Typography,
+} from "@mui/material";
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
+import request from "src/utils/request";
+import Scrollbar from "src/components/scrollbar/Scrollbar";
+import { styled } from "@mui/material/styles";
+
+const DivDayStyle = styled("div")(({ theme }) => ({
+	marginTop: "16px",
+	background: "#fff",
+	borderRadius: "6px",
+}));
 
 function CalendarclPage() {
-	return <>
-		<Helmet>
-			<title>Đăng ký học phần</title>
-		</Helmet>
-		<Container>
-			<Typography variant="h4" gutterBottom>
-				Thời khóa biểu
-			</Typography>
-			<TableContainer component={Paper}>
-				<Table sx={{ minWidth: 650 }} aria-label="simple table">
-					<TableHead>
-						<TableRow>
-							<TableCell>Thời khóa biểu</TableCell>
-							<TableCell align="right">Thứ 2</TableCell>
-							<TableCell align="right">Thứ 3</TableCell>
-							<TableCell align="right">Thứ 4</TableCell>
-							<TableCell align="right">Thứ 5</TableCell>
-							<TableCell align="right">Thứ 6</TableCell>
-							<TableCell align="right">Thứ 7</TableCell>
-							<TableCell align="right">Chủ nhật</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						<TableRow>
-							<TableCell component="th" scope="row">
-								Sáng
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell component="th" scope="row">
-								Chiều
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell component="th" scope="row">
-								Tối
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-							<TableCell align="right">
-							</TableCell>
-						</TableRow>
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Container>
-	</>;
+	const user = useSelector((state) => state.userReducer).data;
+	const [tkb, setTkb] = useState([]);
+	useEffect(() => {
+		request
+			.get(`/coursegrade/tkb/${user.userId}`)
+			.then((res) => setTkb(res.data));
+	}, []);
+	const dataMap = new Map();
+
+	if (tkb.length !== 0) {
+		for (let i = 0; i < tkb.length; i++) {
+			const { id_day, ...dataValue } = tkb[i];
+			if (dataMap.has(id_day)) {
+				dataMap.set(id_day, [...dataMap.get(id_day), dataValue]);
+			} else {
+				dataMap.set(id_day, [dataValue]);
+			}
+		}
+	}
+	return (
+		<>
+			<Helmet>
+				<title>Thời khóa biểu</title>
+			</Helmet>
+			<Container>
+				<Typography variant="h4" gutterBottom>
+					Thời khóa biểu
+				</Typography>
+				<Scrollbar>
+					{Array.from(dataMap.entries()).map(([key, value]) => (
+						<DivDayStyle key={key}>
+							<Typography
+								variant="h6"
+								gutterBottom
+								style={{ paddingLeft: "16px" }}
+							>
+								{key}
+							</Typography>
+							<TableContainer sx={{ minWidth: 800 }}>
+								<Table>
+									<TableBody>
+										{value.map((item, i) => (
+											<TableRow
+												hover
+												key={i}
+												tabIndex={-1}
+											>
+												<TableCell
+													component="th"
+													scope="row"
+													style={{ width: "25%" }}
+												>
+													<Stack
+														direction="row"
+														alignItems="left"
+														spacing={2}
+													>
+														<Typography
+															variant="subtitle2"
+															noWrap
+														>
+															{`${item.mahp} ${item.tenhp}`}
+														</Typography>
+													</Stack>
+												</TableCell>
+												<TableCell
+													align="left"
+													style={{ width: "15%" }}
+												>
+													{`Tiết ${item.lesson}`}
+												</TableCell>
+												<TableCell
+													align="left"
+													style={{ width: "15%" }}
+												>
+													{`Phòng học ${item.id_classroom}`}
+												</TableCell>
+												<TableCell
+													align="left"
+													style={{ width: "20%" }}
+												>
+													{`GV dạy: ${item.teacherName}`}
+												</TableCell>
+											</TableRow>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						</DivDayStyle>
+					))}
+				</Scrollbar>
+			</Container>
+		</>
+	);
 }
 
 export default CalendarclPage;
