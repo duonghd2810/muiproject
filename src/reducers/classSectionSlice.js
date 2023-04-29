@@ -23,7 +23,7 @@ export const classSectionSlice = createSlice({
     builder.addCase(fetchClassSection.fulfilled, (state, action) => {
       state.data = action.payload;
       state.mappingData = action.payload.reduce(
-        (val, { id_classroom, id_day, id_teacher, lesson }) => {
+        (val, { id_classroom, id_day, lesson }) => {
           const key = [id_classroom, id_day].join("-");
           if (lesson) {
             val[key] = val[key] || [];
@@ -36,12 +36,11 @@ export const classSectionSlice = createSlice({
       );
       state.mappingTeacher = action.payload.reduce(
         (val, { id_day, id_teacher, lesson }) => {
-          const period = lesson ? lesson.split(",") : [];
-          if (id_teacher) {
-            val[id_teacher] = val[id_teacher] || {};
-            val[id_teacher][id_day] = val[id_teacher][id_day] || [];
-            val[id_teacher][id_day].push(...period);
-            // val[id_teacher][id_day].sort();
+          const key = [id_day, id_teacher].join("-");
+          if (lesson) {
+            val[key] = val[key] || [];
+            val[key].push(...lesson.split(","));
+            // val[key].sort();
           }
           return val;
         },

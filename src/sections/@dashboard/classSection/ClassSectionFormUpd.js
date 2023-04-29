@@ -35,20 +35,6 @@ function ClassSectionFormUpd(props) {
     (state) => state.classSectionReducer
   );
 
-  const newMappingData = cloneDeep(mappingData);
-  const newMappingTeacher = cloneDeep(mappingTeacher);
-
-  const keyMappingData = [data.id_classroom, data.id_day].join("-");
-  newMappingData[keyMappingData] = undefined;
-  const keyMappingTeacher = data.id_teacher;
-  if (keyMappingTeacher) {
-    newMappingTeacher[keyMappingTeacher][data.id_day] = (
-      mappingTeacher[keyMappingTeacher][data.id_day] || []
-    ).filter((el) => {
-      return !data.lesson ? data.lesson.split("-") : [].includes(el);
-    });
-  }
-
   const [dataDay, setDataDay] = useState([]);
   const [dataRoom, setDataRoom] = useState([]);
   useEffect(() => {
@@ -75,6 +61,26 @@ function ClassSectionFormUpd(props) {
       id_classroom: Yup.string().required("Vui lòng chọn phòng học"),
     }),
     onSubmit: async (values) => {
+      const newMappingData = cloneDeep(mappingData);
+      const keyMappingData = [props.data.id_classroom, props.data.id_day].join(
+        "-"
+      );
+      newMappingData[keyMappingData] = (
+        newMappingData[keyMappingData] || []
+      ).filter((el) => {
+        return !(props.data.lesson || "").includes(el);
+      });
+
+      const newMappingTeacher = cloneDeep(mappingTeacher);
+      const keyMappingTeacher = [props.data.id_day, props.data.id_teacher].join(
+        "-"
+      );
+      newMappingTeacher[keyMappingTeacher] = (
+        mappingTeacher[keyMappingTeacher] || []
+      ).filter((el) => {
+        return !(props.data.lesson || "").includes(el);
+      });
+
       const { lessonStart, lessonEnd, ...value } = values;
       let data = [];
       for (let i = lessonStart; i <= lessonEnd; i++) {
@@ -85,16 +91,16 @@ function ClassSectionFormUpd(props) {
       };
       const newValues = { ...value, ...newObject };
       const { id_classroom, id_day, id_teacher, lesson } = newValues;
-      const key = [id_classroom, id_day].join("-");
-      const period = lesson.split(",");
-      if (newMappingData[key]) {
-        if (newMappingData[key].some((item) => period.includes(item))) {
-          return alert("Không thể cập nhật do trùng lịch");
-        }
+      if (
+        newMappingData[[id_classroom, id_day].join("-")].some((item) =>
+          lesson.includes(item)
+        )
+      ) {
+        return alert("Không thể cập nhật do trùng lịch");
       }
       if (
-        period.some((item) =>
-          newMappingTeacher[id_teacher]?.[id_day]?.includes(item)
+        newMappingTeacher[[id_day, id_teacher].join("-")].some((item) =>
+          lesson.includes(item)
         )
       ) {
         return alert("Không thể cập nhật do giáo viên ko thể phân thân");
