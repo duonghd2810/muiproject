@@ -17,17 +17,26 @@ const GlobalForm = styled("form")(({ theme }) => ({
 
 function ForgotPassPage({ setOpenPopup }) {
 	const [username, setUsername] = useState("");
-	const handleSubmit = async () => {
-		await request.patch(`user/forgotpass`, JSON.stringify(username), {
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		setOpenPopup(false);
+	const handleSubmit = async (e) => {
+		try {
+			e.preventDefault();
+			await request.patch(`user/forgotpass`, JSON.stringify(username), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			setOpenPopup(false);
+			setUsername("");
+			alert(
+				"Hệ thống đã cập nhật mật khẩu mới. Vui lòng vào email để kiểm tra!"
+			);
+		} catch (error) {
+			alert(error.response.data.message);
+		}
 	};
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
-			<GlobalForm onSubmit={handleSubmit}>
+			<GlobalForm onSubmit={(e) => handleSubmit(e)}>
 				<FormControl style={{ margin: "12px 0" }}>
 					<TextField
 						InputLabelProps={{ shrink: true }}
