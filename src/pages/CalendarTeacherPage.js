@@ -21,12 +21,12 @@ const DivDayStyle = styled("div")(({ theme }) => ({
 	borderRadius: "6px",
 }));
 
-function CalendarclPage() {
+function CalendarTeacherPage() {
 	const user = useSelector((state) => state.userReducer).data;
 	const [tkb, setTkb] = useState([]);
 	useEffect(() => {
 		request
-			.get(`coursegrade/tkb/${user.userId}`)
+			.get(`classsection/tkb-teacher/${user.userId}`)
 			.then((res) => setTkb(res.data));
 	}, []);
 	const dataMap = new Map();
@@ -44,7 +44,7 @@ function CalendarclPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Thời khóa biểu</title>
+				<title>Lịch dạy</title>
 			</Helmet>
 			<Container>
 				<Typography variant="h4" gutterBottom>
@@ -95,12 +95,6 @@ function CalendarclPage() {
 												>
 													{`Phòng học ${item.id_classroom}`}
 												</TableCell>
-												<TableCell
-													align="left"
-													style={{ width: "20%" }}
-												>
-													{`GV dạy: ${item.teacherName}`}
-												</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
@@ -114,4 +108,4 @@ function CalendarclPage() {
 	);
 }
 
-export default CalendarclPage;
+export default CalendarTeacherPage;

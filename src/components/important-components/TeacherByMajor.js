@@ -7,7 +7,7 @@ TeacherByMajor.propTypes = {
 	idMajor: PropTypes.number,
 	idTeacher: PropTypes.number,
 };
-function TeacherByMajor({ setTeacher, idMajor, idTeacher }) {
+function TeacherByMajor({ value, setTeacher, idMajor, idTeacher }) {
 	const [dataSelect, setDataSelect] = useState([]);
 	useEffect(() => {
 		request
@@ -25,7 +25,7 @@ function TeacherByMajor({ setTeacher, idMajor, idTeacher }) {
 			labelId="demo-simple-select-label"
 			name="id_teacher"
 			onChange={setTeacher}
-			defaultValue={idTeacher || null}
+			value={value || ""}
 		>
 			{dataSelect?.map((item) => (
 				<MenuItem key={item.id} value={item.id}>

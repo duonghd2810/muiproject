@@ -41,6 +41,12 @@ const navConfig = [
 		role: "ADMIN",
 	},
 	{
+		title: "Đăng ký học phần",
+		path: "/registlesson",
+		icon: icon("ic_key"),
+		role: "STUDENT",
+	},
+	{
 		title: "Thời khóa biểu",
 		path: "/calendarcl",
 		icon: icon("ic_calendar"),
@@ -53,16 +59,16 @@ const navConfig = [
 		role: "STUDENT",
 	},
 	{
-		title: "Đăng ký học phần",
-		path: "/registlesson",
-		icon: icon("ic_key"),
-		role: "STUDENT",
-	},
-	{
 		title: "Nhập điểm học kì",
 		path: "/enterpointfinal",
 		icon: icon("ic_point"),
 		role: "ADMIN",
+	},
+	{
+		title: "Xem lịch dạy",
+		path: "/tkbteacher",
+		icon: icon("ic_calendar"),
+		role: "TEACHER",
 	},
 	{
 		title: "Nhập điểm",

@@ -18,7 +18,9 @@ import Iconify from "../components/iconify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "src/reducers/userSlice";
 import { isEmpty } from "lodash";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Popup from "src/sections/@dashboard/popup/Popup";
+import ForgotPassPage from "src/sections/@dashboard/user/ForgotPassPage";
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +37,7 @@ const StyledContent = styled("div")(({ theme }) => ({
 	display: "flex",
 	justifyContent: "center",
 	flexDirection: "column",
+	alignItems: "center",
 	padding: theme.spacing(12, 0),
 }));
 const StyledWrapper = styled("div")(({ theme }) => ({
@@ -64,6 +67,7 @@ export default function LoginPage() {
 	const dispatch = useDispatch();
 	const history = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
+	const [isOpenPopup, setIsOpenPopup] = useState(false);
 	const formik = useFormik({
 		initialValues: {
 			username: "",
@@ -151,7 +155,16 @@ export default function LoginPage() {
 										),
 									}}
 								/>
-								<a href="/forgot-pass">Quên mật khẩu</a>
+								<Link
+									to="#"
+									className="bs-text-primary"
+									onClick={(event) => {
+										event.preventDefault();
+										setIsOpenPopup(true);
+									}}
+								>
+									Quên mật khẩu
+								</Link>
 								<Button
 									style={{ marginTop: "24px" }}
 									type="submit"
@@ -163,6 +176,13 @@ export default function LoginPage() {
 							</FormLogin>
 						</StyledWrapper>
 					</StyledContent>
+					<Popup
+						title="Lấy lại mật khẩu mới"
+						openPopup={isOpenPopup}
+						setOpenPopup={setIsOpenPopup}
+					>
+						<ForgotPassPage setOpenPopup={setIsOpenPopup} />
+					</Popup>
 				</Container>
 			</StyledRoot>
 		</>

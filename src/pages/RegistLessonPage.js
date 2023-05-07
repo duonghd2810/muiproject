@@ -26,6 +26,9 @@ const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
 	{ id: "tenHp", label: "Tên HP", alignRight: false },
 	{ id: "soTc", label: "Số tín chỉ", alignRight: false },
+	{ id: "id_classroom", label: "Phòng học", alignRight: false },
+	{ id: "id_day", label: "Ngày học", alignRight: false },
+	{ id: "lesson", label: "Tiết học", alignRight: false },
 	{ id: "teacherName", label: "Giáo viên dạy", alignRight: false },
 	{ id: "" },
 ];
@@ -153,6 +156,9 @@ function RegistLessonPage() {
 												soTc,
 												tenHp,
 												teacherName,
+												id_classroom,
+												id_day,
+												lesson,
 											} = row;
 											return (
 												<TableRow
@@ -163,6 +169,7 @@ function RegistLessonPage() {
 													<TableCell
 														component="th"
 														scope="row"
+														style={{ width: "8%" }}
 													>
 														<Stack
 															direction="row"
@@ -178,18 +185,45 @@ function RegistLessonPage() {
 														</Stack>
 													</TableCell>
 
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "20%" }}
+													>
 														{tenHp}
 													</TableCell>
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
 														{soTc}
 													</TableCell>
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "12%" }}
+													>
+														{id_classroom}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{id_day}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{lesson}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "20%" }}
+													>
 														{teacherName}
 													</TableCell>
 													<TableCell
 														align="right"
-														width="15%"
+														width="10%"
 													>
 														<MenuItem
 															onClick={() =>
@@ -241,6 +275,10 @@ function RegistLessonPage() {
 												subjectCode,
 												tenHp,
 												soTc,
+												id_classroom,
+												id_day,
+												lesson,
+												teacherName,
 											} = row;
 											return (
 												<TableRow
@@ -251,6 +289,7 @@ function RegistLessonPage() {
 													<TableCell
 														component="th"
 														scope="row"
+														style={{ width: "8%" }}
 													>
 														<Stack
 															direction="row"
@@ -266,11 +305,41 @@ function RegistLessonPage() {
 														</Stack>
 													</TableCell>
 
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "20%" }}
+													>
 														{tenHp}
 													</TableCell>
-													<TableCell align="left">
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
 														{soTc}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "12%" }}
+													>
+														{id_classroom}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{id_day}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{lesson}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "20%" }}
+													>
+														{teacherName}
 													</TableCell>
 													<TableCell
 														align="right"

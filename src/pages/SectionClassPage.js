@@ -28,6 +28,9 @@ const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
 	{ id: "tenHp", label: "Tên HP", alignRight: false },
 	{ id: "soTc", label: "Số tín chỉ", alignRight: false },
+	{ id: "id_classroom", label: "Phòng học", alignRight: false },
+	{ id: "id_day", label: "Ngày học", alignRight: false },
+	{ id: "lesson", label: "Tiết học", alignRight: false },
 	{ id: "teacherName", label: "Giáo viên dạy", alignRight: false },
 	{ id: "" },
 ];
@@ -142,6 +145,9 @@ function SectionClassPage() {
 												subjectCode,
 												soTc,
 												tenHp,
+												id_classroom,
+												id_day,
+												lesson,
 												teacherName,
 											} = row;
 											return (
@@ -153,7 +159,7 @@ function SectionClassPage() {
 													<TableCell
 														component="th"
 														scope="row"
-														style={{ width: "10%" }}
+														style={{ width: "8%" }}
 													>
 														<Stack
 															direction="row"
@@ -171,7 +177,7 @@ function SectionClassPage() {
 
 													<TableCell
 														align="left"
-														style={{ width: "15%" }}
+														style={{ width: "17%" }}
 													>
 														{tenHp}
 													</TableCell>
@@ -180,6 +186,24 @@ function SectionClassPage() {
 														style={{ width: "10%" }}
 													>
 														{soTc}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{id_classroom}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{id_day}
+													</TableCell>
+													<TableCell
+														align="left"
+														style={{ width: "10%" }}
+													>
+														{lesson}
 													</TableCell>
 													<TableCell
 														align="left"

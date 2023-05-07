@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 //
 import Header from "./header";
 import Nav from "./nav";
+import { Helmet } from "react-helmet-async";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,9 @@ export default function DashboardLayout() {
 	const [open, setOpen] = useState(false);
 	return (
 		<StyledRoot>
+			<Helmet>
+				<title>Quản lý sinh viên</title>
+			</Helmet>
 			<Header onOpenNav={() => setOpen(true)} />
 
 			<Nav openNav={open} onCloseNav={() => setOpen(false)} />

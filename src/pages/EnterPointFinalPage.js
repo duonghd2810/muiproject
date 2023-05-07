@@ -80,7 +80,7 @@ function EnterPointFinalPage() {
 						onClick={handleUploadFinalPoint}
 						style={{ marginTop: "10px" }}
 					>
-						Upload
+						Nhập điểm cuối kỳ
 					</Button>
 				</StyledDiv>
 			</Container>

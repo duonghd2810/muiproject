@@ -50,7 +50,7 @@ function ClassSectionFormUpd(props) {
 	const formik = useFormik({
 		enableReinitialize: true,
 		initialValues: {
-			id_teacher: data.id_teacher || undefined,
+			id_teacher: data?.id_teacher,
 			id_day: data.id_day,
 			lessonStart: !isEmpty(data.lesson)
 				? data.lesson.split(",")[0]
@@ -101,15 +101,15 @@ function ClassSectionFormUpd(props) {
 			const newValues = { ...value, ...newObject };
 			const { id_classroom, id_day, id_teacher, lesson } = newValues;
 			if (
-				newMappingData[[id_classroom, id_day].join("-")].some((item) =>
+				newMappingData[[id_classroom, id_day].join("-")]?.some((item) =>
 					lesson.includes(item)
 				)
 			) {
 				return alert("Không thể cập nhật do trùng lịch");
 			}
 			if (
-				newMappingTeacher[[id_day, id_teacher].join("-")].some((item) =>
-					lesson.includes(item)
+				newMappingTeacher[[id_day, id_teacher].join("-")]?.some(
+					(item) => lesson.includes(item)
 				)
 			) {
 				return alert(
@@ -141,9 +141,10 @@ function ClassSectionFormUpd(props) {
 						Giáo viên dạy
 					</InputLabel>
 					<TeacherByMajor
+						value={formik.values.id_teacher}
 						setTeacher={formik.handleChange}
 						idMajor={data.idMajor}
-						idTeacher={formik.values.id_teacher}
+						idTeacher={formik.values.id_teacher || null}
 					/>
 					{formik.errors.id_teacher && formik.touched.id_teacher && (
 						<p style={{ color: "red", margin: "4px 0" }}>
@@ -159,8 +160,9 @@ function ClassSectionFormUpd(props) {
 						label="Ngày học"
 						labelId="demo-simple-select-label"
 						name="id_day"
+						value={formik.id_day}
 						onChange={formik.handleChange}
-						defaultValue={data.id_day}
+						defaultValue={data.id_day || ""}
 					>
 						{dataDay.map((item) => (
 							<MenuItem
@@ -186,11 +188,12 @@ function ClassSectionFormUpd(props) {
 								variant="outlined"
 								type="number"
 								name="lessonStart"
+								value={formik.lessonStart}
 								onChange={formik.handleChange}
 								defaultValue={
 									!isEmpty(data.lesson)
 										? data.lesson.split(",")[0]
-										: null
+										: ""
 								}
 							/>
 							{formik.errors.lessonStart &&
@@ -212,6 +215,7 @@ function ClassSectionFormUpd(props) {
 								variant="outlined"
 								type="number"
 								name="lessonEnd"
+								value={formik.lessonEnd}
 								onChange={formik.handleChange}
 								defaultValue={
 									!isEmpty(data.lesson)
@@ -219,7 +223,7 @@ function ClassSectionFormUpd(props) {
 												data.lesson.split(",").length -
 													1
 										  ]
-										: null
+										: ""
 								}
 							/>
 							{formik.errors.lessonEnd &&
@@ -244,8 +248,9 @@ function ClassSectionFormUpd(props) {
 						label="Phòng học"
 						labelId="demo-simple-select-label"
 						name="id_classroom"
+						value={formik.id_classroom}
 						onChange={formik.handleChange}
-						defaultValue={data.id_classroom}
+						defaultValue={data.id_classroom || ""}
 					>
 						{dataRoom.map((item) => (
 							<MenuItem key={item.tenPhong} value={item.tenPhong}>
