@@ -112,8 +112,8 @@ function RegistLessonPage() {
 			);
 			dispatch(fetchClassSectionRegistedByStudent(user.userId));
 			alert("Đăng ký thành công");
-		} catch {
-			alert("Bạn đã đăng ký học phần này rồi");
+		} catch (error) {
+			alert(error.response.data.message);
 		}
 	};
 

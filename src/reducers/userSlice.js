@@ -19,8 +19,8 @@ export const fetchUser = createAsyncThunk(
 				`Bearer ${response.data.result.token}`
 			);
 			return response.data.result;
-		} catch {
-			alert("Tên đăng nhập hoặc mật khẩu không đúng");
+		} catch (error) {
+			alert(error.response.data.message);
 		}
 	}
 );
