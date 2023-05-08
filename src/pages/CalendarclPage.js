@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import request from "src/utils/request";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { styled } from "@mui/material/styles";
+import TableCalendar from "src/components/table-calendar";
 
 const DivDayStyle = styled("div")(({ theme }) => ({
 	marginTop: "16px",
@@ -50,6 +51,9 @@ function CalendarclPage() {
 				<Typography variant="h4" gutterBottom>
 					Thời khóa biểu
 				</Typography>
+                <TableCalendar
+                    data={tkb}
+                />
 				<Scrollbar>
 					{Array.from(dataMap.entries()).map(([key, value]) => (
 						<DivDayStyle key={key}>
