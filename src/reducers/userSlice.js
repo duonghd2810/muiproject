@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import request from "src/utils/request";
+import { loadingActions } from "./loadingSlice";
 
 export const fetchUser = createAsyncThunk(
 	"user/fetchUser",
 	async (param, { dispatch, getState }) => {
 		try {
+			dispatch(loadingActions.update(true));
 			const response = await request.post(
 				"auth/login",
 				JSON.stringify(param),
@@ -21,6 +23,8 @@ export const fetchUser = createAsyncThunk(
 			return response.data.result;
 		} catch (error) {
 			alert(error.response.data.message);
+		} finally {
+			dispatch(loadingActions.update(false));
 		}
 	}
 );

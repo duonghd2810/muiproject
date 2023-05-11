@@ -48,7 +48,7 @@ function CalendarTeacherPage() {
 			</Helmet>
 			<Container>
 				<Typography variant="h4" gutterBottom>
-					Thời khóa biểu
+					Lịch dạy
 				</Typography>
 				<Scrollbar>
 					{Array.from(dataMap.entries()).map(([key, value]) => (

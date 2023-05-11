@@ -26,7 +26,7 @@ function TableCalendar({ data }) {
 				</thead>
 				{Object.values(MOMENT)
 					.flat()
-					.map((period) => {
+					.map((period, index) => {
 						const moment = Object.entries(MOMENT).reduce(
 							(val, [key, value]) =>
 								value.includes(period) ? key : val,
@@ -38,7 +38,7 @@ function TableCalendar({ data }) {
 								: 0;
 
 						return (
-							<tr>
+							<tr key={index.toString()}>
 								{!!rowSpan && (
 									<td rowSpan={rowSpan}>{moment}</td>
 								)}
@@ -60,6 +60,7 @@ function TableCalendar({ data }) {
 										if (lesson.startsWith(period)) {
 											return (
 												<td
+													key={date}
 													rowSpan={
 														lesson.split(",").length
 													}
@@ -76,7 +77,7 @@ function TableCalendar({ data }) {
 										}
 										return null;
 									}
-									return <td>&nbsp;</td>;
+									return <td key={date}></td>;
 								})}
 							</tr>
 						);
@@ -89,9 +90,6 @@ function TableCalendar({ data }) {
   table, th, td {
 border: 1px solid black;
 padding: 10px;
-}
-tr:hover {
-background: antiquewhite;
 }`}</style>
 		</>
 	);

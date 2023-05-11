@@ -151,7 +151,7 @@ function StudyResultPage() {
 						</TableHead>
 						<TableBody>
 							{results.length > 0 &&
-								results.map((row) => {
+								results.map((row, i) => {
 									const {
 										tenHp,
 										soTc,
@@ -161,7 +161,7 @@ function StudyResultPage() {
 										finaltest,
 									} = row;
 									return (
-										<TableRow>
+										<TableRow key={i.toString()}>
 											<TableCell align="left">
 												{tenHp}
 											</TableCell>

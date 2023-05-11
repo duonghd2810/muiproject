@@ -205,7 +205,10 @@ function RegistLessonPage() {
 													</TableCell>
 													<TableCell
 														align="left"
-														style={{ width: "10%" }}
+														style={{
+															width: "10%",
+															fontWeight: "700",
+														}}
 													>
 														{id_day}
 													</TableCell>

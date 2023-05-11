@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 // @mui
-import { CssBaseline } from "@mui/material";
+import { Backdrop, CircularProgress, CssBaseline } from "@mui/material";
 import {
 	ThemeProvider as MUIThemeProvider,
 	createTheme,
@@ -13,6 +13,7 @@ import shadows from "./shadows";
 import typography from "./typography";
 import GlobalStyles from "./globalStyles";
 import customShadows from "./customShadows";
+import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }) {
+	const { isLoading } = useSelector((state) => state.loadingReducer);
 	const themeOptions = useMemo(
 		() => ({
 			palette,
@@ -39,6 +41,15 @@ export default function ThemeProvider({ children }) {
 			<MUIThemeProvider theme={theme}>
 				<CssBaseline />
 				<GlobalStyles />
+				<Backdrop
+					sx={{
+						color: "#fff",
+						zIndex: (theme) => theme.zIndex.drawer + 1,
+					}}
+					open={isLoading}
+				>
+					<CircularProgress color="inherit" />
+				</Backdrop>
 				{children}
 			</MUIThemeProvider>
 		</StyledEngineProvider>
