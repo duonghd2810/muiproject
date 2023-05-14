@@ -12,16 +12,19 @@ import {
 } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import request from "src/utils/request";
-import { useSelector } from "react-redux";
-import { isEmpty } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingActions } from "src/reducers/loadingSlice";
 
 function StudyResultPage() {
+	const dispatch = useDispatch();
 	const [results, setResults] = useState([]);
 	const user = useSelector((state) => state.userReducer).data;
 	useEffect(() => {
 		request
 			.get(`coursegrade/studyresult/${user.userId}`)
-			.then((res) => setResults(res.data))
+			.then((res) => {
+				setResults(res.data);
+			})
 			.catch(function (error) {
 				return Promise.reject(error);
 			});

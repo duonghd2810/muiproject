@@ -5,12 +5,13 @@ import { styled } from "@mui/material/styles";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Helmet } from "react-helmet-async";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import request from "src/utils/request";
 import dayjs from "dayjs";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import ChangePassword from "src/sections/@dashboard/user/ChangePassword";
+import { loadingActions } from "src/reducers/loadingSlice";
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
 	display: "flex",
@@ -18,6 +19,7 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 
 function UpdatePage() {
+	const dispatch = useDispatch();
 	const refresh = () => window.location.reload(true);
 	const user = useSelector((state) => state.userReducer).data;
 	const [userUpd, setUserUpd] = useState({});
@@ -25,11 +27,13 @@ function UpdatePage() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		const fetchData = async () => {
+			dispatch(loadingActions.update(true));
 			const response = await request.get(`user/${user.userId}`);
 			return response.data.result;
 		};
 		fetchData().then((res) => {
 			setUserUpd(res);
+			dispatch(loadingActions.update(false));
 		});
 	}, []);
 	const regexPhone = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;

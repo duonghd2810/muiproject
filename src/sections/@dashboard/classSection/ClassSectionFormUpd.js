@@ -105,7 +105,9 @@ function ClassSectionFormUpd(props) {
 					lesson.includes(item)
 				)
 			) {
-				return alert("Không thể cập nhật do trùng lịch");
+				return alert(
+					"Không thể cập nhật do phòng học này đã có lớp học vào thời gian này"
+				);
 			}
 			if (
 				newMappingTeacher[[id_day, id_teacher].join("-")]?.some(
@@ -113,7 +115,7 @@ function ClassSectionFormUpd(props) {
 				)
 			) {
 				return alert(
-					"Không thể cập nhật do giáo viên đang dạy tiết học khác"
+					"Không thể cập nhật do giáo viên đang dạy lớp học phần khác"
 				);
 			}
 			try {

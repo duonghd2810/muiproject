@@ -18,6 +18,7 @@ import request from "src/utils/request";
 import { useDispatch } from "react-redux";
 import { fetchStudent } from "src/reducers/studentSlice";
 import { fetchTeacher } from "src/reducers/teacherSlice";
+import { loadingActions } from "src/reducers/loadingSlice";
 
 const GlobalForm = styled("form")(({ theme }) => ({
 	width: "100%",
@@ -52,6 +53,7 @@ function UserFormAdd({ type, dataSelect }) {
 			gender: Yup.string().required("Vui lòng chọn giới tính"),
 		}),
 		onSubmit: async (values) => {
+			dispatch(loadingActions.update(true));
 			if (type === "student") {
 				await request.post(
 					"auth/registerstudent",
@@ -63,6 +65,7 @@ function UserFormAdd({ type, dataSelect }) {
 					}
 				);
 				dispatch(fetchStudent());
+				dispatch(loadingActions.update(false));
 			}
 			if (type === "teacher") {
 				await request.post(
@@ -75,6 +78,7 @@ function UserFormAdd({ type, dataSelect }) {
 					}
 				);
 				dispatch(fetchTeacher());
+				dispatch(loadingActions.update(false));
 			}
 			formik.handleReset();
 		},

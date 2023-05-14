@@ -8,7 +8,7 @@ const MOMENT = {
 
 const WEEK = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"];
 
-function TableCalendar({ data }) {
+function TableCalendar({ data, type }) {
 	const map = data.reduce((val, item) => {
 		val[item.id_day] = [...(val[item.id_day] || []), item];
 		return val;
@@ -20,8 +20,10 @@ function TableCalendar({ data }) {
 				<thead>
 					<th>Buổi</th>
 					<th>Tiết</th>
-					{WEEK.map((date) => (
-						<th style={{ width: "12%" }}>{date}</th>
+					{WEEK.map((date, index) => (
+						<th key={index} style={{ width: "12%" }}>
+							{date}
+						</th>
 					))}
 				</thead>
 				{Object.values(MOMENT)
@@ -70,8 +72,15 @@ function TableCalendar({ data }) {
 													}}
 												>
 													{tenhp} <br />
-													{teacherName} <br />(
-													{id_classroom})<br />
+													<div>
+														{type === "student" &&
+															`GV: ${teacherName}`}
+													</div>
+													(
+													<strong>
+														{id_classroom}
+													</strong>
+													)<br />
 												</td>
 											);
 										}

@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Iconify from "src/components/iconify/Iconify";
+import { loadingActions } from "src/reducers/loadingSlice";
 import request from "src/utils/request";
 import * as Yup from "yup";
 
@@ -20,16 +21,20 @@ const GlobalForm = styled("form")(({ theme }) => ({
 	flexDirection: "column",
 }));
 function ChangePassword() {
+	const dispatch = useDispatch();
 	const refresh = () => window.location.reload(true);
 	const user = useSelector((state) => state.userReducer).data;
+	const [showOldPassword, setShowOldPassword] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const formik = useFormik({
 		initialValues: {
+			oldPass: "",
 			newpassword: "",
 			password: "",
 		},
 		validationSchema: Yup.object({
+			oldPass: Yup.string().required("Vui lòng nhập mật khẩu hiện tại"),
 			newpassword: Yup.string()
 				.required("Vui lòng nhập mật khẩu mới")
 				.min(8, "Mật khẩu tối thiểu 8 kí tự"),
@@ -41,21 +46,65 @@ function ChangePassword() {
 				),
 		}),
 		onSubmit: async (values) => {
-			await request.patch(
-				`user/changepass/${user.userId}`,
-				JSON.stringify(values.password),
-				{
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			refresh();
+			try {
+				const { newpassword, ...dataRequest } = values;
+				dispatch(loadingActions.update(true));
+				await request.patch(
+					`user/changepass/${user.userId}`,
+					JSON.stringify(dataRequest),
+					{
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				refresh();
+			} catch (error) {
+				alert(error.response.data.message);
+			} finally {
+				dispatch(loadingActions.update(false));
+			}
 		},
 	});
 	return (
 		<Container fixed style={{ margin: "12px 0" }}>
 			<GlobalForm onSubmit={formik.handleSubmit}>
+				<FormControl style={{ margin: "12px 0" }}>
+					<TextField
+						InputLabelProps={{ shrink: true }}
+						label="Mật khẩu cũ"
+						type={showOldPassword ? "text" : "password"}
+						name="oldPass"
+						value={formik.values.oldPass}
+						onChange={formik.handleChange}
+						size="small"
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										onClick={() =>
+											setShowOldPassword(!showOldPassword)
+										}
+										edge="end"
+									>
+										<Iconify
+											icon={
+												showOldPassword
+													? "eva:eye-fill"
+													: "eva:eye-off-fill"
+											}
+										/>
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
+					/>
+					{formik.errors.oldPass && formik.touched.oldPass && (
+						<p style={{ color: "red", margin: "4px 0" }}>
+							{formik.errors.oldPass}
+						</p>
+					)}
+				</FormControl>
 				<FormControl style={{ margin: "12px 0" }}>
 					<TextField
 						InputLabelProps={{ shrink: true }}

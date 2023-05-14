@@ -44,7 +44,7 @@ export default function ThemeProvider({ children }) {
 				<Backdrop
 					sx={{
 						color: "#fff",
-						zIndex: (theme) => theme.zIndex.drawer + 1,
+						zIndex: 10000,
 					}}
 					open={isLoading}
 				>

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import request from "src/utils/request";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { styled } from "@mui/material/styles";
+import TableCalendar from "src/components/table-calendar";
 
 const DivDayStyle = styled("div")(({ theme }) => ({
 	marginTop: "16px",
@@ -29,18 +30,18 @@ function CalendarTeacherPage() {
 			.get(`classsection/tkb-teacher/${user.userId}`)
 			.then((res) => setTkb(res.data));
 	}, []);
-	const dataMap = new Map();
+	// const dataMap = new Map();
 
-	if (tkb.length !== 0) {
-		for (let i = 0; i < tkb.length; i++) {
-			const { id_day, ...dataValue } = tkb[i];
-			if (dataMap.has(id_day)) {
-				dataMap.set(id_day, [...dataMap.get(id_day), dataValue]);
-			} else {
-				dataMap.set(id_day, [dataValue]);
-			}
-		}
-	}
+	// if (tkb.length !== 0) {
+	// 	for (let i = 0; i < tkb.length; i++) {
+	// 		const { id_day, ...dataValue } = tkb[i];
+	// 		if (dataMap.has(id_day)) {
+	// 			dataMap.set(id_day, [...dataMap.get(id_day), dataValue]);
+	// 		} else {
+	// 			dataMap.set(id_day, [dataValue]);
+	// 		}
+	// 	}
+	// }
 	return (
 		<>
 			<Helmet>
@@ -50,7 +51,9 @@ function CalendarTeacherPage() {
 				<Typography variant="h4" gutterBottom>
 					Lịch dạy
 				</Typography>
-				<Scrollbar>
+
+				<TableCalendar type="teacher" data={tkb} />
+				{/* <Scrollbar>
 					{Array.from(dataMap.entries()).map(([key, value]) => (
 						<DivDayStyle key={key}>
 							<Typography
@@ -102,7 +105,7 @@ function CalendarTeacherPage() {
 							</TableContainer>
 						</DivDayStyle>
 					))}
-				</Scrollbar>
+				</Scrollbar> */}
 			</Container>
 		</>
 	);

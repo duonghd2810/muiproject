@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "src/utils/request";
+import { loadingActions } from "./loadingSlice";
 export const fetchClassSectionByTeacher = createAsyncThunk(
 	"classsection/fetchClassSectionByTeacher",
 	async (param, { dispatch, getState }) => {
-		const response = await request.get(`classsection/teacher/${param}`);
-		return response.data;
+		try {
+			dispatch(loadingActions.update(true));
+			const response = await request.get(`classsection/teacher/${param}`);
+			return response.data;
+		} finally {
+			dispatch(loadingActions.update(false));
+		}
 	}
 );
 export const classSectionByTeacherSlice = createSlice({

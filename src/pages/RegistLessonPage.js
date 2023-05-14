@@ -72,6 +72,7 @@ function applySortFilter(array, comparator, query) {
 }
 function RegistLessonPage() {
 	const dispatch = useDispatch();
+	const user = useSelector((state) => state.userReducer).data;
 	const [order, setOrder] = useState("asc");
 
 	const [orderBy, setOrderBy] = useState("name");
@@ -79,7 +80,23 @@ function RegistLessonPage() {
 	const [filterName, setFilterName] = useState("");
 	const [recordForEdit, setRecordForEdit] = useState(null);
 	const [openPopupDel, setOpenPopupDel] = useState(false);
-	const user = useSelector((state) => state.userReducer).data;
+	const [dateRegist, setDateRegist] = useState({});
+
+	useEffect(() => {
+		request.get("dateregist").then((res) => {
+			const { startDate, endDate } = res.data;
+			setDateRegist({ startDate, endDate });
+		});
+	}, []);
+
+	useEffect(() => {
+		setTimeout(() => {
+			request.get("dateregist").then((res) => {
+				const { startDate, endDate } = res.data;
+				setDateRegist({ startDate, endDate });
+			});
+		}, 5000);
+	});
 
 	useEffect(() => {
 		dispatch(fetchClassSectionByStudent(user.userId));
@@ -122,7 +139,21 @@ function RegistLessonPage() {
 		setOpenPopupDel(true);
 	};
 
-	return (
+	const checkDateRegist = () => {
+		if (dateRegist !== null) {
+			const nowDate = new Date();
+			if (
+				Date.parse(dateRegist.startDate) <= Date.parse(nowDate) &&
+				Date.parse(nowDate) <= Date.parse(dateRegist.endDate)
+			) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	};
+
+	return checkDateRegist() ? (
 		<>
 			<Helmet>
 				<title>Đăng ký học phần</title>
@@ -328,7 +359,10 @@ function RegistLessonPage() {
 													</TableCell>
 													<TableCell
 														align="left"
-														style={{ width: "10%" }}
+														style={{
+															width: "10%",
+															fontWeight: "700",
+														}}
 													>
 														{id_day}
 													</TableCell>
@@ -382,6 +416,25 @@ function RegistLessonPage() {
 				type="cancel-registed"
 				data={recordForEdit}
 			></PopupDel>
+		</>
+	) : (
+		<>
+			<Helmet>
+				<title>Đăng ký học phần</title>
+			</Helmet>
+			<Container>
+				<Stack
+					direction="row"
+					alignItems="center"
+					justifyContent="space-between"
+					mt={4}
+					mb={2}
+				>
+					<Typography variant="h5" gutterBottom>
+						Tính năng này đang bị khóa!
+					</Typography>
+				</Stack>
+			</Container>
 		</>
 	);
 }

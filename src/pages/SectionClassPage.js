@@ -13,6 +13,8 @@ import {
 	Container,
 	Typography,
 	TableContainer,
+	Chip,
+	Button,
 } from "@mui/material";
 // components
 import Iconify from "../components/iconify";
@@ -23,6 +25,12 @@ import PopupDel from "src/sections/@dashboard/popup/PopupDel";
 import ClassSectionListHead from "src/sections/@dashboard/classSection/ClassSectionListHead";
 import Popup from "src/sections/@dashboard/popup/Popup";
 import ClassSectionFormUpd from "src/sections/@dashboard/classSection/ClassSectionFormUpd";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import request from "src/utils/request";
+import { loadingActions } from "src/reducers/loadingSlice";
 
 const TABLE_HEAD = [
 	{ id: "subjectCode", label: "Mã HP", alignRight: false },
@@ -84,6 +92,7 @@ function SectionClassPage() {
 
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
+	const [timeValue, setTimeValue] = useState([null, null]);
 	useEffect(() => {
 		dispatch(fetchClassSection());
 	}, []);
@@ -109,6 +118,23 @@ function SectionClassPage() {
 		setRecordForEdit(row);
 		setOpenPopupDel(true);
 	};
+	const handleUpdateTime = async () => {
+		try {
+			const value = {
+				startDate: timeValue[0].toISOString(),
+				endDate: timeValue[1].toISOString(),
+			};
+			dispatch(loadingActions.update(true));
+			await request.post("dateregist", JSON.stringify(value), {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			alert("Cập nhật lại thời gian đăng ký học phần thành công");
+		} finally {
+			dispatch(loadingActions.update(false));
+		}
+	};
 	return (
 		<>
 			<Helmet>
@@ -126,7 +152,40 @@ function SectionClassPage() {
 						Lớp học phần
 					</Typography>
 				</Stack>
-
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+					}}
+				>
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DemoContainer components={["DateRangePicker"]}>
+							<DateRangePicker
+								format="DD / MM / YYYY"
+								localeText={{
+									start: "Ngày đăng ký học phần",
+									end: "Ngày kết thúc đăng ký học phần",
+								}}
+								value={timeValue}
+								onChange={(newValue) => {
+									setTimeValue(newValue);
+								}}
+							/>
+						</DemoContainer>
+					</LocalizationProvider>
+					&nbsp;
+					<Button
+						onClick={handleUpdateTime}
+						size="small"
+						variant="contained"
+						style={{ width: "120px" }}
+					>
+						Cập nhật
+					</Button>
+				</div>
+				<br />
+				<br />
+				<br />
 				<Card>
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
@@ -149,6 +208,7 @@ function SectionClassPage() {
 												id_day,
 												lesson,
 												teacherName,
+												status,
 											} = row;
 											return (
 												<TableRow
@@ -215,46 +275,56 @@ function SectionClassPage() {
 														align="right"
 														style={{ width: "15%" }}
 													>
-														<div
-															style={{
-																display: "flex",
-																justifyContent:
-																	"flex-end",
-															}}
-														>
-															<MenuItem
-																onClick={() =>
-																	handleOpenUpd(
-																		row
-																	)
-																}
+														{status === "acting" ? (
+															<div
+																style={{
+																	display:
+																		"flex",
+																	justifyContent:
+																		"flex-end",
+																}}
 															>
-																<Iconify
-																	icon={
-																		"eva:edit-fill"
+																<MenuItem
+																	onClick={() =>
+																		handleOpenUpd(
+																			row
+																		)
 																	}
-																/>
-																Edit
-															</MenuItem>
+																>
+																	<Iconify
+																		icon={
+																			"eva:edit-fill"
+																		}
+																	/>
+																	Edit
+																</MenuItem>
 
-															<MenuItem
-																onClick={() =>
-																	handleOpenDel(
-																		row
-																	)
-																}
+																<MenuItem
+																	onClick={() =>
+																		handleOpenDel(
+																			row
+																		)
+																	}
+																	sx={{
+																		color: "error.main",
+																	}}
+																>
+																	<Iconify
+																		icon={
+																			"eva:trash-2-outline"
+																		}
+																	/>
+																	Delete
+																</MenuItem>
+															</div>
+														) : (
+															<Chip
 																sx={{
 																	color: "error.main",
 																}}
-															>
-																<Iconify
-																	icon={
-																		"eva:trash-2-outline"
-																	}
-																/>
-																Delete
-															</MenuItem>
-														</div>
+																label="Đã kết thúc"
+															/>
+														)}
 													</TableCell>
 												</TableRow>
 											);

@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "src/utils/request";
+import { loadingActions } from "./loadingSlice";
 export const fetchMajor = createAsyncThunk(
 	"major/fetchMajor",
 	async (param, { dispatch, getState }) => {
-		const response = await request.get("major");
-		return response.data.result;
+		try {
+			dispatch(loadingActions.update(true));
+			const response = await request.get("major");
+			return response.data.result;
+		} finally {
+			dispatch(loadingActions.update(false));
+		}
 	}
 );
 export const majorSlice = createSlice({

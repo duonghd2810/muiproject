@@ -43,7 +43,7 @@ function EnterPointFinalPage() {
 				alert(response.data.Message);
 			})
 			.catch((error) => {
-				console.error(error);
+				alert(error.response.data.message);
 			});
 		setSelectedFile(null);
 	};

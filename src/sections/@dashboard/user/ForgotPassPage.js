@@ -6,7 +6,8 @@ import {
 	styled,
 } from "@mui/material";
 import { useState } from "react";
-import Iconify from "src/components/iconify/Iconify";
+import { useDispatch } from "react-redux";
+import { loadingActions } from "src/reducers/loadingSlice";
 import request from "src/utils/request";
 
 const GlobalForm = styled("form")(({ theme }) => ({
@@ -16,10 +17,12 @@ const GlobalForm = styled("form")(({ theme }) => ({
 }));
 
 function ForgotPassPage({ setOpenPopup }) {
+	const dispatch = useDispatch();
 	const [username, setUsername] = useState("");
 	const handleSubmit = async (e) => {
 		try {
 			e.preventDefault();
+			dispatch(loadingActions.update(true));
 			await request.patch(`user/forgotpass`, JSON.stringify(username), {
 				headers: {
 					"Content-Type": "application/json",
@@ -32,6 +35,8 @@ function ForgotPassPage({ setOpenPopup }) {
 			);
 		} catch (error) {
 			alert(error.response.data.message);
+		} finally {
+			dispatch(loadingActions.update(false));
 		}
 	};
 	return (
@@ -46,6 +51,7 @@ function ForgotPassPage({ setOpenPopup }) {
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
 						size="small"
+						required
 					/>
 				</FormControl>
 				<div

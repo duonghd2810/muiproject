@@ -1,10 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import request from "src/utils/request";
+import { loadingActions } from "./loadingSlice";
 export const fetchSubject = createAsyncThunk(
 	"subject/fetchSubject",
 	async (param, { dispatch, getState }) => {
-		const response = await request.get("subject");
-		return response.data;
+		try {
+			dispatch(loadingActions.update(true));
+			const response = await request.get("subject");
+			return response.data;
+		} finally {
+			dispatch(loadingActions.update(false));
+		}
 	}
 );
 export const subjectSlice = createSlice({
