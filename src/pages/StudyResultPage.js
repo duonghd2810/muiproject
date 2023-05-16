@@ -13,10 +13,7 @@ import {
 import { Helmet } from "react-helmet-async";
 import request from "src/utils/request";
 import { useDispatch, useSelector } from "react-redux";
-import { loadingActions } from "src/reducers/loadingSlice";
-
 function StudyResultPage() {
-	const dispatch = useDispatch();
 	const [results, setResults] = useState([]);
 	const user = useSelector((state) => state.userReducer).data;
 	useEffect(() => {
@@ -43,8 +40,11 @@ function StudyResultPage() {
 	const showTBNumber = (student) => {
 		if (student.finaltest === null) return "";
 		const tbkt = showTBTX(student);
-		const tb = (tbkt + student.finaltest * 2) / 3;
-		return tb.toFixed(1);
+		let tb = 0;
+		if (tbkt != 0) {
+			tb = (tbkt + student.finaltest * 2) / 3;
+			return tb.toFixed(1);
+		} else return "";
 	};
 
 	const showTBText = (student) => {

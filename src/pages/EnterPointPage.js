@@ -1,5 +1,6 @@
 import {
 	Card,
+	Chip,
 	Container,
 	Stack,
 	Table,
@@ -115,6 +116,7 @@ function EnterPointPage() {
 												subjectCode,
 												tenHp,
 												soTc,
+												status,
 											} = row;
 											return (
 												<TableRow
@@ -161,6 +163,18 @@ function EnterPointPage() {
 														}}
 													>
 														{soTc}
+													</TableCell>
+													<TableCell align="right">
+														{status === "end" ? (
+															<Chip
+																sx={{
+																	color: "error.main",
+																}}
+																label="Đã kết thúc"
+															/>
+														) : (
+															<></>
+														)}
 													</TableCell>
 												</TableRow>
 											);

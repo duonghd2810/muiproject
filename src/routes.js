@@ -35,18 +35,43 @@ export default function Router() {
 			),
 			children: [
 				{ element: "", index: true },
-				{ path: "major", element: <MajorPage /> },
-				{ path: "student", element: <StudentPage /> },
-				{ path: "teacher", element: <TeacherPage /> },
-				{ path: "subject", element: <SubjectPage /> },
-				{ path: "sectionclass", element: <SectionClassPage /> },
 				{ path: "profile", element: <UpdatePage /> },
-				{ path: "studyresult", element: <StudyResultPage /> },
-				{ path: "registlesson", element: <RegistLessonPage /> },
-				{ path: "enterpoint", element: <EnterPointPage /> },
-				{ path: "enterpointfinal", element: <EnterPointFinalPage /> },
-				{ path: "calendarcl", element: <CalendarclPage /> },
-				{ path: "tkbteacher", element: <CalendarTeacherPage /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? { path: "major", element: <MajorPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? { path: "student", element: <StudentPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? { path: "teacher", element: <TeacherPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? { path: "subject", element: <SubjectPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? { path: "sectionclass", element: <SectionClassPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("ADMIN")
+					? {
+							path: "enterpointfinal",
+							element: <EnterPointFinalPage />,
+					  }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("STUDENT")
+					? { path: "studyresult", element: <StudyResultPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("STUDENT")
+					? { path: "registlesson", element: <RegistLessonPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("STUDENT")
+					? { path: "calendarcl", element: <CalendarclPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("TEACHER")
+					? { path: "enterpoint", element: <EnterPointPage /> }
+					: { path: "404", element: <Page404 /> },
+				!isEmpty(data) && data.roleSet.includes("TEACHER")
+					? { path: "tkbteacher", element: <CalendarTeacherPage /> }
+					: { path: "404", element: <Page404 /> },
 				{
 					path: "enterpoint/:idClass",
 					element: <DetailClassSectionPage />,

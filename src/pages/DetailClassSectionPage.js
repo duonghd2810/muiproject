@@ -10,7 +10,7 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
@@ -24,6 +24,7 @@ function DetailClassSectionPage() {
 	const { idClass } = useParams();
 	const [classSection, setClassSection] = useState();
 	const [selectedFile, setSelectedFile] = useState(null);
+	const fileRef = useRef();
 	useEffect(() => {
 		request
 			.get(`classsection/classdetail/${idClass}`)
@@ -60,7 +61,9 @@ function DetailClassSectionPage() {
 		let a = window.document.createElement("a");
 		a.href = url;
 		a.target = "_blank";
-		a.download = "Danh sách lớp " + classSection.tenHp;
+		a.download =
+			`${classSection.subjectCode}.${classSection.id} ${classSection.tenHp}` +
+			".xlsx";
 		a.click();
 	};
 	const handleFileSelect = (event) => {
@@ -84,6 +87,7 @@ function DetailClassSectionPage() {
 				console.error(error);
 			});
 		setSelectedFile(null);
+		fileRef.current.value = "";
 		dispatch(fetchStudentInclassSection(idClass));
 	};
 	return (
@@ -106,29 +110,34 @@ function DetailClassSectionPage() {
 							{!!classSection && classSection.tenHp}
 						</Typography>
 					</Grid>
-					<Grid
-						item
-						xs={4}
-						style={{
-							display: "flex",
-							justifyContent: "space-between",
-							alignItems: "center",
-						}}
-					>
-						<input
-							style={{ flex: "2" }}
-							type="file"
-							onChange={handleFileSelect}
-						/>
-						<Button
-							variant="contained"
-							onClick={handleFileUpload}
-							style={{ flex: "1" }}
-							size="small"
+					{!!classSection && classSection.status === "acting" ? (
+						<Grid
+							item
+							xs={4}
+							style={{
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "center",
+							}}
 						>
-							Import file
-						</Button>
-					</Grid>
+							<input
+								style={{ flex: "2" }}
+								type="file"
+								ref={fileRef}
+								onChange={handleFileSelect}
+							/>
+							<Button
+								variant="contained"
+								onClick={handleFileUpload}
+								style={{ flex: "1" }}
+								size="small"
+							>
+								Import file
+							</Button>
+						</Grid>
+					) : (
+						<></>
+					)}
 				</Grid>
 				<Card>
 					<Scrollbar>

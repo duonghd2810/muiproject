@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Icon } from "@iconify/react";
@@ -25,11 +25,15 @@ const FileForm = styled("form")(({ theme }) => ({
 }));
 function EnterPointFinalPage() {
 	const [selectedFile, setSelectedFile] = useState(null);
-
+	const fileRef = useRef();
 	const handleFileSelect = (event) => {
 		setSelectedFile(event.target.files[0]);
 	};
 	const handleUploadFinalPoint = () => {
+		if (selectedFile == null) {
+			alert("Vui lòng nhập dữ liệu");
+			return;
+		}
 		const formData = new FormData();
 		formData.append("file", selectedFile);
 
@@ -46,6 +50,7 @@ function EnterPointFinalPage() {
 				alert(error.response.data.message);
 			});
 		setSelectedFile(null);
+		fileRef.current.value = "";
 	};
 	return (
 		<>
@@ -61,6 +66,7 @@ function EnterPointFinalPage() {
 					>
 						<input
 							className="input-field"
+							ref={fileRef}
 							style={{ flex: "2" }}
 							type="file"
 							onChange={handleFileSelect}
